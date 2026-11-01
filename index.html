@@ -829,7 +829,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       if (!items.length && file.type === 'application/pdf') items = await textItems(file);
       m.source = 'text';
       if (!items.length) { items = await readWithClaude(canvas); m.source = 'claude'; }
-      m.items = items;
+      m.items = oneMainBody(items);
       if (file.type === 'application/pdf' && items.length) m.folCons = await foliantConsumables(file, items).catch(() => null);
       if (file.type === 'application/pdf' && items.length) m.folPhys = await readPhysicals(file, items).catch(() => null);
       m.picture = await cropMachine(canvas);
@@ -1079,6 +1079,11 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const lines = rows.map((r) => r.parts.sort((a, b) => a.x - b.x).map((p) => p.s).join(' ').replace(/\s+/g, ' ').trim());
     return parseOrderLines(lines);
   }
+  // Only the first row of the main-body group is the machine; anything else Foliant lists there is an option.
+  function oneMainBody(items) {
+    let seen = false;
+    return items.map((it) => { if (!/main ?body/i.test(it.category)) return it; if (!seen) { seen = true; return it; } return Object.assign({}, it, { category: 'Accessories' }); });
+  }
   function parseOrderLines(lines) {
     const out = []; let on = false, cat = '';
     for (const l of lines) {
@@ -1086,9 +1091,9 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       if (!on) continue;
       if (/please order|©|foliant/i.test(l)) break;
       if (/^module\b.*quantity/i.test(l)) continue;
-      if (/^(main ?body|paper supply|finishing( options)?|controller|accessories|options|software)$/i.test(l)) { cat = l; continue; }
       const m = l.match(/^(.+?)\s+(\d{1,3})\s+([A-Z0-9]{5,14})$/);
       if (m) out.push({ category: cat || 'Accessories', model: m[1].trim(), qty: Number(m[2]), code: m[3] });
+      else if (l.length <= 40 && !/\d{5,}/.test(l)) cat = l;   // any other short line is a group heading (office Foliants use many: Original handling, Furniture, Fax…)
     }
     return out;
   }
