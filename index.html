@@ -69,6 +69,7 @@ details.cons summary { cursor: pointer; display: flex; align-items: center; gap:
 .cons-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
 input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: var(--warn-bg); }
 .field input, .field select, .field textarea { width: 100%; min-width: 0; }
+.field input.need { border-color: var(--brand); background: #fff5f5; }
 .note { font-size: 13px; color: var(--muted); }
 .prices { display: grid; gap: 16px; }
 .price-block { border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; display: grid; gap: 10px; }
@@ -126,7 +127,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       <div class="field"><label for="tel">Infinity phone</label><input id="tel"></div>
       <div class="field"><label for="mobile">Mobile</label><input id="mobile"></div>
       <div class="field"><label for="repCode">Sales rep code</label><input id="repCode"></div>
-      <div class="field"><label for="preparedBy">Prepared by (your name)</label><input id="preparedBy" autocomplete="name"></div>
+      <div class="field"><label for="preparedBy">Prepared by (your name) <span style="color:var(--brand)">*</span></label><input id="preparedBy" autocomplete="name" required aria-required="true"></div>
       <div class="field wide"><label for="paymentPick">السداد</label><select id="paymentPick" class="ar" dir="rtl" aria-label="Saved payment terms"></select><input id="payment" class="ar" dir="rtl" aria-label="Payment terms text" placeholder="اختر من القائمة أو اكتب شروط سداد جديدة"></div>
     </div>
     <p class="note">Phone, mobile, rep code and your name are remembered in this browser for your next offer.</p>
@@ -1663,12 +1664,14 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
   function renderTodo() {
     const wrap = $('todoWrap'); wrap.textContent = '';
     const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
-    $('genBtn').disabled = !ready.length || S.machines.some((m) => m.status === 'reading');
+    const noName = !$('preparedBy').value.trim();
+    $('preparedBy').classList.toggle('need', noName);
+    $('genBtn').disabled = !ready.length || noName || S.machines.some((m) => m.status === 'reading');
+    if (ready.length && noName) wrap.append(el('p', { class: 'status err', text: 'Write your name in "Prepared by" (step 4) to generate the offer.' }));
     if (!ready.length) { wrap.append(el('p', { class: 'empty', text: 'Add at least one machine that is in the library.' })); return; }
     const todo = [];
     if (!$('customerEn').value.trim() && !$('customerAr').value.trim()) todo.push('Customer name');
     if (!$('customerAr').value.trim()) todo.push('اسم العميل (عربي)');
-    if (!$('preparedBy').value.trim()) todo.push('Prepared by (your name)');
     if (!$('tel').value.trim()) todo.push('Infinity phone');
     if (!$('repCode').value.trim()) todo.push('Sales rep code');
     for (const m of ready) { const lib = dealLib(m);
@@ -1847,6 +1850,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
   $('withAttach').addEventListener('change', () => { try { localStorage.setItem('offer.withAttach', $('withAttach').checked ? '1' : '0'); } catch (e) {} });
   $('genBtn').addEventListener('click', async () => {
     const status = $('status'), btn = $('genBtn');
+    if (!$('preparedBy').value.trim()) { status.className = 'status err'; status.textContent = 'Write your name in "Prepared by" first.'; $('preparedBy').focus(); return; }
     status.className = 'status'; status.textContent = 'Building the offer…'; btn.disabled = true;
     try {
       const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
