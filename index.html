@@ -1755,6 +1755,18 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     if (S.isOwner) { $('logWrap').hidden = false; loadLog(); }
   }
   // each person's offers sit in their own document offers/<their id>: they can add to it, only the owner reads them all
+  // Device fingerprint for the log: a random ID kept in this browser, plus OS · browser · screen.
+  const DEVICE = (() => {
+    let id = store.get('ob_device');
+    if (!id) { const a = new Uint8Array(3); try { crypto.getRandomValues(a); } catch (e) { a[0] = Math.random() * 256; a[1] = Math.random() * 256; a[2] = Math.random() * 256; }
+      id = 'PC-' + [...a].map((x) => x.toString(16).padStart(2, '0')).join('').toUpperCase(); store.set('ob_device', id); }
+    const ua = navigator.userAgent || '';
+    const os = /Windows NT 10/.test(ua) ? 'Windows 10/11' : /Windows/.test(ua) ? 'Windows' : /iPhone|iPad/.test(ua) ? 'iOS' : /Mac OS X|Macintosh/.test(ua) ? 'Mac' : /Android/.test(ua) ? 'Android' : /Linux/.test(ua) ? 'Linux' : 'Other';
+    const br = /Edg\//.test(ua) ? 'Edge' : /OPR\//.test(ua) ? 'Opera' : /Chrome\//.test(ua) ? 'Chrome' : /Firefox\//.test(ua) ? 'Firefox' : /Safari\//.test(ua) ? 'Safari' : 'Browser';
+    let scr = ''; try { scr = screen.width + '×' + screen.height; } catch (e) {}
+    return { id, info: [os, br, scr].filter(Boolean).join(' · ') };
+  })();
+  try { const f = $('preparedBy').closest('.field'); if (f) f.append(el('small', { style: 'display:block;color:var(--muted);margin-top:4px', text: 'This device: ' + DEVICE.id })); } catch (e) {}
   // One-line configuration for the log sheet: "main body + option + option"; several machines are separated by " | ".
   function configText(ready) {
     const one = (m) => {
@@ -1875,7 +1887,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       { const pm = InfinityOffer.priceMath(ctx.machines.map((m) => ({ unit: num(m.unitPrice), qty: num(m.qty) || 1 })), ctx.pricesIncludeVat);
         logOffer({ by: $('preparedBy').value.trim(), customer: (ctx.customerEn || ctx.customerAr || '').trim(), models: ready.map((m) => S.lib[m.libId].model + ((num(m.qty) || 1) > 1 ? ' x ' + num(m.qty) : '')).join(' + '),
           total: pm.grandInc != null ? pm.grandInc.toLocaleString('en-US', { maximumFractionDigits: 2 }) : '', currency: ctx.currency, file: name,
-          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped'), config: configText(ready) }); }
+          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped'), config: configText(ready), deviceId: DEVICE.id, device: DEVICE.info }); }
       status.className = driveErr ? 'status err' : 'status ok'; status.textContent = '';
       status.append('Saved ' + name + (saved ? ' and a copy in Drive (' : '. ') );
       if (saved) { status.append(el('a', { href: saved.url || ('https://drive.google.com/drive/folders/' + OFFERS_FOLDER()), target: '_blank', rel: 'noopener', text: '06 Generated Offers' }), ').' + (saved.light ? ' The Drive copy has lighter pictures so it fits the upload limit; the downloaded file is full quality.' : '')); }
