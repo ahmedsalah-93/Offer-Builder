@@ -1,0 +1,1891 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Infinity Offer Builder</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&family=Noto+Kufi+Arabic:wght@500;700&display=swap">
+<style>
+/* Layout: one working column of numbered steps; the Foliant cards are the centre of gravity. Infinity design system tokens. */
+:root {
+  --brand: #dc2229; --on-brand: #ffffff; --ink: #040707; --ink-soft: #2b2b2b; --muted: #6b6b6b;
+  --line: #e5e5e5; --line-strong: #8c8c8c; --surface: #ffffff; --surface-2: #f5f5f5; --bg: #f7f6f6;
+  --ok: #1d7a46; --ok-bg: #e8f4ec; --warn: #9a5b00; --warn-bg: #fff4e0; --bad: #b3141b; --bad-bg: #fdeaea; --hl: #fff27a;
+  --sans: "Source Sans 3", "Segoe UI", Arial, sans-serif; --kufi: "Noto Kufi Arabic", "Source Sans 3", Arial, sans-serif;
+  --r-sm: 4px; --r-md: 8px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --ink: #f2f2f2; --ink-soft: #d6d6d6; --muted: #a3a3a3; --line: #2e2e2e; --line-strong: #6e6e6e; --surface: #181818; --surface-2: #222222; --bg: #111111;
+  --ok: #6fd39a; --ok-bg: #16301f; --warn: #f0b85c; --warn-bg: #332611; --bad: #ff7b7f; --bad-bg: #3a1517; --hl: #6b5f00; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --ink: #f2f2f2; --ink-soft: #d6d6d6; --muted: #a3a3a3; --line: #2e2e2e; --line-strong: #6e6e6e; --surface: #181818; --surface-2: #222222; --bg: #111111;
+  --ok: #6fd39a; --ok-bg: #16301f; --warn: #f0b85c; --warn-bg: #332611; --bad: #ff7b7f; --bad-bg: #3a1517; --hl: #6b5f00; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 15px/1.5 var(--sans); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 64px; }
+header.top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 2px solid var(--brand); margin-bottom: 24px; }
+header.top .logo { height: 44px; width: auto; background: #fff; border-radius: var(--r-sm); padding: 4px 8px; }
+header.top h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+header.top .sub { color: var(--muted); font-size: 14px; margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
+.ar { font-family: var(--kufi); direction: rtl; }
+section.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; margin-bottom: 20px; }
+section.step > h2 { display: flex; align-items: baseline; gap: 10px; margin: 0 0 4px; font-size: 20px; }
+section.step > h2 .n { color: var(--brand); font-weight: 800; }
+section.step > p.hint { margin: 0 0 16px; color: var(--muted); font-size: 14px; }
+.lib { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; font-size: 13px; color: var(--muted); }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.chip.ok { background: var(--ok-bg); color: var(--ok); } .chip.warn { background: var(--warn-bg); color: var(--warn); } .chip.bad { background: var(--bad-bg); color: var(--bad); }
+.chip.neutral { background: var(--surface-2); color: var(--ink-soft); border: 1px solid var(--line); }
+.drop { display: grid; place-items: center; text-align: center; gap: 6px; border: 2px dashed var(--line-strong); border-radius: var(--r-md); padding: 22px 16px; background: var(--surface-2); cursor: pointer; }
+.drop:hover, .drop.over { border-color: var(--brand); }
+.drop strong { font-size: 16px; } .drop span { color: var(--muted); font-size: 13px; }
+button, .btn { font: 600 14px var(--sans); border-radius: var(--r-md); padding: 9px 16px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink); cursor: pointer; }
+button.primary { background: var(--brand); color: var(--on-brand); border-color: var(--brand); font-size: 16px; padding: 12px 22px; }
+button.primary:disabled { opacity: .5; cursor: not-allowed; }
+button.link { border: 0; background: none; color: var(--brand); padding: 4px 6px; }
+button:focus-visible, input:focus-visible, select:focus-visible, .drop:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.cards { display: grid; gap: 16px; margin-top: 16px; }
+.card { border: 1px solid var(--line); border-radius: var(--r-md); overflow: hidden; }
+.card-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 14px; background: var(--surface-2); border-bottom: 1px solid var(--line); }
+.card-head .model { font-weight: 800; font-size: 17px; color: var(--brand); }
+.card-head .file { color: var(--muted); font-size: 13px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1 1 160px; }
+.card-body { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 16px; padding: 14px; }
+@media (max-width: 720px) { .card-body { grid-template-columns: minmax(0, 1fr); } }
+.pic { display: grid; gap: 8px; align-content: start; }
+.pic .frame { background: #fff; border: 1px solid var(--line); border-radius: var(--r-sm); display: grid; place-items: center; min-height: 140px; padding: 6px; }
+.pic img { max-height: 180px; object-fit: contain; }
+.tbl { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; padding: 6px 8px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+td { padding: 4px 8px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+td input { width: 100%; min-width: 60px; }
+input, select, textarea { font: 15px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 7px 9px; }
+input.ar, textarea.ar { font-family: var(--kufi); font-size: 14px; }
+input.code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; letter-spacing: .02em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px 16px; }
+.field { display: grid; gap: 4px; min-width: 0; } .field label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+.field.wide { grid-column: 1 / -1; }
+details.cons { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+details.cons summary { cursor: pointer; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-weight: 700; }
+.cons-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: var(--warn-bg); }
+.field input, .field select, .field textarea { width: 100%; min-width: 0; }
+.note { font-size: 13px; color: var(--muted); }
+.prices { display: grid; gap: 16px; }
+.price-block { border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; display: grid; gap: 10px; }
+.price-block h3 { margin: 0; font-size: 16px; color: var(--brand); }
+.total { display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: baseline; padding: 14px; border-radius: var(--r-md); background: var(--surface-2); }
+.total .big { font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.total .words { font-family: var(--kufi); direction: rtl; flex: 1 1 260px; text-align: right; }
+.gen { display: grid; gap: 14px; }
+.todo { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 14px; }
+.todo li mark { background: var(--hl); color: var(--ink); padding: 0 4px; border-radius: 3px; }
+.status { font-size: 14px; min-height: 1.5em; } .status.err { color: var(--bad); } .status.ok { color: var(--ok); }
+.empty { color: var(--muted); font-size: 14px; padding: 6px 0; }
+.spin { width: 14px; height: 14px; border: 2px solid var(--line-strong); border-top-color: var(--brand); border-radius: 50%; display: inline-block; animation: s 0.8s linear infinite; }
+@keyframes s { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <img class="logo" id="logo" alt="Infinity Distribution" hidden>
+    <div>
+      <div class="eyebrow">Konica Minolta production print</div>
+      <h1>Offer Builder</h1>
+      <p class="sub">Foliant export in, branded Word offer out. Anything left empty stays highlighted in yellow in the Word file.</p>
+    </div>
+  </header>
+
+  <section class="step" aria-labelledby="s1">
+    <h2 id="s1"><span class="n">1</span> Machines</h2>
+    <p class="hint">Add one Foliant export per machine (the PDF with the Order Information page). Each one becomes a machine in the offer.</p>
+    <div class="lib" id="lib"><span class="spin" aria-hidden="true"></span> Loading the machine library…</div>
+    <label class="drop" id="drop" tabindex="0">
+      <strong>Add Foliant PDF</strong>
+      <span>Drop the file here or click to choose. PDF, PNG or JPG.</span>
+      <input type="file" id="foliantInput" accept="application/pdf,image/png,image/jpeg" multiple hidden>
+    </label>
+    <div class="cards" id="cards"><p class="empty" id="noMachines">No machines yet. The offer is built from the machines you add here.</p></div>
+  </section>
+
+  <section class="step" aria-labelledby="s2">
+    <h2 id="s2"><span class="n">2</span> Client &amp; terms</h2>
+    <p class="hint">Terms start from Infinity's standard text. Change only what this deal needs.</p>
+    <div class="grid">
+      <div class="field"><label for="customerEn">Customer name (English)</label><input id="customerEn" placeholder="e.g. Ministry of Justice"></div>
+      <div class="field"><label for="customerAr">اسم العميل (عربي)</label><input id="customerAr" class="ar" dir="rtl" placeholder="مثال: وزارة العدل"></div>
+      <div class="field"><label for="ref">Offer ref. (optional)</label><input id="ref" placeholder="Empty = not shown"></div>
+      <div class="field"><label for="date">Offer date</label><input id="date"></div>
+      <div class="field"><label for="validityDays">Validity (days)</label><input id="validityDays" inputmode="numeric"></div>
+      <div class="field"><label for="delivery">مدة التوريد</label><div style="display:flex;gap:6px;min-width:0">
+        <input id="delivery" size="4" inputmode="numeric" placeholder="5 or 2-5" style="flex:1 1 0;width:auto;min-width:0">
+        <select id="deliveryUnit" aria-label="Delivery unit" style="flex:0 0 auto;width:auto"><option value="days" selected>Working days</option><option value="weeks">Weeks</option><option value="months">Months</option></select></div></div>
+      <div class="field"><label for="warrantyCopies">الضمان: عدد النسخ (فارغ = سنة فقط)</label><input id="warrantyCopies" class="ar" dir="rtl"></div>
+      <div class="field"><label for="responseHours">Response time (hours)</label><input id="responseHours" inputmode="numeric"></div>
+      <div class="field"><label for="training">مدة التدريب</label><input id="training" class="ar" dir="rtl"></div>
+      <div class="field"><label for="tel">Infinity phone</label><input id="tel"></div>
+      <div class="field"><label for="mobile">Mobile</label><input id="mobile"></div>
+      <div class="field"><label for="repCode">Sales rep code</label><input id="repCode"></div>
+      <div class="field"><label for="preparedBy">Prepared by (your name)</label><input id="preparedBy" autocomplete="name"></div>
+      <div class="field wide"><label for="paymentPick">السداد</label><select id="paymentPick" class="ar" dir="rtl" aria-label="Saved payment terms"></select><input id="payment" class="ar" dir="rtl" aria-label="Payment terms text" placeholder="اختر من القائمة أو اكتب شروط سداد جديدة"></div>
+    </div>
+    <p class="note">Phone, mobile, rep code and your name are remembered in this browser for your next offer.</p>
+  </section>
+
+  <section class="step" aria-labelledby="s3">
+    <h2 id="s3"><span class="n">3</span> Prices</h2>
+    <p class="hint">The offer always shows unit prices without VAT, then adds a 14% VAT line and the total with VAT. Leave a price empty to fill it in Word later.</p>
+    <div class="grid" style="margin:0 0 14px">
+      <div class="field"><label for="currency">Currency</label><select id="currency"><option value="EGP" selected>EGP – جنيه مصري</option><option value="EUR">EUR – يورو</option></select></div>
+      <div class="field"><label for="vatMode">The prices I type are</label><select id="vatMode"><option value="incl" selected>Including 14% VAT</option><option value="excl">Excluding VAT</option></select></div>
+    </div>
+    <div class="prices" id="prices"><p class="empty">Prices appear here once a machine is added.</p></div>
+  </section>
+
+  <section class="step" aria-labelledby="s4">
+    <h2 id="s4"><span class="n">4</span> Download</h2>
+    <div class="gen">
+      <div id="todoWrap"></div>
+      <label style="display:flex;align-items:center;gap:8px;margin:0 0 6px;cursor:pointer"><input type="checkbox" id="withStrengths" checked style="width:18px;height:18px;margin:0"> Include Offer Strengths (نقاط القوة بالعرض)</label>
+      <label style="display:flex;align-items:center;gap:8px;margin:0 0 10px;cursor:pointer"><input type="checkbox" id="withAttach" checked style="width:18px;height:18px;margin:0"> Include Attachments (المرفقات)</label>
+      <div><button class="primary" id="genBtn" disabled>Download Word offer</button></div>
+      <div class="status" id="status" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="step" id="logWrap" hidden aria-labelledby="s5">
+    <h2 id="s5"><span class="n">5</span> Offers log</h2>
+    <p class="hint">Only you see this. Every downloaded offer is recorded here: who prepared it, their claude.ai account when known, the customer, machines and total. <button class="link" id="logRefresh">Refresh</button></p>
+    <div id="log"><p class="empty">Loading…</p></div>
+    <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn" id="exportBtn">Export library for the web app</button>
+      <span class="status" id="exportStatus" role="status"></span>
+    </div>
+  </section>
+</div>
+
+<script>
+/* Web app runtime: stands in for the claude.ai page runtime. Data comes from data/library.json (exported from the
+   Offer Builder), pictures and fonts from assets/, downloads go straight to the browser. */
+(function () {
+  var LIB = { machines: {}, docs: {} };
+  var ready = fetch('data/library.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) {
+    (j.machines || []).forEach(function (m) { if (m && m.id) LIB.machines[m.id] = m; });
+    LIB.docs['config/settings'] = j.settings || null; LIB.docs['config/assets'] = j.assets || null;
+    LIB.docs['config/payments'] = { terms: j.payments || [] };
+    try { var p = JSON.parse(localStorage.getItem('web.payments') || 'null'); if (p && p.terms) LIB.docs['config/payments'] = p; } catch (e) {}
+  });
+  var clone = function (d) { return d == null ? d : JSON.parse(JSON.stringify(d)); };
+  var snap = function (d) { return { exists: d != null, data: function () { return clone(d); } }; };
+  var doc = function (p) { return {
+    get: function () { return ready.then(function () { var a = p.split('/'); return snap(a[0] === 'machines' ? LIB.machines[a[1]] : LIB.docs[p]); }); },
+    set: function (d) { if (p === 'config/payments') { LIB.docs[p] = d; try { localStorage.setItem('web.payments', JSON.stringify(d)); } catch (e) {} } return Promise.resolve(); },
+    update: function () { return Promise.resolve(); } }; };
+  var db = { doc: doc, collection: function (n) { return { get: function () { return ready.then(function () {
+    return { docs: n === 'machines' ? Object.keys(LIB.machines).map(function (id) { return { id: id, data: function () { return clone(LIB.machines[id]); } }; }) : [] }; }); } }; } };
+  var downloads = { save: function (o) { var b = o.data instanceof Blob ? o.data : new Blob([o.data]); var u = URL.createObjectURL(b);
+    var a = document.createElement('a'); a.href = u; a.download = o.filename; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(u); }, 60000); return Promise.resolve(); } };
+  window.ASSET_BASE = 'assets/';
+  window.WEB_APP = true;
+  window.claude = { use: function (k) { return Promise.resolve({ db: db, downloads: downloads }[k] || null); } };
+})();
+</script>
+<script src="config.js"></script>
+<script src="vendor/pdf.worker.min.js"></script>
+<script src="vendor/pdf.min.js"></script>
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/docx.iife.js"></script>
+<script>
+/* Infinity Offer generator — shared by the Offer Builder page (browser) and Node tests.
+   buildOffer(ctx, D) returns a docx Document. D = the docx library namespace.
+   ctx = { date, customerEn, customerAr, ref, validityDays, payment, delivery, deliveryUnit, warrantyCopies,
+           responseHours, training, tel, mobile, repCode, company, machines:[{lib, items, picture, qty, unitPrice, consumablePrices}],
+           images:{header, logo, parts:{MODEL:img}}, fonts:{kufiR, kufiB} }   img = {data, w, h} (PNG bytes + pixel size) */
+(function (root) {
+  'use strict';
+
+  // ---------- Arabic amount in words (Egyptian pounds) ----------
+  const ONES = ['', 'واحد', 'اثنان', 'ثلاثة', 'أربعة', 'خمسة', 'ستة', 'سبعة', 'ثمانية', 'تسعة'];
+  const TEENS = ['عشرة', 'أحد عشر', 'اثنا عشر', 'ثلاثة عشر', 'أربعة عشر', 'خمسة عشر', 'ستة عشر', 'سبعة عشر', 'ثمانية عشر', 'تسعة عشر'];
+  const TENS = ['', '', 'عشرون', 'ثلاثون', 'أربعون', 'خمسون', 'ستون', 'سبعون', 'ثمانون', 'تسعون'];
+  const HUNDREDS = ['', 'مائة', 'مائتان', 'ثلاثمائة', 'أربعمائة', 'خمسمائة', 'ستمائة', 'سبعمائة', 'ثمانمائة', 'تسعمائة'];
+  const SCALES = [['ألف', 'ألفان', 'آلاف'], ['مليون', 'مليونان', 'ملايين'], ['مليار', 'ملياران', 'مليارات']];
+  function under1000(n) {
+    const h = Math.floor(n / 100), r = n % 100, parts = [];
+    if (h) parts.push(HUNDREDS[h]);
+    if (r) {
+      if (r < 10) parts.push(ONES[r]);
+      else if (r < 20) parts.push(TEENS[r - 10]);
+      else parts.push((r % 10 ? ONES[r % 10] + ' و' : '') + TENS[Math.floor(r / 10)]);
+    }
+    return parts.join(' و');
+  }
+  function arabicWords(num) {
+    num = Math.round(Number(num) || 0);
+    if (num === 0) return 'صفر';
+    const groups = [];
+    while (num > 0) { groups.push(num % 1000); num = Math.floor(num / 1000); }
+    const out = [];
+    for (let i = groups.length - 1; i >= 0; i--) {
+      const g = groups[i];
+      if (!g) continue;
+      if (i === 0) { out.push(under1000(g)); continue; }
+      const [one, two, many] = SCALES[i - 1];
+      if (g === 1) out.push(one);
+      else if (g === 2) out.push(two);
+      else if (g <= 10) out.push(under1000(g) + ' ' + many);
+      else out.push(under1000(g) + ' ' + one);
+    }
+    return out.join(' و');
+  }
+  // delivery period: "5" or "2-5" + unit (days / weeks / months) -> Arabic with the right plural
+  const D_UNITS = { days: ['يوم عمل واحد', 'يومي عمل', 'أيام عمل', 'يوم عمل'], weeks: ['أسبوع واحد', 'أسبوعين', 'أسابيع', 'أسبوعاً'], months: ['شهر واحد', 'شهرين', 'أشهر', 'شهراً'] };
+  function deliveryText(v, unit) {
+    const u = D_UNITS[unit] || D_UNITS.days;
+    const s = String(v || '').trim().replace(/[٠-٩]/g, (d) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/^من\s*/, '');
+    const r = s.match(/^(\d+)\s*(?:-|–|—|to|إلى)\s*(\d+)$/i);
+    if (r) { const b = Number(r[2]); return `من ${r[1]} إلى ${r[2]} ${b <= 10 ? u[2] : u[3]}`; }
+    if (!/^\d+$/.test(s)) return s || null;
+    const n = Number(s);
+    return n === 1 ? u[0] : n === 2 ? u[1] : `${n} ${n <= 10 ? u[2] : u[3]}`;
+  }
+  // ---------- money: currency + VAT (prices may be typed with or without 14% VAT; the offer shows them without) ----------
+  const VAT_RATE = 0.14;
+  const CURRENCIES = { EGP: { code: 'EGP', name: 'جنيه مصري', inWords: 'بالجنيه المصري', sub: 'قرش' }, EUR: { code: 'EUR', name: 'يورو', inWords: 'باليورو', sub: 'سنت' } };
+  const r2 = (x) => Math.round(x * 100) / 100;
+  const exVat = (p, incl) => (p == null ? null : incl ? r2(p / (1 + VAT_RATE)) : p);
+  // lines: [{unit, qty}] as typed -> unit and line prices without VAT, total without VAT, VAT, total with VAT (null when a price is missing)
+  function priceMath(lines, incl) {
+    const out = lines.map((l) => { const u = exVat(l.unit, incl); return { unitEx: u, lineEx: u == null ? null : r2(u * l.qty), lineTyped: l.unit == null ? null : l.unit * l.qty }; });
+    if (out.some((o) => o.lineEx == null)) return { lines: out, grandEx: null, vat: null, grandInc: null };
+    const grandEx = r2(out.reduce((a, o) => a + o.lineEx, 0));
+    const grandInc = incl ? r2(out.reduce((a, o) => a + o.lineTyped, 0)) : r2(grandEx * (1 + VAT_RATE));
+    return { lines: out, grandEx, vat: r2(grandInc - grandEx), grandInc };
+  }
+  // "فقط ... جنيه مصري و50 قرشاً لا غير"
+  function amountWords(x, cur) {
+    const c = CURRENCIES[cur] || CURRENCIES.EGP, whole = Math.floor(x + 1e-9), cents = Math.round((x - whole) * 100);
+    return 'فقط ' + arabicWords(whole) + ' ' + c.name + (cents ? ' و' + cents + ' ' + c.sub : '') + ' لا غير';
+  }
+  const fmt = (n) => Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 });
+  const num = (v) => { const x = Number(String(v ?? '').replace(/[, ]/g, '')); return isFinite(x) && String(v ?? '').trim() !== '' ? x : null; };
+
+  // ---------- assemble one machine from library + Foliant items ----------
+  // add-on units sit right after the unit they fit into (configuration, technical details, financial list):
+  // SD-510 booklet maker after FS-541 / FS-532, punch kits after their finisher, and so on
+  const HOSTS = {
+    'SD-510': ['FS-541', 'FS-532', 'FS-532m'], 'PK-525': ['FS-541', 'FS-532', 'FS-532m'], 'PI-502': ['FS-541', 'FS-532', 'FS-532m'],
+    'MK-732': ['FS-541', 'FS-532', 'FS-532m'], 'SD-506': ['FS-532', 'FS-532m'], 'SD-513': ['FS-532', 'FS-532m'],
+    'PK-519': ['FS-533'], 'MK-607': ['FS-533'], 'PK-527': ['FS-542'], 'PK-524': ['FS-539', 'FS-539SD'],
+    'PK-526': ['FS-540', 'FS-540SD'], 'ZU-609': ['FS-540', 'FS-540SD'], 'PI-507': ['FS-540', 'FS-540SD'], 'JS-602': ['FS-540', 'FS-540SD'],
+  };
+  function attachOrder(items) {
+    const key = (s) => String(s || '').toUpperCase().replace(/\s+/g, '');
+    const hostOf = (it) => { const h = HOSTS[Object.keys(HOSTS).find((k) => key(k) === key(it.model))] || [];
+      return items.find((x) => x !== it && h.some((n) => key(n) === key(x.model))); };
+    const out = items.filter((it) => !hostOf(it));
+    for (const it of items) { const h = hostOf(it); if (!h) continue;
+      let i = out.indexOf(h); while (i + 1 < out.length && hostOf(out[i + 1]) === h) i++;
+      out.splice(i + 1, 0, it); }
+    return out;
+  }
+  function assembleMachine(m) {
+    const lib = m.lib, items = attachOrder(m.items || []);
+    const config = [];
+    for (const it of items) {
+      if (/main ?body/i.test(it.category)) {
+        config.push({ category: 'Main Body', pn: it.code, model: lib.model, qty: it.qty, en: lib.mainBody.en, ar: lib.mainBody.ar, main: true });
+        continue;
+      }
+      const p = lib.parts[it.model] || {};
+      const cat = /paper/i.test(it.category) ? 'Paper Supply' : /finish/i.test(it.category) ? 'Finishing' : /control/i.test(it.category) ? 'Controller' : 'Accessory';
+      config.push({ category: p.category || cat, pn: it.code, model: it.model, qty: it.qty, en: p.en || '[Description]', ar: p.ar || '[الوصف]' });
+    }
+    if (!config.some((c) => c.main)) config.unshift({ category: 'Main Body', pn: lib.mainBody.pn, model: lib.model, qty: 1, en: lib.mainBody.en, ar: lib.mainBody.ar, main: true });
+    const models = config.filter((c) => !c.main).map((c) => c.model);
+    const dims = m.phys ? m.phys.rows.map((r) => r.slice()) : [[lib.model, ...lib.engineDims]];   // Foliant layout wins when the PDF has it
+    // AccurioPress C10500/C12010/C14010 wording follows the colour count: S (W, WO) = 5 drums, WCMYK  ·  4-colour = 4 drums, CMYK
+    const cfam = /C(10500|12010|14010)/i.test(lib.model), five = /C\d+(S|W|WO)\s*$/i.test(String(lib.model).trim());
+    const colourFix = (v) => !cfam ? v : String(v)
+      .replace(/4\s*\/\s*5\s*drums/gi, five ? '5 drums' : '4 drums')
+      .replace(/\bW\s*\/\s*YMCK\b|\bW\s*\/\s*CMYK\b|\bWYMCK\b|\bYMCK\b/g, five ? 'WCMYK' : 'CMYK')
+      .replace(/independent [45] systems/gi, five ? 'independent 5 systems' : 'independent 4 systems');
+    const fixRows = (rs) => (rs || []).map((r) => [r[0], colourFix(r[1]), r[2]]);
+    const mainSpecs = fixRows(lib.mainSpecs);
+    const details = (lib.engineDetails || []).map((d) => Object.assign({}, d, { rows: fixRows(d.rows) }));
+    for (const mo of models) {
+      const p = lib.parts[mo];
+      if (!m.phys && p && p.dims) dims.push([mo, ...p.dims]);
+      if (p && p.details && !details.includes(p.details)) details.push(Object.assign({ part: mo }, p.details));
+    }
+    const shortLines = [];
+    for (let i = 0; i < models.length; i += 3) shortLines.push(models.slice(i, i + 3).join('  ·  '));
+    const strengths = lib.strengths.filter((s) => !s.needs || models.includes(s.needs));
+    return Object.assign({}, lib, { config, dims, details, mainSpecs, includedShort: shortLines, strengths, picture: m.picture, physTotal: m.phys ? m.phys.total : null,
+      qty: num(m.qty) || 1, unitPrice: num(m.unitPrice), consumablePrices: m.consumablePrices || {} });
+  }
+
+  function buildOffer(ctx, D) {
+    const { Paragraph, TextRun, ImageRun, Table, TableRow, TableCell, WidthType, ShadingType, AlignmentType, BorderStyle,
+      VerticalAlign, Header, Footer, PageNumber, PageBreak, HeadingLevel, LevelFormat, TableLayoutType, Document } = D;
+    const M = ctx.machines.map(assembleMachine);
+    const MULTI = M.length > 1;
+    // office machines (bizhub) get the short offer: cover, letter, technical (specs + configuration + consumables), financial
+    const SHORT = M.every((m) => m.kind === 'office' || /^bizhub/i.test(m.model));
+    const MODELS = M.map((m) => m.model);
+    const C = ctx.company;
+    const ATTACH = ctx.attachments !== false;   // the Attachments section (5) is optional, chosen in the builder
+    // warranty copies: empty field = time-only warranty ("one full year"), no "or N copies, whichever comes first"
+    const WCOPIES = String(ctx.warrantyCopies || '').trim();
+    // Offer Strengths (section 2) is optional too; the sections after it move up one number when it is left out
+    const STRENGTHS = ctx.strengths !== false;
+    const N_FIN = STRENGTHS ? '3' : '2', N_AS = STRENGTHS ? '4' : '3', N_ATT = STRENGTHS ? '5' : '4';
+
+    const RED = 'DC2229', INK = '040707', INK_SOFT = '2B2B2B', MUTED = '6B6B6B', BORDER = 'E5E5E5', SURF2 = 'F5F5F5', WHITE = 'FFFFFF';
+    const FONT = 'Arial', AR_BODY = 'Simplified Arabic', AR_HEAD = 'Noto Kufi Arabic', W = 9638, MM = 3.7795;
+
+    const imgFit = (im, maxW, maxH) => { if (!im) return null; const k = Math.min(maxW / im.w, (maxH || 1e9) / im.h);
+      return new ImageRun({ type: im.type || 'png', data: im.data, transformation: { width: Math.round(im.w * k * MM), height: Math.round(im.h * k * MM) } }); };
+
+    const t = (text, o = {}) => new TextRun({ text, size: o.size || 20, sizeComplexScript: (o.size || 20) + (o.head ? 0 : 2),
+      font: { ascii: FONT, hAnsi: FONT, eastAsia: FONT, cs: o.head ? AR_HEAD : AR_BODY },
+      bold: o.bold, boldComplexScript: o.bold, color: o.color || INK, highlight: o.ph ? 'yellow' : undefined, rightToLeft: o.rtl });
+    const ph = (text, o = {}) => t(text, { ...o, ph: true });
+    const ar = (text, o = {}) => t(text, { ...o, rtl: true });
+    const arph = (text, o = {}) => t(text, { ...o, rtl: true, ph: true });
+    const P = (children, o = {}) => new Paragraph({ children: Array.isArray(children) ? children : [children],
+      alignment: o.align, spacing: { before: o.before ?? 0, after: o.after ?? 80, line: o.line }, keepNext: o.keepNext,
+      bidirectional: o.rtl, heading: o.heading, border: o.border, numbering: o.numbering, indent: o.indent, pageBreakBefore: o.newPage });
+    const EN = (text, o = {}) => P([t(text, o)], o);
+    const AR = (children, o = {}) => P(typeof children === 'string' ? [ar(children, o)] : children, { ...o, rtl: true, align: o.align || AlignmentType.START });
+    const gap = (pt = 6) => P([t('')], { after: pt * 20 });
+    const pageBreak = () => new Paragraph({ children: [new PageBreak()] });
+    const isPh = (s) => typeof s === 'string' && /^\[.*\]$/.test(s);
+    const val = (v, fallback) => (v && String(v).trim()) ? String(v).trim() : fallback;   // filled value or "[placeholder]"
+    const enRun = (v, fb, o = {}) => (v && String(v).trim()) ? t(String(v).trim(), o) : ph(fb, o);
+    const arRun = (v, fb, o = {}) => (v && String(v).trim()) ? ar(String(v).trim(), o) : arph(fb, o);
+
+    const none = { style: BorderStyle.NONE, size: 0, color: WHITE };
+    const noBorders = { top: none, bottom: none, left: none, right: none };
+    const hair = { style: BorderStyle.SINGLE, size: 4, color: BORDER };
+    const hairBorders = { top: hair, bottom: hair, left: hair, right: hair };
+    function cell(content, width, o = {}) {
+      const kids = (Array.isArray(content) ? content : [content]).map((c) => {
+        if (typeof c !== 'string') return c;
+        const ro = { size: o.size || 18, bold: o.bold, color: o.color, head: o.head };
+        const po = { after: 0, align: o.align };
+        if (isPh(c)) return o.rtl ? AR([arph(c, ro)], po) : P([ph(c, ro)], po);
+        return o.rtl ? AR(c, { ...ro, ...po }) : EN(c, { ...ro, ...po });
+      });
+      return new TableCell({ children: kids, width: { size: width, type: WidthType.DXA },
+        shading: o.fill ? { type: ShadingType.CLEAR, color: 'auto', fill: o.fill } : undefined,
+        borders: o.borders || hairBorders, verticalAlign: o.valign || VerticalAlign.CENTER,
+        margins: { top: o.pad ?? 70, bottom: o.pad ?? 70, left: 110, right: 110 }, columnSpan: o.span });
+    }
+    const table = (widths, rows, o = {}) => new Table({ width: { size: widths.reduce((a, b) => a + b, 0), type: WidthType.DXA }, columnWidths: widths,
+      layout: TableLayoutType.FIXED, rows, alignment: AlignmentType.CENTER, visuallyRightToLeft: o.rtl ? true : undefined });
+    const hdr = (widths, labels) => new TableRow({ tableHeader: true, cantSplit: true, children: labels.map((l, i) =>
+      cell(l[0], widths[i], { fill: RED, color: WHITE, bold: true, rtl: l[1], align: l[2], head: true })) });
+    // a plain string cell must not read String.prototype.bold & co. as options (that wrote w:b="function bold()" and broke Word)
+    const row = (widths, cells, zebra) => new TableRow({ cantSplit: true, children: cells.map((c0, i) => {
+      const c = c0 !== null && typeof c0 === 'object' && 'v' in c0 ? c0 : { v: c0 };
+      return cell(c.v, widths[i], { fill: zebra ? SURF2 : undefined, rtl: c.rtl, bold: c.bold, align: c.align, color: c.color }); }) });
+
+    const partOf = (title) => (title.match(/^([A-Z]{1,4}-\d{3}[a-z]?|PatLite)\b/) || [])[1];
+    function specTable(d) {
+      const rows = d.rows, pic = d.pic ? imgFit(d.pic, 29, Math.max(26, rows.length * 7.5)) : imgFit(ctx.images.parts[d.part || partOf(d.title)], 29, Math.max(26, rows.length * 7.5));
+      const plain = (w) => table(w, [
+        hdr(w, [[d.title], ['Specification / المواصفات', false, AlignmentType.CENTER], [d.titleAr, true]]),
+        ...rows.map((r, i) => row(w, [{ v: r[0], bold: true }, r[1], { v: r[2], rtl: true, bold: true }], i % 2 === 1)),
+      ]);
+      if (!pic) return plain([2500, 4638, 2500]);
+      // picture | nested spec table in one row that cannot split across pages
+      return new Table({ width: { size: W, type: WidthType.DXA }, columnWidths: [1900, 7738], layout: TableLayoutType.FIXED, alignment: AlignmentType.CENTER,
+        rows: [new TableRow({ cantSplit: true, children: [
+          new TableCell({ children: [P([pic], { after: 0, align: AlignmentType.CENTER })], width: { size: 1900, type: WidthType.DXA },
+            borders: hairBorders, verticalAlign: VerticalAlign.CENTER, margins: { top: 60, bottom: 60, left: 80, right: 80 } }),
+          new TableCell({ children: [plain([2000, 3838, 1900]), P([t('', { size: 2 })], { after: 0 })], width: { size: 7738, type: WidthType.DXA },
+            borders: noBorders, margins: { top: 0, bottom: 0, left: 0, right: 0 } }),
+        ] })] });
+    }
+
+    const H2 = (n, en, a, newPage) => P([t(`${n}  ${en}`, { size: 26, bold: true }), t('    '), ar(a, { size: 24, bold: true, color: RED, head: true })],
+      { heading: HeadingLevel.HEADING_2, before: 200, after: 120, keepNext: true, newPage, border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: RED, space: 4 } } });
+    const H3 = (n, en, a) => P([t(`${n}  ${en}`, { size: 22, bold: true, color: INK_SOFT }), t('    '), ar(a, { size: 20, bold: true, color: RED, head: true })],
+      { heading: HeadingLevel.HEADING_3, before: 160, after: 100, keepNext: true });
+    const arLabel = (text) => AR([ar(text, { size: 20, bold: true, color: RED, head: true })], { after: 60, keepNext: true });
+    const label = (text) => EN(text.toUpperCase(), { size: 16, bold: true, color: RED, after: 40, keepNext: true });
+    const bulletEN = (children) => P(children, { numbering: { reference: 'b', level: 0 }, after: 50 });
+    const ORD_AR = ['الأولى', 'الثانية', 'الثالثة', 'الرابعة', 'الخامسة', 'السادسة'];
+    const machineWord = MULTI ? 'الماكينات' : 'الماكينة';
+    const customerEN = val(ctx.customerEn, val(ctx.customerAr, '[Customer name]'));
+
+    const header = ctx.images.header;
+    function sectionPage(n, en, a, lang = 'English / Arabic  |  انجليزي / عربي') {
+      const w = [3000, 4600];
+      return [
+        new Paragraph({ children: [t(`${n}. ${en}`, { size: 2, color: WHITE })], heading: HeadingLevel.HEADING_1, spacing: { after: 0 } }),
+        P([imgFit(header, 170)], { align: AlignmentType.CENTER, after: 0 }),
+        gap(MULTI ? 60 : 70),
+        EN('Digital Production Printing Solutions', { size: 36, bold: true, after: 40, align: AlignmentType.CENTER }),
+        EN('Technical & Financial Offer', { size: 22, color: MUTED, after: 0, align: AlignmentType.CENTER }),
+        gap(40),
+        EN(`${n}.  ${en}`, { size: 56, bold: true, after: 120, align: AlignmentType.CENTER }),
+        AR([ar(a, { size: 44, bold: true, color: RED, head: true })], { after: 0, align: AlignmentType.CENTER }),
+        P([t('')], { after: 600, border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: RED, space: 1 } }, indent: { left: 3600, right: 3600 } }),
+        table(w, [
+          new TableRow({ children: [cell('End User / اسم العميل', w[0], { bold: true, color: WHITE, fill: RED, head: true }), cell(customerEN, w[1], { bold: true })] }),
+          new TableRow({ children: [cell(MULTI ? 'Machines / الماكينات' : 'Machine / الماكينة', w[0], { bold: true, color: WHITE, fill: RED, head: true }),
+            cell(MODELS.map((m) => 'Konica Minolta ' + m), w[1], { bold: true })] }),
+          new TableRow({ children: [cell('Pages Language / لغة الصفحات', w[0], { bold: true, color: WHITE, fill: RED, head: true }), cell(lang, w[1])] }),
+        ]),
+        pageBreak(),
+      ];
+    }
+
+    // ---------- cover + letter ----------
+    const cover = [
+      // the whole cover (down to the Phone / Mobile row) must stay on page 1: header picture capped at 75 mm high
+      P([imgFit(header, 170, 75)], { align: AlignmentType.CENTER, after: 0 }),
+      gap(6),
+      label('Technical & Financial Offer  |  العرض الفني والمالي'),
+      EN(SHORT ? 'Office Printing Solutions' : 'Digital Production Printing Solutions', { size: 44, bold: true, after: 40 }),
+      AR([ar(SHORT ? 'حلول الطباعة المكتبية' : 'حلول الطباعة الرقمية الإنتاجية', { size: 30, bold: true, color: INK_SOFT, head: true })], { after: 160 }),
+      ...M.flatMap((m) => [P([t('Konica Minolta ' + m.model, { size: 28, bold: true, color: RED })], { after: 20 }), EN(m.tagline, { size: 20, color: MUTED, after: 100 })]),
+    ];
+    const oiW = [2300, 2519, 2300, 2519];
+    const offerInfo = table(oiW, [
+      row(oiW, [{ v: 'Offer Date / تاريخ العرض', bold: true }, ctx.date, { v: 'Deal Type / نوع العملية', bold: true }, 'Direct Order / أمر بيع مباشر'], true),
+      new TableRow({ children: [cell('Validity / مدة الصلاحية', oiW[0], { bold: true }),
+        cell(P([enRun(ctx.validityDays, '[15]'), t(' days from offer date')], { after: 0 }), oiW[1]),
+        cell('End User / اسم العميل', oiW[2], { bold: true }), cell(customerEN, oiW[3])] }),
+      // the offer reference shows only when one was typed; otherwise the language value takes the whole row
+      new TableRow({ children: String(ctx.ref || '').trim()
+        ? [cell('Offer Language / لغة العرض', oiW[0], { bold: true, fill: SURF2 }), cell('English / Arabic', oiW[1], { fill: SURF2 }),
+          cell('Offer Ref. / رقم العرض', oiW[2], { bold: true, fill: SURF2 }), cell(String(ctx.ref).trim(), oiW[3], { fill: SURF2 })]
+        : [cell('Offer Language / لغة العرض', oiW[0], { bold: true, fill: SURF2 }), cell('English / Arabic', oiW[1] + oiW[2] + oiW[3], { fill: SURF2, span: 3 })] }),
+    ]);
+    const cW = [2700, 4238, 2700];
+    const company = table(cW, [
+      new TableRow({ children: [cell([EN('Authorized Distribution Channel Basic Data', { size: 18, bold: true, color: WHITE, after: 0, align: AlignmentType.CENTER }),
+        AR([ar('البيانات الرئيسية للموزع المعتمد المسؤول عن الاستيراد ومستوى خدمات ما بعد البيع', { size: 17, bold: true, color: WHITE, head: true })], { after: 0, align: AlignmentType.CENTER })],
+        W, { fill: INK_SOFT, span: 3 })] }),
+      row(cW, [{ v: 'Company Name', bold: true }, `${C.nameEn}  |  ${C.nameAr}`, { v: 'اسم الشركة', rtl: true, bold: true }]),
+      row(cW, [{ v: 'Commercial Register No.', bold: true }, C.cr, { v: 'رقم السجل التجاري', rtl: true, bold: true }], true),
+      row(cW, [{ v: 'Tax Card No.', bold: true }, C.tax, { v: 'رقم البطاقة الضريبية', rtl: true, bold: true }]),
+      new TableRow({ children: [cell('Address', cW[0], { bold: true, fill: SURF2 }),
+        cell([EN(C.addrEn, { size: 17, after: 20 }), AR(C.addrAr, { size: 17, after: 0 })], cW[1], { fill: SURF2 }),
+        cell('العنوان', cW[2], { rtl: true, bold: true, fill: SURF2 })] }),
+      row(cW, [{ v: 'Email / Website', bold: true }, `${C.email}  |  ${C.web}`, { v: 'البريد الإلكتروني / الموقع', rtl: true, bold: true }]),
+      new TableRow({ children: [cell('Phone / Mobile', cW[0], { bold: true, fill: SURF2 }),
+        cell(P([enRun(ctx.tel, '[Tel.]'), t('  |  '), enRun(ctx.mobile, '[Mobile]')], { after: 0 }), cW[1], { fill: SURF2 }),
+        cell('الهاتف / المحمول', cW[2], { rtl: true, bold: true, fill: SURF2 })] }),
+    ]);
+    const fitText = SHORT ? 'والتي تعد من أنسب حلول الطباعة والنسخ والمسح الضوئي للمكاتب والإدارات من حيث الاعتمادية وسهولة الاستخدام وانخفاض تكلفة التشغيل.'
+      : 'والتي تعد من أنسب حلول الطباعة الرقمية للمطابع والمنشآت التي تحتاج إلى إنتاجية عالية وجودة طباعة ثابتة.';
+    const letterIntro = MULTI
+      ? [AR('تتشرف شركة انفنيتي للتوزيع – قطاع حلول الطباعة الرقمية – بأن تتقدم لسيادتكم بالعرض الفني والمالي التالي للماكينات التالية:', { after: 80, line: 300 }),
+         ...M.map((m, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(m.letterAr)], { after: 60, indent: { right: 360 } })),
+         AR(fitText, { after: 120, before: 60, line: 300 })]
+      : [AR('تتشرف شركة انفنيتي للتوزيع بأن تتقدم لسيادتكم بالعرض الفني والمالي التالي ل' + M[0].letterAr + '، ' + fitText, { after: 120, line: 300 })];
+    const toc = SHORT ? [['1', 'Technical Offer', 'العرض الفني'], ...M.map((m, i) => [`1.${i + 1}`, MULTI ? `Machine ${i + 1}: ${m.model}` : m.model, MULTI ? `الماكينة ${ORD_AR[i]}` : 'الماكينة موضوع العرض']),
+      ['2', 'Financial Offer', 'العرض المالي']] : [['1', 'Technical Offer', 'العرض الفني'], ['1.1', 'Technical Offer Summary', 'ملخص العرض الفني'],
+      ...M.map((m, i) => [`1.${i + 2}`, MULTI ? `Machine ${i + 1}: ${m.model}` : m.model, MULTI ? `الماكينة ${ORD_AR[i]}` : 'الماكينة موضوع العرض']),
+      ...(STRENGTHS ? [['2', 'Offer Strengths', 'نقاط القوة بالعرض المقدم']] : []), [N_FIN, 'Financial Offer', 'العرض المالي'],
+      [N_AS, 'After-Sales Services', 'خدمات ما بعد البيع'], ...(ATTACH ? [[N_ATT, 'Attachments', 'المرفقات']] : [])];
+    const letter = [
+      AR([ar('السادة / ', { bold: true, size: 22 }), arRun(ctx.customerAr, '[اسم العميل]', { bold: true, size: 22 })], { after: 200, newPage: true }),
+      AR('تحية طيبة وبعد،', { bold: true, after: 120 }),
+      ...letterIntro,
+      AR('ونحن على أتم استعداد لتقديم أي إيضاحات أو بيانات إضافية تطلبونها.', { after: 120 }),
+      AR('وتفضلوا بقبول فائق الاحترام،', { after: 40 }),
+      AR('شركة انفنيتي للتوزيع', { bold: true, color: RED, after: 360 }),
+      label('Contents  |  المحتوى'),
+      ...toc.map(([n, en, a]) => { const sub = n.includes('.'), b = { ...noBorders, bottom: hair };
+        return table([1000, 4319, 4319], [new TableRow({ children: [cell(n, 1000, { borders: b, bold: !sub, color: sub ? MUTED : RED, size: sub ? 18 : 20 }),
+          cell(en, 4319, { borders: b, bold: !sub, size: sub ? 18 : 20 }), cell(a, 4319, { borders: b, bold: !sub, rtl: true, size: sub ? 18 : 20 })] })]); }),
+    ];
+
+    // ---------- 1. technical ----------
+    const sumW = [700, 1500, 2200, 5238];
+    const summary = [
+      H2('1.1', 'Technical Offer Summary', 'ملخص العرض الفني'),
+      AR('تتشرف شركة انفنيتي للتوزيع – قطاع حلول الطباعة الرقمية – بتقديم العرض الفني التالي لجهتكم الموقرة، والذي يعد من أنسب حلول الطباعة الرقمية الإنتاجية من حيث الإنتاجية العالية والجودة الفائقة وتنوع الخامات، مع الترشيد في استهلاك الطاقة الكهربائية وتوفير أقل تكلفة تشغيل ممكنة.', { after: 140, line: 300 }),
+      table(sumW, [
+        hdr(sumW, [['No. / م', false, AlignmentType.CENTER], ['Brand / الماركة', false, AlignmentType.CENTER], ['Model / الطراز', false, AlignmentType.CENTER], ['Configuration / صورة الماكينة', false, AlignmentType.CENTER]]),
+        ...M.map((m, i) => new TableRow({ cantSplit: true, children: [
+          cell(String(i + 1), sumW[0], { align: AlignmentType.CENTER, bold: true }),
+          cell([EN(m.brand, { bold: true, size: 18, after: 20, align: AlignmentType.CENTER }), AR([ar(m.brandAr, { bold: true, size: 18 })], { after: 0, align: AlignmentType.CENTER })], sumW[1]),
+          cell([EN(m.model, { bold: true, size: 20, color: RED, after: 20, align: AlignmentType.CENTER }), EN(m.short, { size: 16, color: MUTED, after: 0, align: AlignmentType.CENTER })], sumW[2]),
+          cell(m.picture ? P([imgFit(m.picture, 86, 55)], { after: 0, align: AlignmentType.CENTER }) : '[Machine picture]', sumW[3], { align: AlignmentType.CENTER }),
+        ] })),
+      ]),
+    ];
+    function machineBlock(m, i) {
+      const n = `1.${i + 2}`, cfgW = [480, 1100, 1250, 1500, 560, 2374, 2374], dW = [2200, 2600, 1400, 3438], conW = [750, 1500, 1150, 2350, 2338, 1550];
+      const width = m.dims.reduce((s, d) => s + (Number(String(d[1]).split(' x ')[0].replace(/,/g, '')) || 0), 0);
+      const weight = m.dims.reduce((s, d) => s + (Number(d[2]) || 0), 0);
+      return [
+        H2(n, MULTI ? `Machine ${i + 1}: Konica Minolta ${m.model}` : `Konica Minolta ${m.model}`, MULTI ? `الماكينة ${ORD_AR[i]}` : 'الماكينة موضوع العرض', true),
+        H3(`${n}.1`, 'Main Engine', 'وحدة الطباعة الرئيسية'),
+        specTable({ title: 'Main Engine', titleAr: 'وحدة الطباعة الرئيسية', rows: m.mainSpecs, part: '-' }),
+        H3(`${n}.2`, 'Offered Configuration', 'مكونات الماكينة موضوع العرض'),
+        EN('Part numbers as per Konica Minolta Foliant configuration.', { size: 16, color: MUTED, after: 100 }),
+        table(cfgW, [
+          hdr(cfgW, [['#', false, AlignmentType.CENTER], ['Category'], ['PN'], ['Model'], ['QTY', false, AlignmentType.CENTER], ['Description in English'], ['الوصف باللغة العربية', true]]),
+          ...m.config.map((r, j) => row(cfgW, [{ v: String(j + 1), align: AlignmentType.CENTER }, r.category, { v: r.pn, bold: true }, { v: r.model, bold: true },
+            { v: String(r.qty), align: AlignmentType.CENTER }, r.en, { v: r.ar, rtl: true }], j % 2 === 1)),
+        ]),
+        gap(10),
+        label('Configuration dimensions & power  |  أبعاد الماكينة ومصدر الطاقة'),
+        table(dW, [
+          hdr(dW, [['Module / الوحدة'], ['W x D x H (mm)'], ['Weight (kg)', false, AlignmentType.CENTER], ['Power / الطاقة']]),
+          m.physTotal ? row(dW, [{ v: 'Total configuration', bold: true },
+            { v: `${fmt(m.physTotal.width)} x ${fmt(m.physTotal.depth)} x ${fmt(m.physTotal.height)}`, bold: true },
+            { v: fmt(m.physTotal.weight), bold: true, align: AlignmentType.CENTER },
+            `Max. ${fmt(m.physTotal.powerMax)} W  ·  main body on 32 A mains + ${m.physTotal.auxLines} x 16 A line${m.physTotal.auxLines === 1 ? '' : 's'}`], true) : row(dW, [{ v: 'Total configuration', bold: true }, { v: `Width ≈ ${fmt(width)}`, bold: true }, { v: `≈ ${fmt(weight)}`, bold: true, align: AlignmentType.CENTER },
+            'Sum of modules; final layout per site survey'], true),
+        ]),
+        gap(6),
+        H3(`${n}.3`, 'Technical Details', 'تفاصيل العرض الفني'),
+        ...m.details.flatMap((d) => [specTable(d), gap(8)]),
+        H3(`${n}.4`, 'Consumables', 'خامات ومستلزمات التشغيل الاستهلاكية'),
+        table(conW, [
+          hdr(conW, [['Type', false, AlignmentType.CENTER], ['PN'], ['Item'], ['Description - English'], ['الوصف بالعربية', true], ['Yield', false, AlignmentType.RIGHT]]),
+          ...m.consumables.map((r, j) => row(conW, [{ v: r[0], align: AlignmentType.CENTER, bold: true, color: r[0] === 'CRU' ? INK : MUTED },
+            { v: r[1], bold: true }, r[2], r[3], { v: r[4], rtl: true }, { v: r[5], align: AlignmentType.RIGHT }], j % 2 === 1)),
+        ]),
+        gap(6),
+        table([4819, 4819], [
+          new TableRow({ children: [cell('CRUs: Customer Replacement Units', 4819, { fill: SURF2 }), cell('أصناف استهلاكية يتم تغييرها بواسطة العميل', 4819, { rtl: true, fill: SURF2 })] }),
+          new TableRow({ children: [cell('ERUs: Engineer Replacement Units', 4819), cell('أصناف استهلاكية يتم تغييرها بواسطة مهندس الصيانة', 4819, { rtl: true })] }),
+          new TableRow({ children: [cell(m.yieldNote[0], 4819, { fill: SURF2, size: 16 }), cell(m.yieldNote[1], 4819, { rtl: true, fill: SURF2, size: 16 })] }),
+        ]),
+      ];
+    }
+    const technical = [...sectionPage('1', 'Technical Offer', 'العرض الفني'), ...summary, ...M.flatMap(machineBlock), gap(6),
+      AR([ar('مواصفات التشغيل: ', { bold: true, size: 18 }), ar('جميع المواصفات المدرجة بالعرض الفني والعمر الافتراضي للماكينات ومستلزمات التشغيل وقطع الغيار تم قياسها بناءً على طباعة مقاس A4 وجه واحد على ورق وزن 80 جرام ونسبة التغطية الموضحة لكل صنف، مع حتمية الالتزام بظروف التشغيل القياسية المنصوص عليها من الجهة المصنعة – شركة كونيكا مينولتا باليابان.', { size: 18 })], { line: 280 })];
+
+    // ---------- 2. strengths ----------
+    const strengthSection = [...sectionPage('2', 'Offer Strengths', 'نقاط القوة بالعرض المقدم'),
+      ...M.flatMap((m, i) => [...(MULTI ? [H2(`2.${i + 1}`, `Konica Minolta ${m.model}`, `الماكينة ${ORD_AR[i]}`)] : []),
+        ...m.strengths.flatMap((s) => [bulletEN([t(s.enB, { bold: true }), t(s.enT)]), AR([ar(s.arB, { bold: true, color: RED }), ar(s.arT)], { after: 160, indent: { right: 360 } })])])];
+
+    // ---------- 3. financial ----------
+    const finW = [700, 1300, 3138, 900, 1800, 1800];
+    const CUR = CURRENCIES[ctx.currency] || CURRENCIES.EGP, INCL = !!ctx.pricesIncludeVat;
+    const PM = priceMath(M.map((m) => ({ unit: m.unitPrice, qty: m.qty })), INCL);
+    const money = (x) => (x == null ? '[ ]' : Number.isInteger(x) ? fmt(x) : x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+    const sumRow = (label, value, strong) => new TableRow({ cantSplit: true, children: [
+      cell(label, finW.slice(0, 5).reduce((a, b) => a + b, 0), { span: 5, fill: strong ? INK_SOFT : SURF2, color: strong ? WHITE : INK, bold: true, rtl: true }),
+      cell(money(value), finW[5], { fill: SURF2, bold: true, align: AlignmentType.CENTER })] });
+    const financial = [...(SHORT ? [H2('2', 'Financial Offer', 'العرض المالي', true)] : sectionPage(N_FIN, 'Financial Offer', 'العرض المالي', 'Arabic  |  عربي')),
+      AR('تتشرف شركة انفنيتي للتوزيع – قطاع حلول الطباعة الرقمية – بأن تتقدم لجهتكم الموقرة بالعرض المالي التالي:', { after: 140 }),
+      table(finW, [
+        hdr(finW, [['م', true, AlignmentType.CENTER], ['الماركة', true], ['الموديل / الوصف', true], ['الكمية', true, AlignmentType.CENTER],
+          [`سعر الوحدة ${CUR.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER], [`إجمالي السعر ${CUR.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER]]),
+        ...M.map((m, i) => new TableRow({ cantSplit: true, children: [
+          cell(String(i + 1), finW[0], { align: AlignmentType.CENTER, bold: true }),
+          cell([AR([ar(m.brandAr, { bold: true, size: 18 })], { after: 20 }), EN(m.brand, { bold: true, size: 16, color: MUTED, after: 0, align: AlignmentType.RIGHT })], finW[1]),
+          cell([EN(m.model, { bold: true, color: RED, size: 20, after: 40, align: AlignmentType.RIGHT }),
+            ...(m.includedShort.length ? [AR([ar('شاملة الوحدات التالية:', { size: 16, bold: true })], { after: 20 }),
+            ...m.includedShort.map((s) => EN(s, { size: 16, color: INK_SOFT, after: 0, align: AlignmentType.RIGHT }))] : [AR([ar(m.mainBody.ar, { size: 16 })], { after: 0 })])], finW[2]),
+          cell(String(m.qty), finW[3], { align: AlignmentType.CENTER, bold: true }),
+          cell(money(PM.lines[i].unitEx), finW[4], { align: AlignmentType.CENTER }),
+          cell(money(PM.lines[i].lineEx), finW[5], { align: AlignmentType.CENTER }),
+        ] })),
+        sumRow('الإجمالي غير شامل ضريبة القيمة المضافة', PM.grandEx),
+        sumRow('ضريبة القيمة المضافة 14%', PM.vat),
+        sumRow(`الإجمالي شامل ضريبة القيمة المضافة (${CUR.name})`, PM.grandInc, true),
+        new TableRow({ children: [cell(AR([PM.grandInc != null ? ar(amountWords(PM.grandInc, CUR.code), { bold: true }) : arph('[المبلغ بالحروف]', { bold: true })],
+          { after: 0, align: AlignmentType.CENTER }), W, { span: 6 })] }),
+      ], { rtl: true }),
+      gap(10), arLabel('بنود التعاقد'),
+      (() => { const w = [2000, 7638], D0 = ctx;
+        const terms = [
+          ['الأسعار', [ar('أسعار الوحدات الموضحة أعلاه غير شاملة ضريبة القيمة المضافة 14%، والإجمالي شامل الضريبة موضح بالجدول.')]],
+          ['العملة', [ar(CUR.code === 'EUR' ? 'الأسعار باليورو، ويتم السداد باليورو أو ما يعادله بالجنيه المصري وفقاً لسعر الصرف المعلن من البنك المركزي المصري يوم السداد.'
+            : 'الدفع بالجنيه المصري، وفقاً لقيم العملات المعلنة من البنك المركزي المصري، ما لم يتم تطبيق قواعد جديدة بالاقتصاد المصري من شأنها التأثير على حركة الاستيراد أو قيمة الجنيه المصري مقابل العملات الأجنبية.')]],
+          ['السداد', [arRun(D0.payment, '[طريقة السداد]')]],
+          ['مدة التوريد', [ar('بضاعة حاضرة: '), deliveryText(D0.delivery, D0.deliveryUnit) ? ar(deliveryText(D0.delivery, D0.deliveryUnit)) : arph('[مدة التوريد]'),
+            ar(' من تاريخ استلام أمر التوريد وسداد الدفعة المقدمة.')]],
+          ['موقع التسليم', [ar('مقر العميل.')]],
+          ['التركيب والتدريب', [ar('الأسعار شاملة التركيب والتدريب داخل مقر العميل.')]],
+          ['الضمان', SHORT ? [ar(`عام ميلادي كامل${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة، شامل الصيانة وقطع الغيار وغير شامل خامات التشغيل والورق.`)]
+            : WCOPIES ? [ar('عام ميلادي كامل أو إنتاج '), ar(WCOPIES), ar(` نسخة (أيهما أقرب)${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
+            : [ar(`عام ميلادي كامل${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]],
+          ['الارتباط', [ar('العرض ساري لمدة '), arRun(D0.validityDays, '[15]'), ar(' يوماً من تاريخ العرض.')]],
+        ];
+        return table(w, terms.map(([k, v], i) => new TableRow({ cantSplit: true, children: [cell(k, w[0], { rtl: true, bold: true, fill: i % 2 ? undefined : SURF2 }),
+          cell(AR(v, { after: 0 }), w[1], { fill: i % 2 ? undefined : SURF2 })] })), { rtl: true }); })(),
+      gap(10),
+      ...M.flatMap((m) => { const w = [2700, 4138, 2800];
+        return [arLabel(MULTI ? `أسعار خامات التشغيل – ${m.model}` : 'أسعار خامات التشغيل'),
+          table(w, [hdr(w, [['الصنف', true], ['الوصف', true], [`سعر الوحدة ${CUR.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER]]),
+            ...m.priceList.map((r, i) => new TableRow({ cantSplit: true, children: [
+              cell(EN(r[0], { bold: true, size: 18, after: 0, align: AlignmentType.RIGHT }), w[0], { fill: i % 2 ? SURF2 : undefined }),
+              cell(r[1], w[1], { rtl: true, fill: i % 2 ? SURF2 : undefined }),
+              cell(money(exVat(num(m.consumablePrices[r[0]]), INCL)), w[2], { align: AlignmentType.CENTER, fill: i % 2 ? SURF2 : undefined })] }))], { rtl: true }), gap(8)]; })];
+
+    // ---------- 4. after-sales ----------
+    const asP = (head, body) => AR([ar(head, { bold: true, color: RED }), ...body], { after: 120, line: 290 });
+    const asB = (children) => AR(children, { after: 60, indent: { right: 360 } });
+    const each = MULTI ? ' لكل ماكينة' : '';
+    const afterSales = [...sectionPage(N_AS, 'After-Sales Services', 'خدمات ما بعد البيع', 'Arabic  |  عربي'),
+      asP(N_AS + '.1  التركيب والتشغيل: ', [ar('يتم بمعرفتنا مجاناً وبدون مقابل من خلال مهندسي شركة انفنيتي للتوزيع.')]),
+      asP(N_AS + '.2  التدريب الداخلي: ', [ar('بدون مقابل ولأي عدد من العاملين بالمطبعة لكل ماكينة لمدة '), arRun(ctx.training, '[يوم عمل كامل]'), ar(' من تاريخ التركيب والتشغيل.')]),
+      asP(N_AS + '.3  الضمان: ', WCOPIES ? [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي أو إنتاج `), ar(WCOPIES), ar(` نسخة (أيهما أقرب)${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
+        : [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي كامل${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]),
+      AR('يشمل الضمان:', { bold: true, after: 60 }),
+      asB([ar('–  الاستجابة لطلبات الأعطال والإصلاحات اللازمة بسرعة استجابة '), arRun(ctx.responseHours, '[48]'), ar(' ساعة من تلقي إدارة خدمة العملاء لطلب الإصلاح طيلة أيام الأسبوع عدا العطلات الرسمية.')]),
+      asB([ar(`–  عدد 12 زيارة صيانة وقائية${each} بواقع زيارة كل شهر بخلاف زيارات الأعطال.`)]),
+      AR('لا يشمل الضمان:', { bold: true, after: 60, before: 80 }),
+      asB([ar('–  بند الورق وأي نوع من وسائط الطباعة.')]),
+      asB([ar('–  بند مستلزمات وخامات التشغيل المدرجة بالعرض الفني (مثل: الحبر، الديفلوبر، الدرام... إلخ).')]),
+      asB([ar('–  قطع الغيار التي قد تتلف نتيجة عدم ثبات التيار الكهربائي بالمطبعة، أو سوء الاستخدام، أو التخزين أو نقل الماكينات بدون معرفة الشركة، أو تعرض الماكينة لحوادث بالتشغيل.')]),
+      AR([ar('يعد الضمان لاغياً في حالة استخدام خامات تشغيل غير أصلية أو التدخل الفني من قبل جهات صيانة غير معتمدة من شركة انفنيتي للتوزيع.', { bold: true, size: 18 })], { after: 140, before: 80 }),
+      asP(N_AS + '.4  الصيانة خلال فترة الضمان: ', [ar('مجانية طيلة فترة الضمان، علماً بأنه لدينا مركز صيانة متخصص ومتوفر به قطع الغيار والخامات الأصلية، ويشرف عليه نخبة من المهندسين المتخصصين والمدربين لدى الجهات المصنعة بالخارج.')]),
+      asP(N_AS + '.5  الصيانة بعد انتهاء فترة الضمان: ', [ar('كامل الاستعداد لإبرام عقد صيانة سنوي وفقاً لاختيار العميل من البدائل التالية:')]),
+      (() => { const w = [1300, 8338];
+        const mm = [['Labor', 'عقد صيانة سنوي شامل لأجور العمل، وغير شامل لبند التشغيل وبند الورق وكافة قطع الغيار ومستلزمات التشغيل، يتم فوترته ربع سنوياً أو شهرياً (أجل).'],
+          ['SMA', 'عقد صيانة سنوي شامل لأجور العمل وقطع الغيار، وغير شامل لبند التشغيل وبند الورق ومستلزمات التشغيل، يتم فوترته ربع سنوياً أو شهرياً (أجل).'],
+          ['FSMA', 'عقد صيانة سنوي شامل لأجور العمل وقطع الغيار ومستلزمات التشغيل، يتم فوترته شهرياً وفقاً لقيمة النسخة والحد الأدنى للإنتاجية الشهرية، وتتم فوترة الإنتاجية الزائدة ربع سنوياً، ويتم حساب قيمة النسخة وفقاً للتغطية والإنتاجية الشهرية المقررة من العميل.']];
+        return table(w, mm.map((r, i) => new TableRow({ cantSplit: true, children: [cell(r[0], w[0], { bold: true, color: WHITE, fill: RED, align: AlignmentType.CENTER }),
+          cell(r[1], w[1], { rtl: true, fill: i % 2 ? SURF2 : undefined })] })), { rtl: true }); })(),
+      gap(6),
+      AR([ar('علماً بأن كافة عروض الصيانة أعلاه لا تشمل قطع الغيار التي قد تتلف نتيجة عدم ثبات التيار الكهربائي، أو سوء الاستخدام، أو التخزين أو نقل الماكينات بدون معرفة الشركة، أو تعرض الماكينة لحوادث بالتشغيل.', { size: 18, color: MUTED })])];
+
+    // ---------- 5. attachments ----------
+    const attachments = [...sectionPage(N_ATT, 'Attachments', 'المرفقات', 'Arabic  |  عربي'),
+      ...[`كتالوجات ${machineWord} والوحدات موضوع العرض.`,
+        'صور ضوئية للمستندات القانونية الخاصة بشركة انفنيتي للتوزيع: عقد التأسيس، البطاقة الضريبية بآخر إقرار ضريبي، سجل تجاري حديث، شهادة التسجيل بضريبة القيمة المضافة.',
+        'شهادة موزع معتمد من الجهة المصنعة لشركة انفنيتي للتوزيع.', 'سابقة الأعمال.'].map((s, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(s)], { after: 80 }))];
+
+    // ---------- short (office) technical ----------
+    function shortBlock(m, i) {
+      const n = `1.${i + 1}`, cfgW = [1300, 1500, 700, 3069, 3069], conW = [750, 1500, 1150, 2350, 2338, 1550];
+      return [
+        H2(n, MULTI ? `Machine ${i + 1}: Konica Minolta ${m.model}` : `Konica Minolta ${m.model}`, MULTI ? `الماكينة ${ORD_AR[i]}` : 'الماكينة موضوع العرض', i > 0),
+        m.picture ? P([imgFit(m.picture, 95, 60)], { align: AlignmentType.CENTER, after: 120, keepNext: true }) : P([ph('[Machine picture]')], { align: AlignmentType.CENTER, after: 120 }),
+        specTable({ title: 'Main Specifications', titleAr: 'المواصفات الرئيسية', rows: m.mainSpecs, part: '-' }),
+        gap(8),
+        label('Offered configuration  |  مكونات الماكينة'),
+        table(cfgW, [
+          hdr(cfgW, [['PN'], ['Model'], ['QTY', false, AlignmentType.CENTER], ['Description in English'], ['الوصف باللغة العربية', true]]),
+          ...m.config.map((r, j) => row(cfgW, [{ v: r.pn, bold: true }, { v: r.model, bold: true }, { v: String(r.qty), align: AlignmentType.CENTER }, r.en, { v: r.ar, rtl: true }], j % 2 === 1)),
+        ]),
+        gap(8),
+        label('Consumables  |  خامات التشغيل'),
+        table(conW, [
+          hdr(conW, [['Type', false, AlignmentType.CENTER], ['PN'], ['Item'], ['Description - English'], ['الوصف بالعربية', true], ['Yield', false, AlignmentType.RIGHT]]),
+          ...m.consumables.map((r, j) => row(conW, [{ v: r[0], align: AlignmentType.CENTER, bold: true }, { v: r[1], bold: true }, r[2], r[3], { v: r[4], rtl: true }, { v: r[5], align: AlignmentType.RIGHT }], j % 2 === 1)),
+        ]),
+        ...(m.yieldNote && m.yieldNote[0] ? [gap(4), table([4819, 4819], [new TableRow({ children: [cell(m.yieldNote[0], 4819, { fill: SURF2, size: 16 }), cell(m.yieldNote[1] || '', 4819, { rtl: true, fill: SURF2, size: 16 })] })])] : []),
+      ];
+    }
+    const shortTechnical = [H2('1', 'Technical Offer', 'العرض الفني', true), ...M.flatMap(shortBlock)];
+
+    // ---------- header / footer / document ----------
+    const pageHeader = new Header({ children: [table([4819, 4819], [new TableRow({ children: [
+      cell(P([imgFit(ctx.images.logo, 22)], { after: 0 }), 4819, { borders: { ...noBorders, bottom: hair }, pad: 40 }),
+      cell([EN(MODELS.join('  +  '), { size: 16, bold: true, after: 0, align: AlignmentType.RIGHT }), EN('Technical & Financial Offer', { size: 14, color: MUTED, after: 0, align: AlignmentType.RIGHT })],
+        4819, { borders: { ...noBorders, bottom: hair }, pad: 40, valign: VerticalAlign.BOTTOM })] })])] });
+    const footer = new Footer({ children: [
+      P([t(`${C.nameEn}  ·  ${C.addrEn}  ·  ${C.email}  ·  ${C.web}  ·  Tel. `, { size: 14, color: MUTED }), enRun(ctx.tel, '[ ]', { size: 14 })],
+        { align: AlignmentType.CENTER, after: 30, border: { top: { style: BorderStyle.SINGLE, size: 4, color: BORDER, space: 6 } } }),
+      P([new TextRun({ children: ['Page ', PageNumber.CURRENT, ' of ', PageNumber.TOTAL_PAGES], font: FONT, size: 14, bold: true, color: INK }),
+        t(`   |   Date: ${ctx.date}   |   Version: 1   |   Sales Rep. Code: `, { size: 14, color: MUTED }), enRun(ctx.repCode, '[ ]', { size: 14 })], { align: AlignmentType.CENTER, after: 0 })] });
+
+    const fonts = ctx.fonts && ctx.fonts.kufiR ? [{ name: AR_HEAD, data: ctx.fonts.kufiR }, ...(ctx.fonts.kufiB ? [{ name: AR_HEAD + '__BOLD', data: ctx.fonts.kufiB }] : [])] : [];
+    return new Document({
+      fonts, creator: C.nameEn, title: `${MODELS.join(' + ')} - Technical & Financial Offer`,
+      styles: { default: { document: { run: { font: FONT, size: 20, color: INK } } },
+        paragraphStyles: [
+          { id: 'Heading1', name: 'Heading 1', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { size: 2, color: WHITE }, paragraph: { outlineLevel: 0, spacing: { after: 0 } } },
+          { id: 'Heading2', name: 'Heading 2', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { size: 26, bold: true }, paragraph: { outlineLevel: 1 } },
+          { id: 'Heading3', name: 'Heading 3', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { size: 22, bold: true }, paragraph: { outlineLevel: 2 } }] },
+      numbering: { config: [{ reference: 'b', levels: [{ level: 0, format: LevelFormat.BULLET, text: '•', alignment: AlignmentType.LEFT,
+        style: { paragraph: { indent: { left: 360, hanging: 240 } }, run: { color: RED } } }] }] },
+      sections: (SHORT ? [cover.concat([gap(8), offerInfo, gap(8), company], letter), shortTechnical.concat(financial)]
+        : [cover.concat([gap(8), offerInfo, gap(8), company], letter), technical, ...(STRENGTHS ? [strengthSection] : []), financial, afterSales, ...(ATTACH ? [attachments] : [])]).map((children, si) => ({
+        properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1300, bottom: 1250, left: 1134, right: 1134, header: 500, footer: 450 } }, titlePage: !(SHORT && si > 0) },
+        headers: { default: pageHeader, first: new Header({ children: [P([t('')])] }) }, footers: { default: footer, first: footer }, children })),
+    });
+  }
+
+  // docx-js embeds one weight per font name: move "<name>__BOLD" under "<name>" as embedBold; turn on embedTrueTypeFonts
+  async function finishDocx(bytes, JSZip, name = 'Noto Kufi Arabic') {
+    const zip = await JSZip.loadAsync(bytes);
+    // docx-js writes <w:highlightCs> next to every yellow placeholder highlight; that element is not in Word's schema
+    // and makes Word report "unreadable content", so drop it from every part
+    for (const f of Object.keys(zip.files).filter((p) => /^word\/(document|header\d*|footer\d*|footnotes|comments)\.xml$/.test(p))) {
+      const x = await zip.file(f).async('string');
+      if (x.includes('highlightCs')) zip.file(f, x.replace(/<w:highlightCs\b[^>]*\/>/g, '').replace(/<w:highlightCs\b[^>]*>[\s\S]*?<\/w:highlightCs>/g, ''));
+    }
+    let ft = await zip.file('word/fontTable.xml').async('string');
+    const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const m = ft.match(new RegExp('<w:font w:name="' + esc + '__BOLD">([\\s\\S]*?)</w:font>'));
+    if (m) {
+      const emb = m[1].match(/<w:embedRegular([^>]*)\/>/)[1];
+      ft = ft.replace(m[0], '').replace(new RegExp('(<w:font w:name="' + esc + '">[\\s\\S]*?<w:embedRegular[^>]*/>)'), (x) => x + '<w:embedBold' + emb + '/>');
+      zip.file('word/fontTable.xml', ft);
+      let st = await zip.file('word/settings.xml').async('string');
+      if (!st.includes('embedTrueTypeFonts')) st = st.replace(/(<w:settings[^>]*>)/, '$1<w:embedTrueTypeFonts/>');
+      zip.file('word/settings.xml', st);
+    }
+    return zip;
+  }
+
+  root.InfinityOffer = { attachOrder, buildOffer, finishDocx, arabicWords, assembleMachine, deliveryText, priceMath, amountWords, CURRENCIES };
+  if (typeof module !== 'undefined') module.exports = root.InfinityOffer;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function () {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const el = (tag, attrs = {}, kids = []) => { const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) { if (k === 'text') e.textContent = v; else if (k === 'class') e.className = v; else if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else if (v != null) e.setAttribute(k, v); }
+    for (const k of [].concat(kids)) if (k != null) e.append(k); return e; };
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+  const norm = (s) => String(s || '').toLowerCase().replace(/accuriopress|\s|-/g, '');
+  const fmt = (n) => Number(n).toLocaleString('en-US');
+  const num = (v) => { const s = String(v ?? '').replace(/[, ]/g, ''); const x = Number(s); return s !== '' && isFinite(x) ? x : null; };
+  const pngInfo = (u8) => ({ w: (u8[16] << 24 | u8[17] << 16 | u8[18] << 8 | u8[19]) >>> 0, h: (u8[20] << 24 | u8[21] << 16 | u8[22] << 8 | u8[23]) >>> 0 });
+
+  const S = { lib: {}, settings: null, assets: null, machines: [], uid: 0, caps: {} };
+  const FIELDS = ['customerEn', 'customerAr', 'ref', 'date', 'validityDays', 'payment', 'delivery', 'deliveryUnit', 'warrantyCopies', 'responseHours', 'training', 'tel', 'mobile', 'repCode', 'preparedBy'];
+  const STICKY = ['tel', 'mobile', 'repCode', 'preparedBy'];
+
+  if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/pdf.worker.min.js';
+  const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  $('date').value = today;
+  for (const k of STICKY) { const v = store.get('ob_' + k); if (v) $(k).value = v; }
+  for (const k of FIELDS) $(k).addEventListener('input', () => { if (STICKY.includes(k)) store.set('ob_' + k, $(k).value); renderTodo(); });
+
+  // ---------- library ----------
+  (async () => {
+    const db = window.claude ? await claude.use('db') : null;
+    S.db = db;
+    S.caps.mcp = window.claude ? await claude.use('mcp') : null;
+    S.caps.sample = window.claude ? await claude.use('sample') : null;
+    S.caps.downloads = window.claude ? await claude.use('downloads') : null;
+    S.user = window.claude ? await claude.use('user') : null;
+    S.isOwner = !!(S.user && S.user.isOwner && S.user.isOwner());
+    initViewer();
+    if (!db) { $('lib').textContent = 'The machine library could not load. Open this page signed in to claude.ai.'; return; }
+    try {
+      const [ms, st, as, pt] = await Promise.all([db.collection('machines').get(), db.doc('config/settings').get(), db.doc('config/assets').get(),
+        db.doc('config/payments').get().catch(() => null)]);
+      S.payTerms = pt && pt.exists ? [...((pt.data() || {}).terms || [])] : [];
+      // database documents come back read-only: keep editable copies (the sheet merge and edits change them)
+      const own = (x) => (x == null ? x : JSON.parse(JSON.stringify(x)));
+      ms.docs.forEach((d) => { S.lib[d.id] = own(d.data()); });
+      S.settings = st.exists ? own(st.data()) : null;
+      S.assets = as.exists ? own(as.data()) : null;
+    } catch (e) { $('lib').textContent = 'The machine library could not load: ' + (e.message || e.code || e); return; }
+    await loadSeed();
+    S.libReady = true; renderLibChips();
+    if (S.assets && S.assets.logo) { $('logo').src = (window.ASSET_BASE || '/_blob/') + S.assets.logo; $('logo').hidden = false; }
+    const d = (S.settings && S.settings.defaults) || {};
+    if (!d.tel) d.tel = '+(202) 26715539';   // Infinity's landline, always the default
+    if (!d.mobile) d.mobile = '01029587432';   // default mobile on every offer
+    if (!d.repCode) d.repCode = 'PSM';          // default sales rep code
+    if (!d.warrantyCopies) d.warrantyCopies = 'مليون';   // default; clear the field for a time-only warranty
+    d.delivery = String(d.delivery || '2-5').replace(/^من\s*/, '').replace(/\s*إلى\s*/, '-');
+    for (const k of ['validityDays', 'payment', 'delivery', 'warrantyCopies', 'responseHours', 'training', 'tel', 'mobile', 'repCode']) if (!$(k).value && d[k]) $(k).value = d[k];
+    if (!$('payment').value) $('payment').value = PAY_DEFAULT;
+    renderPayTerms();
+    if (d.deliveryUnit && $('deliveryUnit').querySelector(`option[value="${d.deliveryUnit}"]`)) $('deliveryUnit').value = d.deliveryUnit;
+    S.machines.forEach(matchLibrary); renderAll(); S.machines.forEach(autoBuild);
+    loadSheet(); loadMaster().then(() => { renderAll(); return loadParts(); });
+  })();
+  function renderLibChips() {
+    const lib = $('lib'); lib.textContent = '';
+    const names = Object.values(S.lib).map((m) => m.model).sort();
+    lib.append(el('span', { text: names.length ? 'Machines in library:' : 'The library is empty. Add a Foliant and the machine is built from its product guide in Drive.' }));
+    names.forEach((n) => lib.append(el('span', { class: 'chip neutral', text: n })));
+    lib.append(el('a', { href: 'https://docs.google.com/spreadsheets/d/' + PARTS_SHEET() + '/edit', target: '_blank', rel: 'noopener', text: 'Parts Library sheet' }));
+  }
+  function autoBuild(m) { if (S.libReady && m.status === 'ready') buildFromDrive(m); }
+
+  // ---------- Foliant input ----------
+  const input = $('foliantInput'), drop = $('drop');
+  input.addEventListener('change', () => { [...input.files].forEach(addFoliant); input.value = ''; });
+  drop.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+  drop.addEventListener('dragover', (e) => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', (e) => { e.preventDefault(); drop.classList.remove('over'); [...e.dataTransfer.files].forEach(addFoliant); });
+
+  async function addFoliant(file) {
+    const m = { uid: ++S.uid, file: file.name, status: 'reading', items: [], picture: null, libId: null, qty: '1', unitPrice: '', consumablePrices: {}, source: '' };
+    S.machines.push(m); renderAll();
+    try {
+      const canvas = await renderFirstPage(file);
+      let items = file.type === 'application/pdf' ? await formItems(file).catch(() => []) : [];
+      if (!items.length && file.type === 'application/pdf') items = await textItems(file);
+      m.source = 'text';
+      if (!items.length) { items = await readWithClaude(canvas); m.source = 'claude'; }
+      m.items = items;
+      if (file.type === 'application/pdf' && items.length) m.folCons = await foliantConsumables(file, items).catch(() => null);
+      if (file.type === 'application/pdf' && items.length) m.folPhys = await readPhysicals(file, items).catch(() => null);
+      m.picture = await cropMachine(canvas);
+      m.status = items.length ? 'ready' : 'error';
+      if (!items.length) m.error = 'No Order Information found on the first page.';
+    } catch (e) { m.status = 'error'; m.error = e.message || String(e); }
+    matchLibrary(m); renderAll(); autoBuild(m);
+  }
+
+  async function renderFirstPage(file) {
+    const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d');
+    if (file.type === 'application/pdf') {
+      const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+      const page = await pdf.getPage(1), vp = page.getViewport({ scale: 2.5 });
+      canvas.width = vp.width; canvas.height = vp.height;
+      await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    } else {
+      const bmp = await createImageBitmap(file); canvas.width = bmp.width; canvas.height = bmp.height; ctx.drawImage(bmp, 0, 0);
+    }
+    return canvas;
+  }
+
+  // Foliant exports keep the Order Information table in a PDF form field ("InfoBoard"), not as page text:
+  // read it straight from the field — exact codes, no Claude call.
+  async function formItems(file) {
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    for (let p = 1; p <= Math.min(pdf.numPages, 3); p++) {
+      const anns = await (await pdf.getPage(p)).getAnnotations();
+      const fields = anns.filter((a) => typeof a.fieldValue === 'string' && /order information/i.test(a.fieldValue));
+      fields.sort((a, b) => (a.fieldName === 'InfoBoard' ? -1 : 0) - (b.fieldName === 'InfoBoard' ? -1 : 0));
+      for (const f of fields) {
+        const lines = f.fieldValue.split(/\r\n|\r|\n/).map((l) => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+        const items = parseOrderLines(lines);
+        if (items.length) return items;
+      }
+    }
+    return [];
+  }
+  // ---------- consumables straight from the Foliant (AccurioPress C10500 / C12010 / C14010 family) ----------
+  // The Foliant PDF carries the order codes of every consumable (field "Pandora"); which ones a configuration needs
+  // follows Foliant's own Consumable List rules, copied below. Machine consumables come first, then the ones options add.
+  const FOL_SETS = {
+    C10500: ['TN636K', 'TN636C', 'TN636M', 'TN636Y', 'DR625', 'DV620K', 'DV622C', 'DV622M', 'DV622Y'],
+    C10500S: ['TN636K', 'TN636C', 'TN636M', 'TN636Y', 'TN636W', 'DR625', 'DV620K', 'DV622C', 'DV622M', 'DV622Y', 'DV622W'],
+    C12010: ['TN633K', 'TN633C', 'TN633M', 'TN633Y', 'DR625', 'DV620K', 'DV622C', 'DV622M', 'DV622Y'],
+    C12010S: ['TN633K', 'TN633C', 'TN633M', 'TN633Y', 'TN633W', 'DR625', 'DV620K', 'DV622C', 'DV622M', 'DV622Y', 'DV622W'],
+  };
+  const FOL_OPTIONS = [
+    { when: ['MB-200'], items: ['MB50B', 'MB50W', 'MB100B', 'MB100W'] },
+    { when: ['PB-503'], items: ['GC-501'] },
+    { when: ['SD-513'], items: ['SK-601H'] },
+    { when: ['FS-541'], items: ['SK-703'] },
+    { when: ['FS-541PKSD'], items: ['SK-703', 'SK-602'] },
+    { when: ['SD-506'], items: ['SK-601'] },
+    { when: ['SD-510'], items: ['SK-602'] },
+    { when: ['PSQ-160', 'SD-435'], items: ['Plockmatic Staples (3-Pack)'] },
+  ];
+  // AccurioPress 7120 / 7136 / 7136P Foliant rules. SD-510 -> SK-602 is not in this Foliant's list; added from the product guide.
+  const FOL_7136_OPTIONS = [
+    { when: ['SD-435'], items: ['Plockmatic Staples (3-Pack)'] },
+    { when: ['PB-503'], items: ['GC-501'] },
+    { when: ['SD-513'], items: ['SK-601H'] },
+    { when: ['FS-532M'], items: ['SK-703'] },
+    { when: ['FS-541'], items: ['SK-703'] },
+    { when: ['SD-506'], items: ['SK-602'] },
+    { when: ['SD-510'], items: ['SK-602'] },
+    { when: ['GBC-G1'], items: ['A', 'B', 'C', 'D', 'E', 'F'].flatMap((z) => ['B', 'W', 'S'].map((c) => 'G1' + z + c)) },
+    { when: ['MB-200'], items: ['MB50B', 'MB50W', 'MB100B', 'MB100W'] },
+  ];
+  const FOL_FAMILIES = [
+    { test: /^C(10500|12010|14010)/, options: FOL_OPTIONS,
+      set: (k) => FOL_SETS[(/^C10500/.test(k) ? 'C10500' : 'C12010') + (/^C\d+(S|W|WO)$/.test(k) ? 'S' : '')] },   // C14010 shares the C12010 list
+    { test: /^(AP)?71(36P?|20)$/, options: FOL_7136_OPTIONS, set: () => ['TN017', 'DR017', 'DV017', 'TNWasteBox'] },
+  ];
+  const FOL_COLOUR = { K: ['black', 'أسود'], C: ['cyan', 'أزرق (سيان)'], M: ['magenta', 'أحمر (ماجنتا)'], Y: ['yellow', 'أصفر'], W: ['white', 'أبيض'] };
+  function folDesc(item, forPart) {
+    const forEn = forPart ? ' – for ' + forPart : '', forAr = forPart ? ' – لوحدة ' + forPart : '';
+    let m;
+    if (/^TN\d+$/.test(item)) return ['CRU', 'Toner black', 'حبر أسود جاف'];
+    if (/^DV\d+$/.test(item)) return ['ERU', 'Developer black', 'ديفلوبر أسود'];
+    if (/wastebox/i.test(item)) return ['CRU', 'Toner collection box', 'عبوة تجميع عادم الحبر'];
+    if ((m = item.match(/^G1([A-F])([BWS])$/))) return ['CRU', `Wire spool element, size ${m[1]}, ${{ B: 'black', W: 'white', S: 'silver' }[m[2]]}` + forEn,
+      `بكرة سلك تجليد مقاس ${m[1]} – ${{ B: 'أسود', W: 'أبيض', S: 'فضي' }[m[2]]}` + forAr];
+    if ((m = item.match(/^TN\d+([KCMYW])$/))) return ['CRU', `Toner ${FOL_COLOUR[m[1]][0]}`, `حبر ${FOL_COLOUR[m[1]][1]} جاف`];
+    if ((m = item.match(/^DV\d+([KCMYW])$/))) return ['ERU', `Developer ${FOL_COLOUR[m[1]][0]}`, `ديفلوبر ${FOL_COLOUR[m[1]][1]}`];
+    if (/^DR\d+/.test(item)) return ['ERU', 'PC drum', 'وحدة الدرام (الأسطوانة الضوئية)'];
+    if (/^SK-/.test(item)) return ['CRU', 'Staple cartridge' + forEn, 'خرطوشة دبابيس' + forAr];
+    if (/^GC-/.test(item)) return ['CRU', 'Hot melt glue chips' + forEn, 'حبيبات غراء التجليد الحراري' + forAr];
+    if ((m = item.match(/^MB(\d+)([BW])$/))) return ['CRU', `${m[1]}-sheet binding rings, ${m[2] === 'B' ? 'black' : 'white'}` + forEn,
+      `حلقات تجليد ${m[1]} ورقة – ${m[2] === 'B' ? 'أسود' : 'أبيض'}` + forAr];
+    if (/plockmatic/i.test(item)) return ['CRU', 'Plockmatic staples (3-pack)' + forEn, 'دبابيس Plockmatic (عبوة 3 قطع)' + forAr];
+    return ['CRU', item + forEn, item + forAr];
+  }
+  async function foliantConsumables(file, items) {
+    const main = items.find((i) => /main ?body/i.test(i.category)) || items[0];
+    const mainKey = String(main && main.model || '').toUpperCase().replace(/[\s-]/g, '').replace(/^ACCURIOPRESS/, '');
+    const fam = FOL_FAMILIES.find((f) => f.test.test(mainKey));
+    if (!fam) return null;               // other Foliant families: rules not added yet
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    const anns = await (await pdf.getPage(1)).getAnnotations();
+    const pan = anns.find((a) => a.fieldName === 'Pandora' && typeof a.fieldValue === 'string');
+    const block = pan && (pan.fieldValue.match(/<ConsumableCodes[^>]*>([\s\S]*?)<\/ConsumableCodes>/) || [])[1];
+    if (!block) return null;
+    const codes = {};
+    for (const line of block.split(/\r\n|\r|\n/)) { const c = line.split(';'); if (c.length >= 2 && c[0].trim() && c[0].trim() !== 'name') codes[c[0].trim()] = c[1].trim(); }
+    const set = fam.set(mainKey);
+    const out = new Map(), add = (item, forPart) => { if (out.has(item)) return; const [type, en, ar] = folDesc(item, forPart);
+      out.set(item, { item, pn: codes[item] || '', type, en, ar, forPart: forPart || '' }); };
+    (set || []).forEach((it) => add(it));
+    const sel = new Set(items.map((i) => String(i.model || '').toUpperCase().replace(/\s+/g, '').replace(/_\w+$/, '')));
+    for (const r of fam.options) { const hit = r.when.find((w) => sel.has(w)); if (hit) r.items.forEach((it) => add(it, hit.replace(/PKSD$/, ''))); }
+    return [...out.values()];
+  }
+  // the library machine with this deal's Foliant consumables applied: Foliant PNs win, missing items are added for this offer only
+  // Accessories are the same part whatever press they go on (PF-712 is PF-712): a part described in any library machine
+  // is used for every machine. Which parts fit which press is decided by the Foliant, not here.
+  // order of truth for a part: Parts Library sheet (edited by Ahmed) > parts-master.json (Foliant + product guide) > any library machine
+  const fixedPart = (model) => (S.sheetParts && S.sheetParts[model]) || (S.master && S.master.parts && S.master.parts[model]) || null;
+  // machines prepared ahead from product guides (library-seed.json): added once to the library if not there yet,
+  // so a Foliant for any of them matches at once with no Drive build
+  async function loadSeed() {
+    try {
+      const r = await fetch('library-seed.json', { cache: 'no-cache' }); if (!r.ok) return;
+      const j = await r.json();
+      for (const doc of (j && j.machines) || []) {
+        if (!doc || !doc.id || S.lib[doc.id]) continue;
+        if (Object.values(S.lib).some((l) => l.mainBody && doc.mainBody && l.mainBody.pn === doc.mainBody.pn)) continue;
+        S.lib[doc.id] = JSON.parse(JSON.stringify(doc));
+        if (S.db) S.db.doc('machines/' + doc.id).set(doc).catch(() => {});
+      }
+    } catch (e) {}
+  }
+  async function loadMaster() {
+    try { const r = await fetch('parts-master.json', { cache: 'no-cache' }); S.master = r.ok ? await r.json() : null; } catch (e) { S.master = null; }
+  }
+  function sharedPart(model) {
+    if (!model) return null;
+    const fx = fixedPart(model); if (fx) return JSON.parse(JSON.stringify(fx));
+    let best = null;
+    for (const l of Object.values(S.lib)) {
+      const p = l.parts && l.parts[model]; if (!p) continue;
+      const s = (p.details ? 2 : 0) + (p.dims ? 1 : 0) - (/^\[/.test(String(p.en || '')) ? 9 : 0);
+      if (!best || s > best.s) best = { p, s };
+    }
+    return best && best.s > -5 ? JSON.parse(JSON.stringify(best.p)) : null;
+  }
+  // this machine's own part, unless it is only a placeholder; then the same part described on another machine
+  const realPart = (lib, model) => { if (fixedPart(model)) return sharedPart(model);
+    const p = lib && lib.parts && lib.parts[model];
+    return p && !/^\[/.test(String(p.en || '')) ? p : sharedPart(model); };
+  function dealLib(m) {
+    const lib0 = m.libId && S.lib[m.libId];
+    if (!lib0) return lib0;
+    const parts = Object.assign({}, lib0.parts);
+    for (const it of m.items || []) if (it.model) { const rp = realPart(lib0, it.model); if (rp) parts[it.model] = rp; }
+    const lib = Object.assign({}, lib0, { parts });
+    // one price line per consumable item (TN633K, TN633C, ...), never grouped rows
+    const perItem = (cs) => (cs || []).filter((c) => c[2] && !isPh(c[2])).map((c) => [c[2], c[4]]);
+    if (!m.folCons || !m.folCons.length) return Object.assign(lib, { priceList: perItem(lib.consumables) });
+    const cons = (lib.consumables || []).map((r) => r.slice()), pl = (lib.priceList || []).map((r) => r.slice());
+    for (const f of m.folCons) {
+      const hit = cons.find((r) => ckey(r[2]) === ckey(f.item)) || (f.pn ? cons.find((r) => r[1] === f.pn) : null);
+      if (hit) { if (f.pn) hit[1] = f.pn; continue; }
+      const sr = S.sheet && S.sheet.rows ? S.sheet.rows.find((x) => ckey(x.c[2]) === ckey(f.item)) : null;   // master sheet wins for text and yield
+      const fp = f.forPart ? ' – for ' + f.forPart : '', fpAr = f.forPart ? ' – لوحدة ' + f.forPart : '';
+      const row = sr ? [/^ERU$/i.test(sr.c[1]) ? 'ERU' : 'CRU', f.pn || sr.c[3] || '[PN]', f.item, (sr.c[4] || f.en) + (sr.c[4] ? fp : ''), (sr.c[5] || f.ar) + (sr.c[5] ? fpAr : ''), sr.c[6] || '—']
+        : [f.type, f.pn || '[PN]', f.item, f.en, f.ar, '—'];
+      cons.push(row);
+      if (!pl.some((p) => ckey(p[0]) === ckey(f.item))) pl.push([f.item, row[4]]);
+    }
+    return Object.assign({}, lib, { consumables: cons, priceList: perItem(cons) });
+  }
+  function folNote(m) {
+    const lib = m.libId && S.lib[m.libId];
+    if (!lib || !m.folCons) return null;
+    if (!m.folCons.length) return el('p', { class: 'note', style: 'margin:10px 0 0', text: 'Consumables: none found in this Foliant.' });
+    const libCons = lib.consumables || [];
+    const extra = [], diff = [];
+    for (const f of m.folCons) {
+      const r = libCons.find((x) => ckey(x[2]) === ckey(f.item)) || (f.pn ? libCons.find((x) => x[1] === f.pn) : null);
+      if (!r) extra.push(f.item + (f.forPart ? ' (' + f.forPart + ')' : ''));
+      else if (f.pn && !isPh(r[1]) && r[1] !== f.pn) diff.push(`${f.item}: library ${r[1]} → Foliant ${f.pn}`);
+    }
+    return el('div', { style: 'margin:12px 0 0;display:grid;gap:6px' }, [
+      el('div', { style: 'display:flex;gap:8px;flex-wrap:wrap;align-items:center' }, [
+        el('strong', { text: 'Consumables from Foliant' }),
+        el('span', { class: 'chip ok', text: `${m.folCons.length} items, PNs from PDF` }),
+        extra.length ? el('span', { class: 'chip neutral', text: `${extra.length} added for this offer` }) : null,
+        diff.length ? el('span', { class: 'chip warn', text: `${diff.length} PN${diff.length > 1 ? 's' : ''} differ from library` }) : null]),
+      extra.length ? el('p', { class: 'note', style: 'margin:0', text: 'Added to this offer only (not in the library list): ' + extra.join(', ') + '.' }) : null,
+      diff.length ? el('p', { class: 'note', style: 'margin:0', text: 'The offer uses the Foliant PN: ' + diff.join('; ') + '.' }) : null]);
+  }
+  // ---------- dimensions, weight and power for this exact configuration, from the Foliant's own Physicals table ----------
+  function foliantPhysicals(pandora, items) {
+    const block = (String(pandora || '').match(/<Physicals>([\s\S]*?)<\/Physicals>/) || [])[1];
+    if (!block) return null;
+    const rows = block.split(/\r\n|\r|\n/).map((l) => l.split(';'));
+    const head = rows.find((r) => r[0] === 'ident'); if (!head) return null;
+    const idents = head.slice(1), col = {};
+    for (const r of rows) if (r[0] && r[0] !== 'ident') col[r[0]] = r.slice(1);
+    const val = (key, i) => { const v = Number(String((col[key] || [])[i] ?? '').replace(',', '.')); return isFinite(v) && String((col[key] || [])[i] ?? '').trim() !== '' ? v : null; };
+    const has = (i) => ['width', 'depth', 'height', 'weight', 'powerMax'].some((k) => val(k, i) != null);
+    const pick = [], seen = new Set();
+    const take = (id, label) => { const i = idents.indexOf(id); if (i < 0 || seen.has(id) || !has(i)) return false; seen.add(id); pick.push({ id, i, label }); return true; };
+    for (const it of items) {
+      const mo = String(it.model || '').trim(), q = Math.max(1, Number(it.qty) || 1);
+      const cands = [mo, mo.toUpperCase(), mo.replace(/s$/, 'S')];
+      let found = cands.some((c) => take(c, mo));
+      for (let n = 1; n <= q; n++) if (cands.some((c) => take(`${c}_${n}`, q > 1 ? `${mo} (${n})` : mo))) found = true;
+      for (const c of [mo, mo.toUpperCase()]) idents.forEach((id) => { if (id.startsWith(c + '_') && /tray/i.test(id)) take(id, `${mo} tray`); });
+    }
+    if (!pick.length) return null;
+    const fmtN = (n) => Number(n).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    const power = (i) => { const p = val('powerMax', i);
+      if (val('lines32A', i)) return `32 A mains  ·  max. ${fmtN(p)} W`;
+      if (val('extLines16A', i)) return `Own 16 A line  ·  max. ${fmtN(p)} W`;
+      return p ? `From main body  ·  max. ${fmtN(p)} W` : '—'; };
+    const dimTxt = (i) => { const w = val('width', i), d = val('depth', i), h = val('height', i);
+      return w == null && d == null && h == null ? '—' : `${w == null ? '—' : fmtN(w)} x ${d == null ? '—' : fmtN(d)} x ${h == null ? '—' : fmtN(h)}`; };
+    const outRows = pick.map((p) => [p.label, dimTxt(p.i), val('weight', p.i) == null ? '—' : fmtN(val('weight', p.i)), power(p.i)]);
+    const sum = (k) => pick.reduce((s, p) => s + (val(k, p.i) || 0), 0), max = (k) => pick.reduce((s, p) => Math.max(s, val(k, p.i) || 0), 0);
+    const total = { width: sum('width'), depth: max('depth'), height: max('height'), weight: Math.round(sum('weight')),
+      powerMax: Math.round(sum('powerMax')), mainCurrent: sum('lines32A'), auxLines: pick.filter((p) => val('extLines16A', p.i)).length, auxCurrent: Math.round(sum('lines16A') * 100) / 100 };
+    return { rows: outRows, total };
+  }
+  async function readPhysicals(file, items) {
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    const pan = (await (await pdf.getPage(1)).getAnnotations()).find((a) => a.fieldName === 'Pandora' && typeof a.fieldValue === 'string');
+    return pan ? foliantPhysicals(pan.fieldValue, items) : null;
+  }
+  function physNote(m) {
+    if (!m.folPhys) return null;
+    const t = m.folPhys.total;
+    return el('div', { style: 'margin:12px 0 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center' }, [
+      el('strong', { text: 'Layout from Foliant' }),
+      el('span', { class: 'chip ok', text: `${fmt(t.width)} x ${fmt(t.depth)} x ${fmt(t.height)} mm` }),
+      el('span', { class: 'chip ok', text: `${fmt(t.weight)} kg` }),
+      el('span', { class: 'chip ok', text: `max. ${fmt(t.powerMax)} W  ·  ${t.auxLines} x 16 A lines` })]);
+  }
+  async function textItems(file) {
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    const tc = await (await pdf.getPage(1)).getTextContent();
+    const rows = [];
+    for (const it of tc.items) { if (!it.str || !it.str.trim()) continue; const y = it.transform[5], x = it.transform[4];
+      let r = rows.find((r) => Math.abs(r.y - y) < 3); if (!r) rows.push(r = { y, parts: [] }); r.parts.push({ x, s: it.str.trim() }); }
+    rows.sort((a, b) => b.y - a.y);
+    const lines = rows.map((r) => r.parts.sort((a, b) => a.x - b.x).map((p) => p.s).join(' ').replace(/\s+/g, ' ').trim());
+    return parseOrderLines(lines);
+  }
+  function parseOrderLines(lines) {
+    const out = []; let on = false, cat = '';
+    for (const l of lines) {
+      if (/order information/i.test(l)) { on = true; continue; }
+      if (!on) continue;
+      if (/please order|©|foliant/i.test(l)) break;
+      if (/^module\b.*quantity/i.test(l)) continue;
+      if (/^(main ?body|paper supply|finishing( options)?|controller|accessories|options|software)$/i.test(l)) { cat = l; continue; }
+      const m = l.match(/^(.+?)\s+(\d{1,3})\s+([A-Z0-9]{5,14})$/);
+      if (m) out.push({ category: cat || 'Accessories', model: m[1].trim(), qty: Number(m[2]), code: m[3] });
+    }
+    return out;
+  }
+  async function readWithClaude(canvas) {
+    if (!S.caps.sample) throw new Error('This Foliant page is a picture, and reading pictures needs Claude access on this page. Allow it in the page permissions and add the file again.');
+    const crop = document.createElement('canvas'), y0 = Math.round(canvas.height * 0.36);
+    crop.width = canvas.width; crop.height = canvas.height - y0;
+    crop.getContext('2d').drawImage(canvas, 0, y0, canvas.width, crop.height, 0, 0, canvas.width, crop.height);
+    const blob = await new Promise((r) => crop.toBlob(r, 'image/png'));
+    const res = await S.caps.sample.json(
+      'This image is the "Order Information" table from a Konica Minolta Foliant configuration export. ' +
+      'Return only JSON in this shape: {"items":[{"category":"Mainbody","model":"C14010s","qty":1,"code":"AE9402A"}]}. ' +
+      'List every row in table order. category is the blue group heading the row sits under (Mainbody, Paper supply, Finishing options, Controller, Accessories). ' +
+      'Copy model and order code exactly as printed, character by character, without correcting them.',
+      { images: [blob], modelTier: 'default' });
+    return (res && Array.isArray(res.items) ? res.items : []).map((x) => ({ category: String(x.category || ''), model: String(x.model || ''), qty: Number(x.qty) || 1, code: String(x.code || '') }));
+  }
+
+  // machine picture: Foliant shows it in a band near the top of the page; whiten the background and trim
+  async function cropMachine(canvas) {
+    const W = canvas.width, H = canvas.height;
+    const x0 = Math.round(W * 0.05), y0 = Math.round(H * 0.065), w = Math.round(W * 0.90), h = Math.round(H * 0.19);
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const g = c.getContext('2d'); g.drawImage(canvas, x0, y0, w, h, 0, 0, w, h);
+    g.fillStyle = '#fff'; g.fillRect(Math.round(w * 0.86), 0, w, Math.round(h * 0.25));   // Foliant's "next" arrow
+    const im = g.getImageData(0, 0, w, h), d = im.data, seen = new Uint8Array(w * h), q = new Int32Array(w * h);
+    const bg = [d[(5 * w + w - 6) * 4], d[(5 * w + w - 6) * 4 + 1], d[(5 * w + w - 6) * 4 + 2]];
+    const near = (i) => { const r = d[i * 4], gg = d[i * 4 + 1], b = d[i * 4 + 2];
+      return (Math.abs(r - bg[0]) + Math.abs(gg - bg[1]) + Math.abs(b - bg[2]) < 36) || (r > 238 && gg > 238 && b > 238); };
+    let qh = 0, qt = 0;
+    const push = (i) => { if (!seen[i] && near(i)) { seen[i] = 1; q[qt++] = i; } };
+    for (let x = 0; x < w; x++) { push(x); push((h - 1) * w + x); }
+    for (let y = 0; y < h; y++) { push(y * w); push(y * w + w - 1); }
+    while (qh < qt) { const i = q[qh++], x = i % w, y = (i / w) | 0;
+      d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = 255;
+      if (x > 0) push(i - 1); if (x < w - 1) push(i + 1); if (y > 0) push(i - w); if (y < h - 1) push(i + w); }
+    g.putImageData(im, 0, 0);
+    let minX = w, minY = h, maxX = -1, maxY = -1;
+    for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = (y * w + x) * 4;
+      if (d[i] < 242 || d[i + 1] < 242 || d[i + 2] < 242) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; } }
+    if (maxX < 0) return null;
+    const pad = 12; minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad); maxX = Math.min(w - 1, maxX + pad); maxY = Math.min(h - 1, maxY + pad);
+    const k = Math.min(1, 1100 / (maxX - minX + 1));
+    const out = document.createElement('canvas'); out.width = Math.round((maxX - minX + 1) * k); out.height = Math.round((maxY - minY + 1) * k);
+    out.getContext('2d').drawImage(c, minX, minY, maxX - minX + 1, maxY - minY + 1, 0, 0, out.width, out.height);
+    return toPng(out);
+  }
+  async function toPng(canvas) {
+    const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
+    const data = new Uint8Array(await blob.arrayBuffer());
+    return { data, w: canvas.width, h: canvas.height, url: URL.createObjectURL(blob) };
+  }
+  async function replacePicture(m, file) {
+    const bmp = await createImageBitmap(file), c = document.createElement('canvas');
+    const k = Math.min(1, 1100 / bmp.width); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+    c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+    m.picture = await toPng(c); renderAll();
+  }
+
+  // 4-colour C10500 / C12010 / C14010: same engine as the S version without the 5th (white) station; built once from the S record
+  const VARIANTS = { AETE02A: ['c12010s', 'C12010', 120], AETC02A: ['c14010s', 'C14010', 140], AF1T021: ['c10500s', 'C10500', 105] };
+  function deriveVariant(main) {
+    const v = VARIANTS[main.code], base = v && S.lib[v[0]];
+    if (!base || !S.db) return null;
+    const id = v[1].toLowerCase(); if (S.lib[id]) return id;
+    const model = v[1], ppm = v[2], from = base.model.replace(/^AccurioPress\s+/i, '');
+    const swap = (s) => String(s).split(from).join(model).split(from.replace(/S$/, 's')).join(model);
+    // rewrite the white wording first, then drop only the segments that are still about white
+    const noW = (s) => swap(String(s).replace(/\s*\(CMYK \+ White\)/g, ' (CMYK)').replace(/CMYK \+ White/g, 'CMYK').replace(/5 colours/g, '4 colours')
+      .replace(/4\/5 drums/g, '4 drums').replace(/W\/YMCK independent 5 systems/g, 'CMYK independent 4 systems').replace(/\s*\(CMYK\)(?=\s*·)/g, '')
+      .split('  ·  ').filter((x) => !/white|5th colou?r|fifth/i.test(x)).join('  ·  '));
+    const rows = (rs) => (rs || []).filter((r) => !/white|5th colou?r|fifth/i.test(r[0])).map((r) => [r[0], noW(r[1]), r[2]]).filter((r) => r[1]);
+    const doc = JSON.parse(JSON.stringify(base));
+    Object.assign(doc, { id, model: 'AccurioPress ' + model, short: 'Colour', tagline: `Colour production press: ${ppm} ppm`,
+      letterAr: `ماكينة الطباعة الرقمية الإنتاجية الملونة Konica Minolta AccurioPress ${model} بسرعة ${ppm} صفحة في الدقيقة`,
+      mainBody: { pn: main.code, en: `AccurioPress ${model} main body, full colour (CMYK), ${ppm} ppm`, ar: `وحدة الطباعة الرئيسية AccurioPress ${model} – ملونة (CMYK) بسرعة ${ppm} صفحة في الدقيقة` },
+      mainSpecs: rows(base.mainSpecs), engineDetails: (base.engineDetails || []).map((d) => Object.assign({}, d, { title: swap(d.title), rows: rows(d.rows) })),
+      consumables: (base.consumables || []).filter((c) => !/W$/.test(String(c[2])) && !/white/i.test(String(c[3]))),
+      priceList: (base.priceList || []).filter((p) => !/W$/.test(String(p[0])) && !/أبيض/.test(String(p[1]))),
+      strengths: (base.strengths || []).filter((s) => !/white|fifth|5th/i.test(String(s.enB) + String(s.enT))),
+      yieldNote: ['Yields are based on A4 simplex printing at 5% coverage per colour.', 'معدلات الاستهلاك محسوبة على أساس طباعة مقاس A4 وجه واحد بنسبة تغطية 5% للون الواحد.'],
+      source: Object.assign({}, base.source, { derivedFrom: base.model, built: new Date().toISOString(), by: 'Offer Builder (4-colour variant)' }), needsReview: true });
+    S.lib[id] = doc; S.db.doc('machines/' + id).set(doc).catch(() => {}); applySheet(doc); renderLibChips();
+    return id;
+  }
+  function matchLibrary(m) {
+    if (m.libId && S.lib[m.libId]) return;
+    const main = m.items.find((i) => /main ?body/i.test(i.category)) || m.items[0];
+    if (!main) return;
+    for (const [id, lib] of Object.entries(S.lib)) {
+      if ((lib.mainBody && lib.mainBody.pn === main.code) || norm(lib.model) === norm(main.model)) { m.libId = id; return; }
+    }
+    const dv = deriveVariant(main); if (dv) m.libId = dv;
+  }
+
+  // ---------- build a library machine from the product guide in Drive ----------
+  // Main body (first Foliant band) -> model code -> the product folder in Drive whose name holds that code
+  // -> the product guide in it -> Claude extracts the machine record -> saved to the library.
+  const DRIVE = 'Google Drive', FOLDER = 'application/vnd.google-apps.folder';
+  const ROOT = () => (S.settings && S.settings.productsFolderId) || '1lItZ8jLGxxLjqYGhxlkCAO0Le2VPMw9r';
+  const squash = (s) => String(s || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  const slug = (s) => String(s || '').toLowerCase().replace(/accuriopress|bizhub/g, '').replace(/[^a-z0-9]+/g, '') || 'machine';
+  const mainOf = (m) => m.items.find((i) => /main ?body/i.test(i.category)) || m.items[0];
+  const modelCodes = (name) => {
+    const toks = String(name || '').toUpperCase().match(/[A-Z]{0,3}\d{3,5}[A-Z]{0,2}/g) || [];
+    const out = []; for (const t of toks) for (const v of [t, t.replace(/[A-Z]+$/, ''), t.replace(/^[A-Z]+/, '').replace(/[A-Z]+$/, '')]) if (v.length >= 3 && !out.includes(v)) out.push(v);
+    return out; };
+
+  async function driveCall(tool, input) {
+    if (!S.caps.mcp) throw new Error('Google Drive is not reachable from this page. Allow Google Drive in the page permissions.');
+    try { return (await S.caps.mcp.callTool(DRIVE, tool, input)).payload; }
+    catch (e) {
+      const c = e && e.code;
+      if (c === 'server_not_connected') throw new Error('Google Drive is not connected. Add it in claude.ai Settings → Connectors.');
+      if (c === 'needs_reauth') throw new Error('Google Drive needs reconnecting in claude.ai Settings → Connectors.');
+      if (c === 'not_in_manifest' || c === 'approval_required') throw new Error('Google Drive access was not allowed for this page. Allow it and add the Foliant again.');
+      throw new Error('Google Drive' + (c ? ' (' + c + ')' : '') + ': ' + ((e && e.message) || e));
+    }
+  }
+  async function driveSearch(query) {
+    const files = []; let pageToken;
+    for (let i = 0; i < 5; i++) {
+      const p = await driveCall('search_files', Object.assign({ query, excludeContentSnippets: true, pageSize: 100 }, pageToken ? { pageToken } : {}));
+      files.push(...((p && p.files) || [])); pageToken = p && p.nextPageToken; if (!pageToken) break;
+    }
+    return files;
+  }
+  let folderCache = null;
+  async function productFolders() {        // every folder under 02 Products, up to 3 levels deep (production, office, ...)
+    if (folderCache) return folderCache;
+    const all = []; let level = [ROOT()];
+    for (let d = 0; d < 3 && level.length; d++) {
+      const found = await driveSearch(`(${level.map((id) => `parentId = '${id}'`).join(' or ')}) and mimeType = '${FOLDER}'`);
+      all.push(...found); level = found.map((f) => f.id);
+    }
+    return (folderCache = all);
+  }
+  async function findGuide(main) {
+    const codes = modelCodes(main.model);
+    if (!codes.length) throw new Error(`Could not read a model code from the main body "${main.model}".`);
+    const folders = (await productFolders()).filter((f) => !/option|accessor/i.test(f.title));
+    let best = null;
+    for (const f of folders) {
+      const t = squash(f.title), i = codes.findIndex((c) => t.includes(c));
+      if (i >= 0 && (!best || i < best.rank || (i === best.rank && f.title.length < best.f.title.length))) best = { f, rank: i };
+    }
+    if (!best) throw new Error(`No product folder in Drive matches ${main.model}. Add a folder named with the model (e.g. "AccurioPress ${codes[0]}") under 02 Products, with its product guide inside.`);
+    const files = (await driveSearch(`parentId = '${best.f.id}'`)).filter((f) => f.mimeType !== FOLDER && /pdf|word|document|sheet|excel/i.test(f.mimeType));
+    const pick = files.find((f) => /product.?guide/i.test(f.title)) || files.find((f) => /guide/i.test(f.title)) || files.find((f) => /spec|datasheet|data sheet/i.test(f.title)) || files.find((f) => /brochure/i.test(f.title));
+    if (!pick) throw new Error(`The Drive folder "${best.f.title}" has no product guide (or brochure) in it.`);
+    return { folder: best.f, file: pick };
+  }
+  async function guideText(fileId) {
+    const p = await driveCall('read_file_content', { fileId });
+    const t = typeof p === 'string' ? p : (p && (p.fileContent || p.content || p.text)) || '';
+    if (t.length < 2000) throw new Error('The product guide came back empty from Drive.');
+    return t;
+  }
+  // Only the parts of the guide that matter for this configuration: the opening specification pages,
+  // every passage that names a Foliant part, and the consumables pages.
+  function excerpt(text, main, models, budget) {
+    const lines = text.split('\n'), keep = new Uint8Array(lines.length);
+    const mark = (a, b) => { for (let i = Math.max(0, a); i < Math.min(lines.length, b); i++) keep[i] = 1; };
+    let chars = 0, head = 0; while (head < lines.length && chars < 40000) chars += lines[head++].length + 1;
+    mark(0, head);
+    const hits = (re, n, before, after) => { let c = 0; for (let i = 0; i < lines.length && c < n; i++) if (re.test(lines[i])) { mark(i - before, i + after); c++; } };
+    const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    for (const mo of models) if (mo && mo.length > 1) hits(new RegExp(esc(mo).replace(/-/g, '[- ]?'), 'i'), 4, 6, 45);
+    hits(/consumable|toner|developer|drum unit|\bdrum\b|waste toner/i, 14, 4, 25);
+    hits(/dimension|weight|power (consumption|requirement|source)/i, 10, 2, 8);
+    let out = [], size = 0, gap = false;
+    for (let i = 0; i < lines.length; i++) {
+      if (!keep[i]) { gap = true; continue; }
+      if (gap && out.length) out.push('[…]'); gap = false;
+      size += lines[i].length + 1; if (size > budget) { out.push('[… guide cut for length …]'); break; }
+      out.push(lines[i]);
+    }
+    return out.join('\n');
+  }
+  const EXAMPLE = () => { const ex = Object.values(S.lib)[0]; if (!ex) return '';
+    const e = JSON.parse(JSON.stringify(ex)); e.parts = Object.fromEntries(Object.entries(e.parts).slice(0, 2));
+    e.engineDetails = e.engineDetails.slice(0, 1); return JSON.stringify(e); };
+
+  async function askForMachine(text, main, parts, guideTitle, existing) {
+    const partList = parts.map((p) => `${p.model} | Foliant PN ${p.code} | group ${p.category}`).join('\n');
+    const ex = EXAMPLE();
+    const rules = [
+      'You build the machine record for a Konica Minolta technical offer, written by Infinity Distribution (Egypt).',
+      'Use ONLY facts written in the product guide excerpt below. Never invent a spec, a PN or a yield: when the guide does not give it, write "[value]" (or "[PN]" for a part number).',
+      'Part numbers from the Foliant always win over the guide. Arabic text: formal Modern Standard Arabic as used in Egyptian government tenders; keep model names, units and numbers in Latin script. English and Arabic must say the same thing.',
+      'Number style: thousands with commas (5,000), ranges with " – ", separators with "  ·  ".',
+    ];
+    let shape;
+    if (existing) {
+      shape = 'Return only JSON: {"parts": {"<Foliant model exactly as given>": {"category": "Paper Supply|Finishing|Controller|Accessory", "pn": "<Foliant PN>", "en": "<one-line description>", "ar": "<same in Arabic>", "dims": ["W x D x H in mm", "kg", "power"] (only when the guide gives physical dimensions for this unit; omit otherwise), "details": {"title": "<model + English name>", "titleAr": "<Arabic name>", "rows": [["<spec name EN>", "<value>", "<spec name AR>"]]}}}, "strengths": [ {"enB","enT","arB","arT","needs":"<part model>"} ] (0–2 items, only for parts that clearly add a selling point)}.';
+      rules.push(`These parts are new for the existing library machine ${existing.model}. Describe each of them.`);
+    } else {
+      shape = 'Return only JSON with this shape (the example below shows the style and level of detail, NOT values to copy): ' +
+        '{"model": "<brand family + model, e.g. AccurioPress C12010S>", "brand": "Konica Minolta", "brandAr": "كونيكا مينولتا", "tagline": "<short EN line: type + speed>", "short": "<one word: Colour / Monochrome / ...>", ' +
+        '"letterAr": "<Arabic phrase naming the machine for the cover letter, e.g. ماكينة الطباعة الرقمية الإنتاجية الملونة Konica Minolta AccurioPress C12010S بسرعة 120 صفحة في الدقيقة>", ' +
+        '"mainBody": {"pn": "<Foliant PN>", "en": "<one line>", "ar": "<one line>"}, "engineDims": ["W x D x H", "kg", "power"], ' +
+        '"mainSpecs": [["<EN spec>", "<value>", "<AR spec>"]] (8–10 headline specs: type, speeds, resolution, paper weights, paper sizes, monthly volume, life), ' +
+        '"engineDetails": [{"title": "<model> Engine", "titleAr": "المحرك الرئيسي", "rows": [[EN, value, AR]]}] (10–14 rows, plus one more block for a built-in controller if the guide has one), ' +
+        '"parts": {"<Foliant model exactly as given>": {"category", "pn", "en", "ar", "dims"?, "details": {"title","titleAr","rows"}}} (one entry for EVERY Foliant part listed below), ' +
+        '"consumables": [["CRU|ERU", "<PN or [PN]>", "<item code>", "<EN name>", "<AR name>", "<yield or —>"]] (toner per colour, developer, drum, waste toner box, fuser/belt only if the guide lists them), ' +
+        '"yieldNote": ["<EN coverage note from the guide>", "<AR>"], "priceList": [["<item>", "<AR description>"]] (the consumables to price), ' +
+        '"strengths": [{"enB": "<bold lead EN, ends with .>", "enT": " <sentence EN>", "arB": "<bold lead AR, ends with : >", "arT": "<sentence AR>", "needs": "<part model, only if the point depends on that part>"}] (5–7 items)}.';
+    }
+    const prompt = rules.join('\n') + '\n\n' + shape + '\n\n' + (ex && !existing ? 'STYLE EXAMPLE (another machine — do not copy its values):\n' + ex + '\n\n' : '') +
+      `MAIN BODY (from the Foliant): ${main.model} | PN ${main.code}\n` + (existing ? `LIBRARY MACHINE: ${existing.model}\n` : '') +
+      `FOLIANT PARTS:\n${partList || '(none)'}\n\nPRODUCT GUIDE "${guideTitle}" (excerpt):\n` + text;
+    return S.caps.sample.json(prompt, { modelTier: 'complex' });
+  }
+
+  const building = new Set();
+  async function buildFromDrive(m) {
+    const main = mainOf(m); if (!main || building.has(m.uid)) return;
+    const lib = m.libId && S.lib[m.libId];
+    const parts = m.items.filter((i) => i !== main && i.model && !/main ?body/i.test(i.category));
+    const missing = (lib ? parts.filter((p) => !realPart(lib, p.model)) : parts).filter((p) => !sharedPart(p.model));   // shared parts need no Claude call
+    if (lib && !missing.length) return;
+    if (!S.caps.sample || !S.caps.mcp || !S.db) { m.build = { state: 'error', msg: window.WEB_APP ? 'This machine is not in the library yet. Ask Ahmed (Presales) to add it, then open the page again.' : 'Building from Drive needs Google Drive and Claude access on this page.' }; renderAll(); return; }
+    building.add(m.uid);
+    const step = (msg) => { m.build = { state: 'running', msg }; renderAll(); };
+    try {
+      step(`Finding the ${main.model} folder in Drive…`);
+      const g = lib && lib.source && lib.source.fileId ? { folder: { title: lib.source.folder }, file: { id: lib.source.fileId, title: lib.source.file } } : await findGuide(main);
+      step(`Reading "${g.file.title}"…`);
+      const text = await guideText(g.file.id);
+      const ex = excerpt(text, main, [main.model, ...missing.map((p) => p.model)], 170000);
+      step(lib ? `Claude is describing ${missing.length} new part${missing.length > 1 ? 's' : ''} from the guide (about a minute)…`
+               : `Claude is building ${main.model} from "${g.file.title}" (one to two minutes)…`);
+      const r = await askForMachine(ex, main, missing, g.file.title, lib || null);
+      if (!r || typeof r !== 'object' || !r.parts) throw new Error('Claude did not return a usable machine record. Add the Foliant again to retry.');
+      const fixPart = (p, it) => Object.assign({ category: 'Accessory', en: '[Description]', ar: '[الوصف]' }, p, { pn: it.code });
+      let doc, id;
+      if (lib) {
+        id = m.libId; doc = JSON.parse(JSON.stringify(lib));
+        for (const it of missing) if (r.parts[it.model]) doc.parts[it.model] = fixPart(r.parts[it.model], it);
+        if (Array.isArray(r.strengths)) doc.strengths.push(...r.strengths.filter((s) => s && s.enB && s.needs));
+      } else {
+        for (const k of ['model', 'mainSpecs', 'engineDetails', 'consumables', 'strengths']) if (!r[k]) throw new Error(`Claude's machine record has no ${k}. Add the Foliant again to retry.`);
+        id = slug(r.model); while (S.lib[id]) id += 'x';
+        doc = Object.assign({ brand: 'Konica Minolta', brandAr: 'كونيكا مينولتا', yieldNote: ['', ''], priceList: [], engineDims: ['[value]', '[value]', '[value]'] }, r, { id });
+        doc.mainBody = Object.assign({ en: main.model, ar: main.model }, r.mainBody, { pn: main.code });
+        doc.parts = {}; for (const it of parts) doc.parts[it.model] = fixPart(r.parts[it.model] || sharedPart(it.model) || {}, it);
+        doc.source = { folder: g.folder.title, file: g.file.title, fileId: g.file.id, built: new Date().toISOString(), by: 'Offer Builder' };
+        doc.needsReview = true;
+      }
+      await S.db.doc('machines/' + id).set(doc);
+      S.lib[id] = doc; m.libId = id;
+      if (!lib) { applySheet(doc);
+        if (doc.consSource !== 'sheet') try { await syncSheet(doc.model, doc.consumables || [], 'Product guide (auto, check)'); applySheet(doc); } catch (e) {}
+        // keep the sheet's PNs, items and yields in the saved record too, so it never reopens with [PN] placeholders
+        if (doc.consSource === 'sheet') S.db.doc('machines/' + id).set(doc).catch(() => {}); }
+      m.build = { state: 'done', msg: lib ? `Added ${missing.length} part${missing.length > 1 ? 's' : ''} to ${doc.model} from the product guide. Check them in the offer.`
+                                          : `Built ${doc.model} from "${g.file.title}" and saved it to the library. Check the specs in the offer before sending.` };
+      renderLibChips(); loadParts();
+    } catch (e) { m.build = { state: 'error', msg: (e && (e.message || e.code)) || String(e) }; }
+    building.delete(m.uid); renderAll();
+  }
+
+
+  // ---------- Consumables Master (Google Sheet in Drive 02 Products) = the source of truth for consumables ----------
+  const SHEETS = 'Google Sheets';
+  const SHEET_ID = () => (S.settings && S.settings.consumablesSheetId) || '1PY5HX_8aQBDhUTItMpi5oJwmn0rWE5g2PIu5WmHQ5qE';
+  S.sheet = null;
+  async function sheetCall(tool, input) {
+    if (!S.caps.mcp) throw new Error('Google Sheets is not reachable from this page.');
+    try { return (await S.caps.mcp.callTool(SHEETS, tool, Object.assign({ spreadsheetId: SHEET_ID() }, input))).payload; }
+    catch (e) { const c = e && e.code;
+      if (c === 'server_not_connected') throw new Error('Google Sheets is not connected. Add it in claude.ai Settings → Connectors.');
+      if (c === 'needs_reauth') throw new Error('Google Sheets needs reconnecting in claude.ai Settings → Connectors.');
+      if (c === 'not_in_manifest' || c === 'approval_required') throw new Error('Google Sheets access was not allowed for this page.');
+      throw new Error('Google Sheets: ' + ((e && e.message) || c || e)); }
+  }
+  const forModel = (cell, model) => String(cell || '').split(/[,;\n]/).some((x) => x.trim() && norm(x) === norm(model));
+  async function loadSheet() {
+    try {
+      // one call at a time, one retry: a missing or failing "Yield notes" tab must not block the consumables
+      const get = async (range) => { try { return await sheetCall('get_values', { range }); } catch (e) { await new Promise((r) => setTimeout(r, 1500)); return sheetCall('get_values', { range }); } };
+      const a = await get('Consumables!A1:I3000');
+      const b = await get("'Yield notes'!A1:C500").catch(() => null);
+      const rows = ((a && a.values) || []).slice(1).map((c, i) => ({ n: i + 2, c: Array.from({ length: 9 }, (_, k) => String(c[k] ?? '').trim()) })).filter((r) => r.c[0] && (r.c[2] || r.c[3]));
+      const notes = ((b && b.values) || []).slice(1).map((c) => [String(c[0] || ''), String(c[1] || ''), String(c[2] || '')]);
+      S.sheet = { rows, notes, err: null };
+      const before = {}; for (const [id, l] of Object.entries(S.lib)) before[id] = JSON.stringify([l.consumables, l.priceList, l.yieldNote]);
+      Object.values(S.lib).forEach(applySheet);
+      // the owner's page copies sheet changes into the library, so colleagues without access to the sheet get them too
+      if (S.isOwner && S.db) for (const [id, l] of Object.entries(S.lib)) {
+        if (l.consSource === 'sheet' && before[id] !== JSON.stringify([l.consumables, l.priceList, l.yieldNote]))
+          S.db.doc('machines/' + id).update({ consumables: l.consumables, priceList: l.priceList, yieldNote: l.yieldNote || null }).catch(() => {});
+      }
+    } catch (e) { S.sheet = { rows: [], notes: [], err: (e && e.message) || String(e) }; }
+    S.machines.forEach((m) => { m.cons = null; }); renderAll();
+  }
+  function applySheet(lib) {
+    if (!S.sheet || S.sheet.err) return;
+    const rows = S.sheet.rows.filter((r) => forModel(r.c[0], lib.model));
+    lib.consSource = rows.length ? 'sheet' : 'library';
+    if (!rows.length) return;
+    lib.consumables = rows.map((r) => [/^ERU$/i.test(r.c[1]) ? 'ERU' : 'CRU', r.c[3] || '[PN]', r.c[2], r.c[4] || '[Description]', r.c[5] || '[الوصف]', r.c[6] || '—']);
+    const pl = (lib.priceList || []).filter((p) => lib.consumables.some((c) => ckey(c[2]) === ckey(p[0])));
+    for (const c of lib.consumables) if (c[2] && !pl.some((p) => ckey(p[0]) === ckey(c[2]))) pl.push([c[2], c[4]]);
+    lib.priceList = pl;
+    const note = S.sheet.notes.find((x) => forModel(x[0], lib.model));
+    if (note && (note[1] || note[2])) lib.yieldNote = [note[1] || (lib.yieldNote || [])[0] || '', note[2] || (lib.yieldNote || [])[1] || ''];
+  }
+  async function syncSheet(model, rows, source) {   // update matching rows' B..G, append the rest
+    if (!S.sheet || S.sheet.err) await loadSheet();
+    if (S.sheet.err) throw new Error(S.sheet.err);
+    const mine = S.sheet.rows.filter((r) => forModel(r.c[0], model)), add = [];
+    for (const r of rows) {
+      const hit = mine.find((x) => (r[2] && ckey(x.c[2]) === ckey(r[2])) || (r[1] && !isPh(r[1]) && x.c[3] === r[1]));
+      const vals = [r[0], r[2], isPh(r[1]) ? '' : r[1], r[3], r[4], r[5]];
+      if (hit) { if (vals.some((v, k) => String(v) !== hit.c[k + 1])) await sheetCall('update_values', { range: `Consumables!B${hit.n}:G${hit.n}`, values: [vals] }); }
+      else add.push([model, ...vals, isPh(r[1]) ? 'PN missing' : '', source + ' · ' + new Date().toISOString().slice(0, 10)]);
+    }
+    if (add.length) await sheetCall('append_values', { range: 'Consumables!A1', values: add });
+    await loadSheet();
+  }
+
+  // ---------- Parts Library sheet in Drive (02 Products): browse and edit part descriptions and specs ----------
+  // The sheet wins: an edited description, dimension or spec row there is what every offer uses. Parts and machines
+  // that are in the library but not yet in the sheet are added to it on load and after each Drive build.
+  const PARTS_SHEET = () => (S.settings && S.settings.partsSheetId) || '13LzfIgVrj5bxiGJxR9WV5IQI4sJTtBn2biYusZV_0p4';
+  const partsCall = (tool, input) => sheetCall(tool, Object.assign({}, input, { spreadsheetId: PARTS_SHEET() }));
+  async function loadParts() {
+    try {
+      const [a, b, c] = await Promise.all([partsCall('get_values', { range: 'Parts!A1:K2000' }),
+        partsCall('get_values', { range: "'Part specs'!A1:D6000" }), partsCall('get_values', { range: 'Machines!A1:A300' })]);
+      const cells = (v, n) => ((v && v.values) || []).slice(1).map((r) => Array.from({ length: n }, (_, k) => String(r[k] ?? '').trim()));
+      const rows = cells(a, 11).filter((r) => r[0]), specs = cells(b, 4).filter((r) => r[0] && (r[1] || r[2]));
+      S.sheetParts = {};
+      for (const r of rows) {
+        if (!r[2] && !r[3]) continue;
+        const sp = specs.filter((s) => s[0] === r[0]);
+        S.sheetParts[r[0]] = { category: r[1] || 'Accessory', en: r[2] || '[Description]', ar: r[3] || '[الوصف]', pn: r[10] || '',
+          ...(r[4] || r[5] || r[6] ? { dims: [r[4] || '—', r[5] || '—', r[6] || '—'] } : {}),
+          ...(sp.length ? { details: { title: r[7] || r[0], titleAr: r[8] || '', rows: sp.map((s) => [s[1], s[2], s[3]]) } } : {}) };
+      }
+      const machines = new Set(cells(c, 1).map((r) => r[0]).filter(Boolean));
+      for (const r of rows) {
+        const sp = specs.filter((s) => s[0] === r[0]);
+        for (const lib of Object.values(S.lib)) {
+          const p = lib.parts && lib.parts[r[0]]; if (!p) continue;
+          if (r[1]) p.category = r[1]; if (r[2]) p.en = r[2]; if (r[3]) p.ar = r[3];
+          if (r[4] || r[5] || r[6]) p.dims = [r[4] || '[value]', r[5] || '[value]', r[6] || '[value]'];
+          if (sp.length) p.details = { title: r[7] || (p.details && p.details.title) || r[0], titleAr: r[8] || (p.details && p.details.titleAr) || '', rows: sp.map((s) => [s[1], s[2], s[3]]) };
+          else if (p.details) { if (r[7]) p.details.title = r[7]; if (r[8]) p.details.titleAr = r[8]; }
+        }
+      }
+      const have = new Set(rows.map((r) => r[0])), addP = [], addS = [];
+      const models = [...Object.keys((S.master && S.master.parts) || {}), ...Object.values(S.lib).flatMap((l) => Object.keys(l.parts || {}))];
+      for (const model of models) {
+        if (have.has(model)) continue;
+        const p = sharedPart(model); if (!p) continue;
+        have.add(model);
+        const d = p.dims || [], det = p.details || {};
+        addP.push([model, p.category || '', p.en || '', p.ar || '', d[0] || '', d[1] || '', d[2] || '', det.title || '', det.titleAr || '', p.source || 'Library', p.pn || '']);
+        for (const s of det.rows || []) addS.push([model, s[0] || '', s[1] || '', s[2] || '']);
+      }
+      const addM = Object.values(S.lib).filter((l) => l.model && !machines.has(l.model)).map((l) => [l.model, (l.mainBody && l.mainBody.pn) || '', l.short || '', l.tagline || '',
+        (l.mainBody && l.mainBody.en) || '', (l.mainBody && l.mainBody.ar) || '', Object.keys(l.parts || {}).join(', '), (l.source && l.source.file) || '', l.needsReview ? 'Not yet' : 'Yes']);
+      if (addP.length) await partsCall('append_values', { range: 'Parts!A1', values: addP });
+      if (addS.length) await partsCall('append_values', { range: "'Part specs'!A1", values: addS });
+      if (addM.length) await partsCall('append_values', { range: 'Machines!A1', values: addM });
+      S.partsSheet = { err: null };
+    } catch (e) { S.partsSheet = { err: (e && e.message) || String(e) }; }
+    renderAll();
+  }
+
+  // ---------- consumables in the library: edit, fill from the Foliant Consumable List, save ----------
+  const clone = (x) => JSON.parse(JSON.stringify(x));
+  const isPh = (v) => !v || /^\[.*\]$/.test(String(v).trim()) || String(v).trim() === '—';
+  const ckey = (s) => squash(s).replace(/^(TN|DV|DR|IU|WX|WTB)0+/, '$1');
+  function consDraft(m) {
+    const lib = S.lib[m.libId];
+    if (!m.cons || m.cons.libId !== m.libId) m.cons = { libId: m.libId, rows: clone(lib.consumables || []), dirty: false, isNew: {}, msg: null };
+    return m.cons;
+  }
+  async function consumableListText(file) {
+    if (file.type !== 'application/pdf') return '';
+    const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    let out = '';
+    for (let p = 1; p <= Math.min(pdf.numPages, 6); p++) {
+      const tc = await (await pdf.getPage(p)).getTextContent(), rows = [];
+      for (const it of tc.items) { if (!it.str || !it.str.trim()) continue; const y = it.transform[5];
+        let r = rows.find((r) => Math.abs(r.y - y) < 3); if (!r) rows.push(r = { y, parts: [] }); r.parts.push({ x: it.transform[4], s: it.str.trim() }); }
+      rows.sort((a, b) => b.y - a.y);
+      out += rows.map((r) => r.parts.sort((a, b) => a.x - b.x).map((q) => q.s).join(' | ')).join('\n') + '\n';
+    }
+    return out;
+  }
+  async function readConsumableList(m, file) {
+    const c = consDraft(m), lib = S.lib[m.libId];
+    if (!S.caps.sample) { c.msg = { err: true, text: 'Reading the Consumable List needs Claude access on this page.' }; renderAll(); return; }
+    c.msg = { busy: true, text: 'Reading the Consumable List…' }; renderAll();
+    try {
+      const ask = 'This is the "Consumable List" from a Konica Minolta Foliant export for ' + lib.model + '. ' +
+        'Return only JSON: {"items":[{"type":"CRU or ERU (as printed; empty if not printed)","pn":"order code exactly as printed","item":"item code, e.g. TN017 or DR-017","en":"English name, e.g. Black toner","ar":"same name in formal Arabic, e.g. حبر أسود جاف","yield":"yield as printed with thousands commas, or empty"}]}. ' +
+        'List every row. Copy codes character by character without correcting them. Skip paper, staples and service parts only if the list itself marks them as not consumables.';
+      let res;
+      const text = await consumableListText(file);
+      if (text.replace(/\s/g, '').length > 80) res = await S.caps.sample.json(ask + '\n\nTEXT OF THE LIST (cells separated by |):\n' + text.slice(0, 60000), { modelTier: 'default' });
+      else {
+        const canvas = await renderFirstPage(file);
+        const blob = await new Promise((r) => canvas.toBlob(r, 'image/png'));
+        res = await S.caps.sample.json(ask, { images: [blob], modelTier: 'default' });
+      }
+      const items = (res && Array.isArray(res.items) ? res.items : []).filter((x) => x && (x.pn || x.item));
+      if (!items.length) throw new Error('No consumables found in that file.');
+      let upd = 0, add = 0;
+      for (const x of items) {
+        const k = ckey(x.item), r = c.rows.find((row) => (k && ckey(row[2]) === k) || (x.pn && row[1] === x.pn));
+        if (r) {
+          if (x.pn && r[1] !== x.pn) { r[1] = String(x.pn).trim(); upd++; }
+          if (x.yield && isPh(r[5])) r[5] = String(x.yield).trim();
+          if (x.type && /^(CRU|ERU)$/i.test(x.type)) r[0] = x.type.toUpperCase();
+        } else {
+          c.rows.push([/^(ERU)$/i.test(x.type) ? 'ERU' : 'CRU', String(x.pn || '[PN]').trim(), String(x.item || '').trim(), String(x.en || '[Description]'), String(x.ar || '[الوصف]'), String(x.yield || '—')]);
+          c.isNew[c.rows.length - 1] = true; add++;
+        }
+      }
+      c.dirty = c.dirty || upd + add > 0;
+      c.msg = { text: upd + add ? `From the list: ${upd} PN${upd === 1 ? '' : 's'} updated, ${add} new item${add === 1 ? '' : 's'}. Check them, then Save to library.` : 'The list matches the library. Nothing to change.' };
+    } catch (e) { c.msg = { err: true, text: 'Could not read the Consumable List: ' + ((e && (e.message || e.code)) || e) }; }
+    renderAll();
+  }
+  async function saveConsumables(m) {
+    const c = consDraft(m), id = m.libId, lib = S.lib[id];
+    const rows = c.rows.filter((r) => r[1] || r[2]);
+    const priceList = clone(lib.priceList || []);
+    for (const r of rows) if (r[2] && !priceList.some((p) => ckey(p[0]) === ckey(r[2]))) priceList.push([r[2], r[4]]);
+    c.msg = { busy: true, text: 'Saving…' }; renderAll();
+    try {
+      await S.db.doc('machines/' + id).update({ consumables: rows, priceList });
+      lib.consumables = rows; lib.priceList = priceList;
+      let sheetErr = null;
+      try { await syncSheet(lib.model, rows, 'Offer Builder'); } catch (e) { sheetErr = (e && e.message) || String(e); }
+      m.cons = null; S.machines.forEach((x) => { if (x.libId === id) x.cons = null; });
+      consDraft(m).msg = sheetErr ? { err: true, text: 'Saved to the library, but the Consumables Master sheet in Drive was not updated: ' + sheetErr }
+        : { ok: true, text: 'Saved to the library and the Consumables Master sheet in Drive. Every offer with ' + lib.model + ' now uses these consumables.' };
+    } catch (e) { c.msg = { err: true, text: 'Could not save: ' + ((e && (e.message || e.code)) || e) }; }
+    renderAll();
+  }
+  function consPanel(m) {
+    const c = consDraft(m);
+    const fileIn = el('input', { type: 'file', accept: 'application/pdf,image/png,image/jpeg', hidden: '' });
+    fileIn.addEventListener('change', () => { if (fileIn.files[0]) readConsumableList(m, fileIn.files[0]); fileIn.value = ''; });
+    const edit = (j, k, cls) => { const v = c.rows[j][k] || '';
+      const i = el('input', { value: v, class: (cls || '') + (isPh(v) && k !== 5 ? ' ph' : ''), 'aria-label': ['Type', 'PN', 'Item', 'Description', 'Arabic', 'Yield'][k] });
+      i.addEventListener('change', () => { c.rows[j][k] = i.value.trim(); c.dirty = true; renderAll(); }); return i; };
+    const rows = c.rows.map((r, j) => el('tr', c.isNew[j] ? { class: 'new' } : {}, [
+      el('td', {}, (() => { const s = el('select', { 'aria-label': 'Type' }, ['CRU', 'ERU'].map((t) => el('option', { value: t, text: t, ...(r[0] === t ? { selected: '' } : {}) })));
+        s.addEventListener('change', () => { r[0] = s.value; c.dirty = true; renderAll(); }); return s; })()),
+      el('td', {}, edit(j, 1, 'code')), el('td', {}, edit(j, 2)), el('td', {}, edit(j, 3)), el('td', {}, edit(j, 4, 'ar')), el('td', {}, edit(j, 5)),
+      el('td', {}, el('button', { class: 'link', text: '✕', 'aria-label': 'Remove consumable', onclick: () => { c.rows.splice(j, 1); c.isNew = {}; c.dirty = true; renderAll(); } }))]));
+    const missing = c.rows.filter((r) => isPh(r[1])).length;
+    const msg = c.msg ? el('p', { class: 'status' + (c.msg.err ? ' err' : c.msg.ok ? ' ok' : ''), style: 'margin:6px 0 0' },
+      c.msg.busy ? [el('span', { class: 'spin' }), document.createTextNode(' ' + c.msg.text)] : c.msg.text) : null;
+    return el('details', { class: 'cons', ...(missing || c.dirty || c.msg ? { open: '' } : {}) }, [
+      el('summary', {}, [el('span', { text: 'Consumables' }),
+        S.lib[m.libId].consSource === 'sheet' ? el('span', { class: 'chip neutral', text: 'From Drive sheet' }) : S.sheet && !S.sheet.err ? el('span', { class: 'chip warn', text: 'Not in Drive sheet yet' })
+          : S.isOwner && S.sheet && S.sheet.err ? el('span', { class: 'chip bad', text: 'Consumables sheet not reachable', title: S.sheet.err }) : null,
+        S.isOwner && S.sheet && S.sheet.err ? el('button', { class: 'link', text: 'Retry', onclick: (ev) => { ev.preventDefault(); loadSheet(); } }) : null,
+        missing ? el('span', { class: 'chip bad', text: `${missing} PN missing` }) : el('span', { class: 'chip ok', text: 'All PNs in' }),
+        c.dirty ? el('span', { class: 'chip warn', text: 'Not saved' }) : null]),
+      el('div', { class: 'cons-actions' }, [
+        el('label', { class: 'btn' }, [document.createTextNode('Read Consumable List'), fileIn]),
+        el('button', { class: 'link', text: '+ Add consumable', onclick: () => { c.rows.push(['CRU', '[PN]', '', '', '', '—']); c.isNew[c.rows.length - 1] = true; c.dirty = true; renderAll(); } }),
+        c.dirty ? el('button', { class: 'btn primary', text: 'Save to library', onclick: () => saveConsumables(m) }) : null,
+        c.dirty ? el('button', { class: 'link', text: 'Discard changes', onclick: () => { m.cons = null; renderAll(); } }) : null]),
+      el('div', { class: 'tbl' }, el('table', {}, [el('thead', {}, el('tr', {}, ['Type', 'Order code (PN)', 'Item', 'Description', 'الوصف', 'Yield', ''].map((h) => el('th', { text: h })))), el('tbody', {}, rows)])),
+      el('p', { class: 'note', style: 'margin:6px 0 0' }, [document.createTextNode('The master list is the '),
+        el('a', { href: 'https://docs.google.com/spreadsheets/d/' + SHEET_ID() + '/edit', target: '_blank', rel: 'noopener', text: 'Consumables Master sheet' }),
+        document.createTextNode(' in Drive (02 Products): edit it there, or upload the Foliant Consumable List here (PDF or screenshot). Save updates both the library and the sheet.' + (S.sheet && S.sheet.err ? ' Sheet not read: ' + S.sheet.err : ''))]),
+      msg]);
+  }
+
+  // ---------- rendering ----------
+  function renderAll() { renderCards(); renderPrices(); renderTodo(); }
+  function renderCards() {
+    const box = $('cards'); box.textContent = '';
+    if (!S.machines.length) { box.append(el('p', { class: 'empty', text: 'No machines yet. The offer is built from the machines you add here.' })); return; }
+    S.machines.forEach((m, idx) => {
+      const lib = m.libId && S.lib[m.libId];
+      const head = el('div', { class: 'card-head' }, [
+        el('span', { class: 'model', text: lib ? `Machine ${idx + 1}: ${lib.model}` : `Machine ${idx + 1}` }),
+        el('span', { class: 'file', text: m.file, title: m.file }),
+        m.status === 'reading' ? el('span', { class: 'chip neutral' }, [el('span', { class: 'spin' }), document.createTextNode(' Reading Foliant…')]) : null,
+        m.status === 'ready' && m.source === 'claude' ? el('span', { class: 'chip warn', text: 'Read from picture: check every PN' }) : null,
+        m.status === 'ready' && m.source === 'text' ? el('span', { class: 'chip ok', text: 'Read from PDF text' }) : null,
+        m.status === 'error' ? el('span', { class: 'chip bad', text: 'Could not read' }) : null,
+        m.build && m.build.state === 'running' ? el('span', { class: 'chip neutral' }, [el('span', { class: 'spin' }), document.createTextNode(' Building from Drive…')]) : null,
+        lib && lib.needsReview ? el('span', { class: 'chip warn', text: 'Built from Drive: check specs' }) : null,
+        el('button', { class: 'link', text: 'Remove', onclick: () => { S.machines = S.machines.filter((x) => x !== m); renderAll(); } }),
+      ]);
+      const card = el('article', { class: 'card' }, [head]);
+      if (m.status === 'reading') { box.append(card); return; }
+      if (m.status === 'error') { card.append(el('div', { class: 'card-body' }, [el('p', { class: 'status err', text: m.error })])); box.append(card); return; }
+      // picture
+      const picInput = el('input', { type: 'file', accept: 'image/png,image/jpeg', hidden: '' });
+      picInput.addEventListener('change', () => { if (picInput.files[0]) replacePicture(m, picInput.files[0]); });
+      const pic = el('div', { class: 'pic' }, [
+        el('div', { class: 'frame' }, m.picture ? el('img', { src: m.picture.url, alt: 'Machine configuration picture' }) : el('span', { class: 'note', text: 'No picture found' })),
+        el('label', { class: 'btn', style: 'text-align:center' }, [document.createTextNode('Replace picture'), picInput]),
+      ]);
+      // library match
+      const sel = el('select', { 'aria-label': 'Library machine' }, [el('option', { value: '', text: 'Pick the machine…' }),
+        ...Object.entries(S.lib).map(([id, l]) => el('option', { value: id, text: l.model, ...(id === m.libId ? { selected: '' } : {}) }))]);
+      sel.addEventListener('change', () => { m.libId = sel.value || null; m.build = null; renderAll(); if (m.libId) buildFromDrive(m); });
+      const b = m.build;
+      const buildMsg = b ? el('p', { class: 'status' + (b.state === 'error' ? ' err' : ''), style: 'margin:0 0 8px', text: b.msg }) : null;
+      const retry = b && b.state === 'error' ? el('button', { class: 'link', text: 'Try again', onclick: () => buildFromDrive(m) }) : null;
+      const libRow = lib ? el('div', { class: 'lib', style: 'margin:0 0 8px' }, [el('span', { text: 'Machine: ' + lib.model + (lib.source ? '  ·  from ' + lib.source.file : '') })])
+        : (b && b.state === 'running') ? null
+        : el('div', { class: 'lib', style: 'margin:0 0 8px' }, [el('span', { text: 'Or pick it by hand:' }), sel, retry]);
+      // items table
+      const rows = m.items.map((it, j) => {
+        const isMain = /main ?body/i.test(it.category);
+        const p = lib && !isMain ? realPart(lib, it.model) : null;
+        let chip;
+        if (!lib) chip = el('span', { class: 'chip neutral', text: '—' });
+        else if (isMain) chip = lib.mainBody.pn === it.code ? el('span', { class: 'chip ok', text: 'Main body' }) : el('span', { class: 'chip warn', text: `Library PN ${lib.mainBody.pn}` });
+        else if (!p) chip = el('span', { class: 'chip bad', text: 'New part: no specs' });
+        else if (p.pn && p.pn !== it.code) chip = el('span', { class: 'chip warn', text: `Library PN ${p.pn}` });
+        else chip = el('span', { class: 'chip ok', text: 'In library' });
+        const inp = (key, cls, w) => { const i = el('input', { value: it[key], class: cls || '', 'aria-label': key, style: w ? `width:${w}` : null });
+          i.addEventListener('change', () => { it[key] = key === 'qty' ? (Number(i.value) || 1) : i.value.trim(); renderAll(); }); return i; };
+        return el('tr', {}, [el('td', { class: 'note', text: it.category }), el('td', {}, inp('model')), el('td', {}, inp('qty', '', '56px')), el('td', {}, inp('code', 'code')), el('td', {}, chip),
+          el('td', {}, el('button', { class: 'link', text: '✕', 'aria-label': 'Remove row', onclick: () => { m.items.splice(j, 1); renderAll(); } }))]);
+      });
+      const addRow = el('button', { class: 'link', text: '+ Add row', onclick: () => { m.items.push({ category: 'Accessories', model: '', qty: 1, code: '' }); renderAll(); } });
+      const tbl = el('div', { class: 'tbl' }, [el('table', {}, [el('thead', {}, el('tr', {}, ['Group', 'Model', 'Qty', 'Order code (PN)', 'Status', ''].map((h) => el('th', { text: h })))), el('tbody', {}, rows)]), addRow]);
+      card.append(el('div', { class: 'card-body' }, [pic, el('div', { style: 'min-width:0' }, [buildMsg, libRow, tbl, lib ? folNote(m) : null, lib ? physNote(m) : null, lib ? consPanel(m) : null])]));
+      box.append(card);
+    });
+  }
+
+  const curCode = () => $('currency').value === 'EUR' ? 'EUR' : 'EGP';
+  const typedIncl = () => $('vatMode').value === 'incl';
+  const priceLabel = () => `Unit price (${curCode()}, ${typedIncl() ? 'incl.' : 'excl.'} VAT)`;
+  function renderPrices() {
+    const box = $('prices'); box.textContent = '';
+    const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
+    if (!ready.length) { box.append(el('p', { class: 'empty', text: 'Prices appear here once a machine is added.' })); return; }
+    for (const m of ready) {
+      const lib = dealLib(m);
+      const pin = (val, set, label, w) => { const i = el('input', { value: val, inputmode: 'decimal', 'aria-label': label, style: w ? `width:${w}` : null });
+        i.addEventListener('input', () => { set(i.value); renderTotal(); renderTodo(); }); return i; };
+      const top = el('div', { class: 'grid' }, [
+        el('div', { class: 'field' }, [el('label', { text: 'Number of machines' }), pin(m.qty, (v) => (m.qty = v), 'Number of machines')]),
+        el('div', { class: 'field' }, [el('label', { text: priceLabel() }), pin(m.unitPrice, (v) => (m.unitPrice = v), 'Unit price')]),
+      ]);
+      const cons = el('table', {}, [el('thead', {}, el('tr', {}, [el('th', { text: 'Consumable' }), el('th', { text: 'Description' }), el('th', { text: priceLabel() })])),
+        el('tbody', {}, lib.priceList.map(([item, arDesc]) => el('tr', {}, [el('td', { text: item }), el('td', { class: 'ar', text: arDesc }),
+          el('td', {}, pin(m.consumablePrices[item] || '', (v) => (m.consumablePrices[item] = v), item + ' price'))])))]);
+      box.append(el('div', { class: 'price-block' }, [el('h3', { text: lib.model }), top, el('div', { class: 'tbl' }, cons)]));
+    }
+    box.append(el('div', { class: 'total', id: 'total' })); renderTotal();
+  }
+  function renderTotal() {
+    const t = $('total'); if (!t) return; t.textContent = '';
+    const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
+    const pm = InfinityOffer.priceMath(ready.map((m) => ({ unit: num(m.unitPrice), qty: num(m.qty) || 1 })), typedIncl());
+    if (pm.grandInc == null) { t.append(el('span', { class: 'note', text: 'Total: add every machine price to see the total and the amount in words.' })); return; }
+    const c = curCode(), f2 = (x) => x.toLocaleString('en-US', { minimumFractionDigits: Number.isInteger(x) ? 0 : 2, maximumFractionDigits: 2 });
+    t.append(el('span', { text: `Excl. VAT ${f2(pm.grandEx)} ${c}  ·  VAT 14% ${f2(pm.vat)} ${c}  ·  Total incl. VAT` }), el('span', { class: 'big', text: f2(pm.grandInc) + ' ' + c }),
+      el('span', { class: 'words', text: InfinityOffer.amountWords(pm.grandInc, c) }));
+  }
+
+  function renderTodo() {
+    const wrap = $('todoWrap'); wrap.textContent = '';
+    const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
+    $('genBtn').disabled = !ready.length || S.machines.some((m) => m.status === 'reading');
+    if (!ready.length) { wrap.append(el('p', { class: 'empty', text: 'Add at least one machine that is in the library.' })); return; }
+    const todo = [];
+    if (!$('customerEn').value.trim() && !$('customerAr').value.trim()) todo.push('Customer name');
+    if (!$('customerAr').value.trim()) todo.push('اسم العميل (عربي)');
+    if (!$('preparedBy').value.trim()) todo.push('Prepared by (your name)');
+    if (!$('tel').value.trim()) todo.push('Infinity phone');
+    if (!$('repCode').value.trim()) todo.push('Sales rep code');
+    for (const m of ready) { const lib = dealLib(m);
+      if (num(m.unitPrice) == null) todo.push(`${lib.model}: unit price`);
+      const miss = lib.priceList.filter(([it]) => num(m.consumablePrices[it]) == null).length; if (miss) todo.push(`${lib.model}: ${miss} consumable price(s)`);
+      const newParts = m.items.filter((i) => !/main ?body/i.test(i.category) && !lib.parts[i.model]).map((i) => i.model || '(blank)');
+      if (newParts.length) todo.push(`${lib.model}: description for ${newParts.join(', ')}`);
+      if (lib.consumables.some((c) => /^\[.*\]$/.test(c[1]))) todo.push(`${lib.model}: consumable PN missing in library`);
+      if (!m.picture) todo.push(`${lib.model}: machine picture`); }
+    const skipped = S.machines.filter((m) => m.status === 'ready' && !(m.libId && S.lib[m.libId])).length;
+    if (skipped) wrap.append(el('p', { class: 'status err', text: `${skipped} machine(s) not in the library will be left out.` }));
+    if (todo.length) wrap.append(el('p', { class: 'note', text: 'These stay highlighted in yellow in the Word file:' }), el('ul', { class: 'todo' }, todo.map((x) => el('li', {}, el('mark', { text: x })))));
+    else wrap.append(el('p', { class: 'status ok', text: 'Everything is filled in.' }));
+  }
+
+  // ---------- generate ----------
+  const blobCache = {};
+  async function asset(id) { if (!id) return null; if (blobCache[id]) return blobCache[id];
+    const r = await fetch((window.ASSET_BASE || '/_blob/') + id); if (!r.ok) return null; const u8 = new Uint8Array(await r.arrayBuffer()); return (blobCache[id] = u8); }
+  async function img(id) { const u8 = await asset(id); if (!u8) return null; const { w, h } = pngInfo(u8); return { data: u8, w, h }; }
+
+  // every generated offer is kept in Drive "06 Generated Offers" as <customer>_<model>_v<n>.docx
+  const OFFERS_FOLDER = () => (S.settings && S.settings.offersFolderId) || '1A_9Tf0twFUeNp1Q8cxsP5OBL4XlegZY9';
+  const DOCX = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  // Drive copy: the file goes as a $file leaf when this view allows it; otherwise inline base64, which must stay under 1 MiB,
+  // so that copy is shrunk (big pictures as JPEG, no embedded Noto Kufi: Google Drive has that font) until it fits.
+  const INLINE_MAX = 1000000;
+  const b64 = (u8) => { let s = ''; for (let i = 0; i < u8.length; i += 0x8000) s += String.fromCharCode.apply(null, u8.subarray(i, i + 0x8000)); return btoa(s); };
+  async function toJpeg(im, maxPx, q) {
+    if (!im || !im.data || im.data.length < 60000) return im;
+    try {
+      const bmp = await createImageBitmap(new Blob([im.data], { type: 'image/png' }));
+      const k = Math.min(1, maxPx / Math.max(bmp.width, bmp.height));
+      const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(bmp.width * k)); c.height = Math.max(1, Math.round(bmp.height * k));
+      const g = c.getContext('2d'); g.fillStyle = '#ffffff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(bmp, 0, 0, c.width, c.height);
+      const b = await new Promise((r) => c.toBlob(r, 'image/jpeg', q)); if (!b) return im;
+      const u8 = new Uint8Array(await b.arrayBuffer());
+      return u8.length < im.data.length ? { data: u8, w: im.w, h: im.h, type: 'jpg' } : im;
+    } catch (e) { return im; }
+  }
+  async function packDocx(ctx) {
+    const blob = await docx.Packer.toBlob(InfinityOffer.buildOffer(ctx, docx));
+    const zip = await InfinityOffer.finishDocx(await blob.arrayBuffer(), JSZip);
+    return zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE', compressionOptions: { level: 9 } });
+  }
+  async function compactCopy(ctx, maxPx, q) {
+    const parts = {}; for (const k of Object.keys(ctx.images.parts || {})) parts[k] = await toJpeg(ctx.images.parts[k], maxPx, q);
+    const machines = []; for (const m of ctx.machines) machines.push(Object.assign({}, m, { picture: await toJpeg(m.picture, maxPx, q) }));
+    return packDocx(Object.assign({}, ctx, { fonts: {}, machines,
+      images: { header: await toJpeg(ctx.images.header, maxPx, q), logo: await toJpeg(ctx.images.logo, maxPx, q), parts } }));
+  }
+  async function saveOfferToDrive(bytes, base, ctx) {
+    if (!S.caps.mcp) throw new Error('Google Drive is not reachable from this page. Allow Google Drive in the page permissions.');
+    const esc = base.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const same = await driveSearch(`parentId = '${OFFERS_FOLDER()}' and title contains '${esc}'`).catch(() => []);
+    let v = 1;
+    for (const f of same) { const t = String(f.title || ''); if (!t.startsWith(base)) continue;
+      const mm = t.slice(base.length).match(/^_v(\d+)\.docx$/i); v = Math.max(v, mm ? Number(mm[1]) + 1 : 2); }
+    const name = `${base}_v${v}.docx`;
+    const send = async (content) => { const p = await driveCall('create_file', { title: name, parentId: OFFERS_FOLDER(), contentMimeType: DOCX,
+      disableConversionToGoogleType: true, base64Content: content }); return { name, url: p && p.viewUrl }; };
+    const lt = await S.caps.mcp.listTools().catch(() => null);
+    if (lt && lt.fileArgs) {
+      try { return await send({ $file: { data: new Blob([bytes], { type: DOCX }), name: 'offer.docx', type: DOCX } }); }
+      catch (e) { if (/needs_reauth|server_not_connected|not_in_manifest|approval_required|not connected|reconnecting|not allowed/i.test(String(e && e.message))) throw e; }
+    }
+    let data = b64(bytes), light = false;
+    for (const [px, q] of [[1800, 0.85], [1200, 0.7], [900, 0.6]]) { if (data.length <= INLINE_MAX) break; data = b64(await compactCopy(ctx, px, q)); light = true; }
+    if (data.length > INLINE_MAX) throw new Error('the offer is too big to send to Drive from this page (' + Math.round(data.length * 3 / 4 / 1024) + ' KB).');
+    const r = await send(data); r.light = light; return r;
+  }
+  // ---------- who uses the page: their claude.ai account (when the platform can tell) + the name they type ----------
+  async function initViewer() {
+    try {
+      if (!S.user) return;
+      const v = typeof S.user.id === 'function' ? await S.user.id() : await S.user.me();
+      S.viewerId = typeof v === 'string' ? v : (v && v.id) || '';
+      const ps = await S.user.profiles([S.viewerId]); S.uname = (ps && ps[S.viewerId] && ps[S.viewerId].name) || '';
+      if (S.uname && !$('preparedBy').value.trim()) { $('preparedBy').value = S.uname; store.set('ob_preparedBy', S.uname); renderTodo(); }
+    } catch (e) {}
+    if (S.isOwner) { $('logWrap').hidden = false; loadLog(); }
+  }
+  // each person's offers sit in their own document offers/<their id>: they can add to it, only the owner reads them all
+  async function logOffer(entry) {
+    if (window.OFFER_LOG_URL) {   // web app: each offer is posted to the owner's log sheet
+      try { fetch(window.OFFER_LOG_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(Object.assign({ at: new Date().toISOString() }, entry)) }); } catch (e) {}
+    }
+    if (!S.db || !S.viewerId) return;
+    const ref = S.db.doc('offers/' + S.viewerId);
+    try {
+      const cur = await ref.get().catch(() => null);
+      const entries = cur && cur.exists ? [...(((cur.data() || {}).entries) || [])] : [];
+      entries.unshift(Object.assign({ at: new Date().toISOString() }, entry));
+      await ref.set({ account: S.uname || '', entries: entries.slice(0, 500) });
+    } catch (e) {}
+    if (S.isOwner) loadLog();
+  }
+  async function loadLog() {
+    const box = $('log'); if (!box || !S.db) return;
+    let rows = [];
+    try {
+      const q = await S.db.collection('offers').get();
+      for (const d of q.docs) { const x = d.data() || {}; for (const e of x.entries || []) rows.push(Object.assign({ account: x.account || '', uid: d.id }, e)); }
+      rows.sort((a, b) => String(b.at).localeCompare(String(a.at))); rows = rows.slice(0, 500);
+    }
+    catch (e) { box.textContent = 'The offers log could not load: ' + ((e && e.message) || e); return; }
+    box.textContent = '';
+    if (!rows.length) { box.append(el('p', { class: 'empty', text: 'No offers generated yet.' })); return; }
+    const when = (s) => { try { return new Date(s).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch (e) { return s; } };
+    box.append(el('div', { class: 'tbl' }, el('table', {}, [
+      el('thead', {}, el('tr', {}, ['Date', 'Prepared by', 'Account', 'Customer', 'Machines', 'Total incl. VAT', 'File', 'Drive'].map((h) => el('th', { text: h })))),
+      el('tbody', {}, rows.map((r) => el('tr', {}, [when(r.at), r.by || '—', r.account || (r.uid ? 'Signed-in user' : '—'), r.customer || '—', r.models || '—',
+        r.total ? r.total + ' ' + (r.currency || '') : '—', r.file || '—', r.drive || '—'].map((v) => el('td', { text: String(v) })))))])));
+  }
+  if ($('logRefresh')) $('logRefresh').addEventListener('click', () => loadLog());
+  // owner: export the whole library (with sheet consumables applied) for the web app; saved to Drive 02 Products and downloaded
+  async function exportLibrary() {
+    const st = $('exportStatus'); st.className = 'status'; st.textContent = 'Preparing the library…';
+    try {
+      let payments = []; try { const p = await S.db.doc('config/payments').get(); payments = p.exists ? ((p.data() || {}).terms || []) : []; } catch (e) {}
+      const out = { exportedAt: new Date().toISOString(), machines: Object.values(S.lib).map((l) => JSON.parse(JSON.stringify(l))),
+        settings: S.settings || {}, assets: S.assets || {}, payments };
+      const text = JSON.stringify(out);
+      if (S.caps.downloads) await S.caps.downloads.save({ filename: 'offer-builder-library.json', data: new Blob([text], { type: 'application/json' }) });
+      if (S.caps.mcp) {
+        await driveCall('create_file', { title: 'offer-builder-library.json', parentId: ROOT(), contentMimeType: 'application/json', disableConversionToGoogleType: true, textContent: text });
+        st.className = 'status ok'; st.textContent = 'Library exported (' + out.machines.length + ' machines) to Drive 02 Products as offer-builder-library.json. Tell Claude to update the web app.';
+      } else { st.className = 'status ok'; st.textContent = 'Library downloaded (' + out.machines.length + ' machines).'; }
+    } catch (e) { st.className = 'status err'; st.textContent = 'Export failed: ' + ((e && e.message) || e); }
+  }
+  if ($('exportBtn')) $('exportBtn').addEventListener('click', () => exportLibrary());
+
+  // ---------- payment terms: a saved list (config/payments), default first, then the most recently used ----------
+  const PAY_DEFAULT = 'دفعة واحدة بنسبة 100% بعد الفحص والاستلام';
+  const PAY_NEW = '__new';
+  const payKey = (s) => String(s || '').replace(/\s+/g, ' ').trim();
+  function renderPayTerms() {
+    const sel = $('paymentPick'), cur = payKey($('payment').value);
+    const list = [PAY_DEFAULT, ...(S.payTerms || []).filter((t) => payKey(t) && payKey(t) !== PAY_DEFAULT)];
+    sel.textContent = '';
+    for (const t of list) sel.append(el('option', { value: t, text: t }));
+    sel.append(el('option', { value: PAY_NEW, text: '✎ اكتب شروط سداد جديدة…' }));
+    sel.value = list.some((t) => payKey(t) === cur) ? list.find((t) => payKey(t) === cur) : PAY_NEW;
+  }
+  $('paymentPick').addEventListener('change', () => {
+    const v = $('paymentPick').value;
+    if (v === PAY_NEW) { $('payment').value = ''; $('payment').focus(); } else $('payment').value = v;
+  });
+  $('payment').addEventListener('input', () => {
+    const cur = payKey($('payment').value), sel = $('paymentPick');
+    const hit = [...sel.options].find((o) => o.value !== PAY_NEW && payKey(o.value) === cur);
+    sel.value = hit ? hit.value : PAY_NEW;
+  });
+  async function rememberPayTerm(term) {
+    const t = payKey(term); if (!t || !S.db) return;
+    const terms = [t, ...(S.payTerms || []).filter((x) => payKey(x) !== t)].slice(0, 40);
+    S.payTerms = terms; renderPayTerms();
+    try { await S.db.doc('config/payments').set({ terms }); } catch (e) {}
+  }
+  // currency and "prices typed with / without VAT": remembered in this browser
+  for (const [id, key] of [['currency', 'offer.currency'], ['vatMode', 'offer.vatMode']]) {
+    try { const v = localStorage.getItem(key); if (v && $(id).querySelector(`option[value="${v}"]`)) $(id).value = v; } catch (e) {}
+    $(id).addEventListener('change', () => { try { localStorage.setItem(key, $(id).value); } catch (e) {} renderPrices(); });
+  }
+  try { const v = localStorage.getItem('offer.withStrengths'); if (v !== null) $('withStrengths').checked = v === '1'; } catch (e) {}
+  $('withStrengths').addEventListener('change', () => { try { localStorage.setItem('offer.withStrengths', $('withStrengths').checked ? '1' : '0'); } catch (e) {} });
+  try { const v = localStorage.getItem('offer.withAttach'); if (v !== null) $('withAttach').checked = v === '1'; } catch (e) {}
+  $('withAttach').addEventListener('change', () => { try { localStorage.setItem('offer.withAttach', $('withAttach').checked ? '1' : '0'); } catch (e) {} });
+  $('genBtn').addEventListener('click', async () => {
+    const status = $('status'), btn = $('genBtn');
+    status.className = 'status'; status.textContent = 'Building the offer…'; btn.disabled = true;
+    try {
+      const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
+      const A = S.assets || {}, partsMap = A.parts || {}, partImgs = {};
+      const models = new Set(ready.flatMap((m) => m.items.map((i) => i.model)));
+      for (const mo of models) if (partsMap[mo]) partImgs[mo] = await img(partsMap[mo]);
+      const ctx = { company: S.settings.company, machines: ready.map((m) => ({ lib: dealLib(m), phys: m.folPhys, items: m.items, picture: m.picture, qty: m.qty, unitPrice: m.unitPrice, consumablePrices: m.consumablePrices })),
+        images: { header: await img(A.header), logo: await img(A.logo), parts: partImgs }, fonts: { kufiR: await asset(A.kufiR), kufiB: await asset(A.kufiB) } };
+      for (const k of FIELDS) ctx[k] = $(k).value;
+      ctx.attachments = $('withAttach').checked;
+      ctx.strengths = $('withStrengths').checked;
+      ctx.currency = curCode(); ctx.pricesIncludeVat = typedIncl();
+      const bytes = await packDocx(ctx), out = new Blob([bytes], { type: DOCX });
+      const clean = (s) => String(s || '').replace(/[\\/:*?"<>|\n\r\t]+/g, '-').replace(/\s+/g, ' ').trim();
+      const base = clean(ctx.customerEn.trim() || ctx.customerAr.trim() || 'Customer') + '_' + ready.map((m) => clean(S.lib[m.libId].model)).join(' + ');
+      status.textContent = 'Saving a copy to Drive…';
+      let name = base + '.docx', saved = null, driveErr = null;
+      if (S.caps.mcp) { try { saved = await saveOfferToDrive(bytes, base, ctx); name = saved.name; } catch (e) { driveErr = (e && e.message) || String(e); } }
+      if (!S.caps.downloads) throw new Error('Downloads are not available in this view. Open the page in claude.ai.' + (saved ? ' The offer was saved to Drive as ' + name + '.' : ''));
+      await S.caps.downloads.save({ filename: name, data: out });
+      rememberPayTerm(ctx.payment);
+      { const pm = InfinityOffer.priceMath(ctx.machines.map((m) => ({ unit: num(m.unitPrice), qty: num(m.qty) || 1 })), ctx.pricesIncludeVat);
+        logOffer({ by: $('preparedBy').value.trim(), customer: (ctx.customerEn || ctx.customerAr || '').trim(), models: ready.map((m) => S.lib[m.libId].model + ((num(m.qty) || 1) > 1 ? ' x ' + num(m.qty) : '')).join(' + '),
+          total: pm.grandInc != null ? pm.grandInc.toLocaleString('en-US', { maximumFractionDigits: 2 }) : '', currency: ctx.currency, file: name,
+          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped') }); }
+      status.className = driveErr ? 'status err' : 'status ok'; status.textContent = '';
+      status.append('Saved ' + name + (saved ? ' and a copy in Drive (' : '. ') );
+      if (saved) { status.append(el('a', { href: saved.url || ('https://drive.google.com/drive/folders/' + OFFERS_FOLDER()), target: '_blank', rel: 'noopener', text: '06 Generated Offers' }), ').' + (saved.light ? ' The Drive copy has lighter pictures so it fits the upload limit; the downloaded file is full quality.' : '')); }
+      if (driveErr) {
+        status.append(' The Drive copy was not saved: ' + driveErr + ' ');
+        const again = el('button', { class: 'link', text: 'Save to Drive again' });
+        again.addEventListener('click', async () => {
+          again.disabled = true; again.textContent = 'Saving to Drive…';
+          try { const r = await saveOfferToDrive(bytes, base, ctx); status.className = 'status ok'; status.textContent = 'Saved to Drive as ' + r.name + ' (';
+            status.append(el('a', { href: r.url || ('https://drive.google.com/drive/folders/' + OFFERS_FOLDER()), target: '_blank', rel: 'noopener', text: '06 Generated Offers' }), ').'); }
+          catch (e) { again.disabled = false; again.textContent = 'Save to Drive again'; status.append(' Still not saved: ' + ((e && e.message) || e)); }
+        });
+        status.append(again);
+      }
+      else status.append(' Open it in Word: Simplified Arabic comes with Windows, and Noto Kufi is inside the file.');
+    } catch (e) {
+      status.className = 'status err';
+      status.textContent = e && e.code === 'cancelled' ? 'Download cancelled.' : 'The offer could not be built: ' + (e.message || e.code || e);
+    } finally { btn.disabled = false; renderTodo(); }
+  });
+  renderAll();
+})();
+</script>
+
+</body></html>

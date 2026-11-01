@@ -1,0 +1,2235 @@
+{
+ "version": "2026-10-31",
+ "parts": {
+  "AI-101": {
+   "pn": "AEM6WY1",
+   "category": "Accessory",
+   "en": "Auto Inspection unit: inline image inspection of printed sheets",
+   "ar": "وحدة الفحص الآلي للمطبوعات أثناء الطباعة",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "CK-102": {
+   "pn": "ADY8WY2",
+   "category": "Accessory",
+   "en": "5th colour kit for main body (dedicated developing unit for white)",
+   "ar": "طقم اللون الخامس للوحدة الرئيسية (وحدة تظهير مخصصة للون الأبيض)",
+   "details": {
+    "title": "CK-102 – 5th colour kit for main body (dedicated developing unit for white)",
+    "titleAr": "طقم اللون الخامس للوحدة الرئيسية",
+    "rows": [
+     [
+      "Type",
+      "Main body expansion kit to enable the 5th colour",
+      "النوع"
+     ],
+     [
+      "Developing unit",
+      "Dedicated for the 5th colour  ·  drum and charging units same as CMYK",
+      "وحدة التظهير"
+     ],
+     [
+      "Required with",
+      "UK-121 (and UK-224 / UK-118 for the controller)",
+      "مطلوب مع"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "CR-101": {
+   "pn": "A65XWY1",
+   "category": "Finishing",
+   "en": "Creasing unit for SD-513",
+   "ar": "وحدة تكسير (Creasing) للوحدة SD-513",
+   "dims": [
+    "211 x 137 x 460",
+    "6.8",
+    "From main body  ·  max. 25 W"
+   ],
+   "details": {
+    "title": "CR-101 – Creasing unit for SD-513",
+    "titleAr": "وحدة تكسير",
+    "rows": [
+     [
+      "Type",
+      "Creasing Unit",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Saddle stitch/Half-fold+Crease  ·  Tri-fold + Crease  ·  Perfect Binder+Crease  ·  Free Crease",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Compatibility",
+      "SD-513",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "80 – 350 gsm*  ·  (For Saddle Stitch 300gsm  ·  For Perfect Binding 216gsm)  ·  *Depends on the function that is combined with creasing",
+      "أوزان الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "211 x 137 x 460 m ( built in SD-513)  ·  6.8kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Supplied from SD-513  ·  25W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "CR-102": {
+   "pn": "ACJ5WY1",
+   "category": "Finishing",
+   "en": "Downwards creasing kit for TU-510",
+   "ar": "طقم تكسير لأسفل للوحدة TU-510",
+   "dims": [
+    "106.4 x 603.1 x 250.4",
+    "9.6",
+    "—"
+   ],
+   "details": {
+    "title": "CR-102 – Downwards creasing kit for TU-510",
+    "titleAr": "طقم تكسير لأسفل للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Crease operation device",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "80 to 400 gsm  ·  128 to 300 gsm ( Paper length more than 487.7)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 140 x 133 mm · Max. 330.2 x 1,300 mm  ·  487.7 to 1300mm requires MK-764",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "106.4 x 603.1 x 250.4 mm  ·  9.6 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  40 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "CR-103": {
+   "pn": "ACWKWY1",
+   "category": "Finishing",
+   "en": "Upwards creasing kit for TU-510",
+   "ar": "طقم تكسير لأعلى للوحدة TU-510",
+   "dims": [
+    "106.4 x 603.1 x 250.4",
+    "9.6",
+    "—"
+   ],
+   "details": {
+    "title": "CR-103 – Upwards creasing kit for TU-510",
+    "titleAr": "طقم تكسير لأعلى للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Crease operation device",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "80 to 400 gsm  ·  128 to 300 gsm ( Paper length more than 487.7)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 140 x 133 mm · Max. 330.2 x 1,300 mm  ·  487.7 to 1300mm requires MK-764",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "106.4 x 603.1 x 250.4 mm  ·  9.6 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  40 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "EF-106": {
+   "pn": "ACT1W21",
+   "category": "Accessory",
+   "en": "Envelope fusing unit",
+   "ar": "وحدة تثبيت حراري لطباعة الأظرف",
+   "dims": [
+    "295.8 x 784.3 x 383.8",
+    "40",
+    "From main body  ·  max. 6,500 W"
+   ],
+   "details": {
+    "title": "EF-106 – Envelope fusing unit",
+    "titleAr": "وحدة تثبيت حراري لطباعة الأظرف",
+    "rows": [
+     [
+      "Compatibility",
+      "AccurioPress C14000/e, C12000/e, C14010/S, C12010/S, C10500/S",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "70 to 100gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Capacity",
+      "100 sheets",
+      "السعة"
+     ],
+     [
+      "Dimensions / Weight",
+      "295.8 x 784.3 x 383.8 mm  ·  40 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From main body  ·  6500 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "EK-612": {
+   "pn": "ACMCWY1",
+   "category": "Controller",
+   "en": "USB print kit for IC-610",
+   "ar": "طقم الطباعة من USB للوحدة IC-610",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "FA-505": {
+   "pn": "AC4MWY2",
+   "category": "Paper Supply",
+   "en": "Feed adjuster: bridge for an additional PF-712",
+   "ar": "وحدة ضبط التغذية (جسر) لوحدة تغذية الورق PF-712 الإضافية",
+   "details": {
+    "title": "FA-505 – Feed adjuster",
+    "titleAr": "وحدة ضبط التغذية",
+    "rows": [
+     [
+      "Required for",
+      "PF-712, if PF712 is 2nd, 3rd PF  ·  in case of 3 PFs 2 times FA-502 required",
+      "مطلوب لـ"
+     ],
+     [
+      "Content",
+      "Bridge for additional PF-712",
+      "المحتوى"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "FD-503": {
+   "pn": "A0H0W22",
+   "category": "Finishing",
+   "en": "Folding and punching unit with post inserter",
+   "ar": "وحدة طي وتثقيب مع وحدة إدخال لاحق للأغلفة",
+   "dims": [
+    "400 x 723 x 1,231",
+    "130",
+    "Own 16 A line  ·  max. 180 W"
+   ],
+   "details": {
+    "title": "FD-503 – Folding and punching unit with post inserter",
+    "titleAr": "وحدة طي وتثقيب مع وحدة إدخال لاحق للأغلفة",
+    "rows": [
+     [
+      "Type",
+      "Multi folding unit with punch and post inserter",
+      "النوع"
+     ],
+     [
+      "Fold types",
+      "Centre fold, letter fold-in, letter fold-out, Z-fold, double-parallel fold, gate fold",
+      "أنواع الطي"
+     ],
+     [
+      "Punch",
+      "2 holes and 4 holes",
+      "التثقيب"
+     ],
+     [
+      "Paper weight",
+      "Straight 52 – 450 gsm  ·  Fold 55 – 130 gsm  ·  Punch 52 – 216 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Post inserter",
+      "2 x 500 sheets, 50 – 300 gsm",
+      "وحدة الإدخال اللاحق"
+     ],
+     [
+      "Main tray capacity",
+      "Up to 2,500 sheets (A4)",
+      "سعة الدرج الرئيسي"
+     ],
+     [
+      "Dimensions / Weight",
+      "400 x 723 x 1,231 mm (without main tray)  ·  approx. 130 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  180 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "FD-504": {
+   "pn": "A65VWY1",
+   "category": "Finishing",
+   "en": "Spine corner forming unit for SD-513 (square-back booklets)",
+   "ar": "وحدة تشكيل ظهر الكتيب (ظهر مسطح) للوحدة SD-513",
+   "dims": [
+    "643 x 157 x 258",
+    "13",
+    "From main body  ·  max. 60 W"
+   ],
+   "details": {
+    "title": "FD-504 – Spine corner forming unit for SD-513 (square-back booklets)",
+    "titleAr": "وحدة تشكيل ظهر الكتيب",
+    "rows": [
+     [
+      "Type",
+      "Spine Corner Forming Unit",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Spine Corner Forming  (flat back) of booklets",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Compatibility",
+      "SD-513",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "50 – 216gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 120 x 257 mm · Max. 330.2 x 487.7 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "643 x 157 x 258 mm ( built in SD-513)  ·  13kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Supplied from SD-513  ·  60W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "FS-541": {
+   "pn": "AAUUWY1",
+   "category": "Finishing",
+   "en": "Staple finisher, up to 100 sheets stapling",
+   "ar": "وحدة إنهاء بالتدبيس حتى 100 ورقة",
+   "dims": [
+    "1,003 x 656 x 1,020",
+    "93",
+    "From main body  ·  max. 192 W"
+   ],
+   "details": {
+    "title": "FS-541 – Staple finisher",
+    "titleAr": "وحدة إنهاء بالتدبيس حتى 100 ورقة",
+    "rows": [
+     [
+      "Type",
+      "Staple finisher with all-in-one options (SD-510, PK-525, PI-502)",
+      "النوع"
+     ],
+     [
+      "Stapling",
+      "Up to 100 sheets  ·  1 back, 1 front or 2 centre",
+      "التدبيس"
+     ],
+     [
+      "Paper weight",
+      "40 – 450 gsm (stapling 50 – 300 gsm)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 95 x 133 mm · Max. 330.2 x 1,300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Stacking",
+      "Stapled sets: 2 sheets 180 sets … 100 sheets 30 sets  ·  sub tray 300 sheets",
+      "سعة الاستلام"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,003 x 656 x 1,020 mm  ·  93 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From main body  ·  192 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "GBC-G1": {
+   "pn": "9967008138",
+   "category": "Finishing",
+   "en": "GBC G1 inline wire binder",
+   "ar": "وحدة تجليد سلك GBC G1 على الخط",
+   "dims": [
+    "1191 x 750 x 1020",
+    "231.5",
+    "Own 16 A line  ·  max. 190 W"
+   ],
+   "details": {
+    "title": "GBC Binder G1 – GBC G1 inline wire binder",
+    "titleAr": "وحدة تجليد سلك GBC G1 على الخط",
+    "rows": [
+     [
+      "Type",
+      "Inline wire binder",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Bind mode, bypass mode",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "Plain: 75gsm - 300gsm  ·  Coated: 120gsm - 300gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "1191 x 750 x 1020 mm  ·  231.5 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "230V; 1.4A; 50Hz",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "GBC-G3": {
+   "pn": "9967010355",
+   "category": "Finishing",
+   "en": "GBC G3 inline multi-punching unit",
+   "ar": "وحدة تثقيب متعدد GBC G3 على الخط",
+   "dims": [
+    "445 x 775 x 1020",
+    "95",
+    "Own 16 A line  ·  max. 440 W"
+   ],
+   "details": {
+    "title": "GBC Punch G3 – GBC G3 inline multi-punching unit",
+    "titleAr": "وحدة تثقيب متعدد GBC G3 على الخط",
+    "rows": [
+     [
+      "Type",
+      "Multi Punching Unit",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Bypass mode, Punch mode and  Double punch, Saddle Punch, Creasing, Perforation",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "62gsm – 450gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 100 x 148 mm · Max. 330 x 1,300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "445 x 775 x 1020 mm  ·  Approx. 95 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "230V / 50Hz  ·  Less than 482W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "HM-103": {
+   "pn": "A9CFWY1",
+   "category": "Finishing",
+   "en": "Humidification unit for RU-518m (curl and static reduction)",
+   "ar": "وحدة ترطيب للوحدة RU-518m لتقليل تقوس الورق والكهرباء الاستاتيكية",
+   "dims": [
+    "—",
+    "30",
+    "From main body  ·  max. 150 W"
+   ],
+   "details": {
+    "title": "HM-103 – Humidification unit for RU-518m (curl and static reduction)",
+    "titleAr": "وحدة ترطيب للوحدة RU-518m لتقليل تقوس الورق والكهرباء الاستاتيكية",
+    "rows": [
+     [
+      "Function",
+      "Humidification function: Function performing humidification of the  ·  paper  ·  Electric charge reduction function: Function for increasing  ·  humidification to the paper, and reducing the amount of electric  ·  charge",
+      "الوظيفة"
+     ],
+     [
+      "Paper weight",
+      "40 – 400 gsm  ·  Engine Spec.: 52- 450 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 95 x 133 mm  ·  Engine Spec: 100 x 140 mm · Max. 330.2 x 1300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "Not regulated ( Built in RU-518m)  ·  Appr. 20.6 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From RU-518m  ·  150 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "HT-506": {
+   "pn": "A1RKWY4",
+   "category": "Paper Supply",
+   "en": "Heating kit for paper feed unit trays",
+   "ar": "طقم تسخين لأدراج وحدة تغذية الورق",
+   "dims": [
+    "—",
+    "6",
+    "From main body  ·  max. 600 W"
+   ],
+   "details": {
+    "title": "HT-506 – Heating kit for paper feed unit trays",
+    "titleAr": "طقم تسخين لأدراج وحدة تغذية الورق",
+    "rows": [
+     [
+      "Type",
+      "Heating unit for Paper feed units  ·  Includes 3 heater for each tray",
+      "النوع"
+     ],
+     [
+      "Compatibility",
+      "PF-712, PF-713, PF-812",
+      "التوافق"
+     ],
+     [
+      "Power",
+      "600 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IC-320": {
+   "pn": "AEWGWY1",
+   "category": "Controller",
+   "en": "Creo external controller",
+   "ar": "وحدة تحكم خارجية Creo",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IC-320S": {
+   "pn": "AEWGWY2",
+   "category": "Controller",
+   "en": "Creo external controller (S version, 5th colour)",
+   "ar": "وحدة تحكم خارجية Creo (إصدار S للون الخامس)",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IC-322": {
+   "pn": "AEM1W21",
+   "category": "Controller",
+   "en": "EFI Fiery external controller",
+   "ar": "وحدة تحكم خارجية EFI Fiery",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IC-323": {
+   "pn": "AEM3W21",
+   "category": "Controller",
+   "en": "EFI Fiery external controller (high-end)",
+   "ar": "وحدة تحكم خارجية EFI Fiery (الفئة العليا)",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IC-614": {
+   "pn": "AEMH0Y1",
+   "category": "Controller",
+   "en": "AccurioImage IC-614 internal Konica Minolta controller",
+   "ar": "وحدة التحكم الداخلية AccurioImage IC-614 من كونيكا مينولتا",
+   "details": {
+    "title": "IC-614 – AccurioImage IC-614 internal Konica Minolta controller",
+    "titleAr": "وحدة التحكم الداخلية AccurioImage IC-614 من كونيكا مينولتا",
+    "rows": [
+     [
+      "Architecture / OS",
+      "Internal  ·  Linux",
+      "البنية / نظام التشغيل"
+     ],
+     [
+      "CPU",
+      "Intel Core i7-10700, 3.4 GHz",
+      "المعالج"
+     ],
+     [
+      "RAM / Storage",
+      "32 GB  ·  1 TB HDD + 4 TB SSD (2 x 2 TB)",
+      "الذاكرة / التخزين"
+     ],
+     [
+      "Page description language",
+      "CPSI 3022  ·  APPE 5.6  ·  PDF direct print (PDF 1.3 – 2.0, PDF/X-1a, X-3, X-4, PDF/VT-3)  ·  TIFF 6  ·  PPML 2.2  ·  PCL5c  ·  PCL XL",
+      "لغات وصف الصفحة"
+     ],
+     [
+      "Options",
+      "UK-224 VDP license kit",
+      "الملحقات"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IM-104": {
+   "pn": "AEECWY1",
+   "category": "Accessory",
+   "en": "Intelligent media sensor: detects paper type and weight automatically",
+   "ar": "حساس الوسائط الذكي: يتعرف آلياً على نوع الورق ووزنه",
+   "dims": [
+    "253 x 772 x 1,262",
+    "81",
+    "Own 16 A line  ·  max. 900 W"
+   ],
+   "details": {
+    "title": "IM-104 – Intelligent media sensor",
+    "titleAr": "حساس الوسائط الذكي",
+    "rows": [
+     [
+      "Type / Function",
+      "Automatic determination of paper type and paper weight  ·  Automatic adjustment of the fusing temperature and the fusing separation fan according to the paper property.  ·  Determines unprintable paper",
+      "النوع / الوظيفة"
+     ],
+     [
+      "Paper weight",
+      "Up to 350 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Tray capacity",
+      "50 sheets",
+      "سعة الدرج"
+     ],
+     [
+      "Dimensions / Weight",
+      "253 x 772 x 1,262 mm  ·  81 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "900 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IM-105": {
+   "pn": "AEEDWY1",
+   "category": "Accessory",
+   "en": "Intelligent media sensor for paper size detection (with IM-104)",
+   "ar": "حساس الوسائط الذكي لاكتشاف مقاس الورق (مع IM-104)",
+   "dims": [
+    "177 x 772 x 968",
+    "36",
+    "From main body  ·  max. 100 W"
+   ],
+   "details": {
+    "title": "IM-105 – Intelligent media sensor for paper size detection (with IM-104)",
+    "titleAr": "حساس الوسائط الذكي لاكتشاف مقاس الورق",
+    "rows": [
+     [
+      "Type / Function",
+      "Relay conveyance unit with paper size detection function",
+      "النوع / الوظيفة"
+     ],
+     [
+      "Dimensions / Weight",
+      "177 x 772 x 968 mm  ·  36 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "1,000 W or less (incl. IM-104)",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "IQ-601": {
+   "pn": "AEFKWY1",
+   "category": "Accessory",
+   "en": "Intelligent Quality Care unit: inline scanner and spectrophotometer",
+   "ar": "وحدة التحكم الذكي في الجودة: ماسح ضوئي ومطياف ضوئي على الخط",
+   "dims": [
+    "663 x 822 x 1,020",
+    "222",
+    "Own 16 A line  ·  max. 700 W"
+   ],
+   "details": {
+    "title": "IQ-601 – Intelligent Quality Care unit",
+    "titleAr": "وحدة التحكم الذكي في الجودة",
+    "rows": [
+     [
+      "Function",
+      "Image scan with the scanner unit and the colorimeter unit",
+      "الوظيفة"
+     ],
+     [
+      "Compatibility",
+      "AccurioPress C14010/S, C12010/S, C10500/S",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "40 – 450 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 95 x 139 mm · Max. 330,2 x 1300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "663 x 822 x 1,020 mm  ·  222 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  750 W (or less )",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "JS-507": {
+   "pn": "ACJ8WY2",
+   "category": "Finishing",
+   "en": "Business card unit for TU-510",
+   "ar": "وحدة إنتاج كروت العمل للوحدة TU-510",
+   "dims": [
+    "194 x 488.7 x 200.8",
+    "3.8",
+    "—"
+   ],
+   "details": {
+    "title": "JS-507 – Business card unit for TU-510",
+    "titleAr": "وحدة إنتاج كروت العمل للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Business Card output tray",
+      "النوع"
+     ],
+     [
+      "Paper size",
+      "Min. 287 x 370 mm · Max. 330.2 x 457.2 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Capacity",
+      "Up to 216gsm: 420 cards  ·  Up to 300gsm:  210 cards",
+      "السعة"
+     ],
+     [
+      "Dimensions / Weight",
+      "194 x 488.7 x 200.8 mm  ·  3.8 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  10 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "LS-507": {
+   "pn": "AAPKWY1",
+   "category": "Finishing",
+   "en": "Large capacity stacker, up to 3,000 sheets",
+   "ar": "وحدة استلام عالية السعة حتى 3,000 ورقة",
+   "dims": [
+    "787 x 705 x 1,020",
+    "160",
+    "Own 16 A line  ·  max. 240 W"
+   ],
+   "details": {
+    "title": "LS-507 – Large capacity stacker",
+    "titleAr": "وحدة استلام عالية السعة حتى 3,000 ورقة",
+    "rows": [
+     [
+      "Type",
+      "Grip convenyance type horizontal stacker",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Straight mode, Stack mode, Offset stack mode, Sub tray mode",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "40 to 450 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 95 x 139mm · Max. 330.2 x 1300mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Tray capacity",
+      "3000 sheets",
+      "سعة الدرج"
+     ],
+     [
+      "Dimensions / Weight",
+      "787 x 705 x 1,020  ·  160 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From main body  ·  240 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MB-200": {
+   "pn": "9967008445",
+   "category": "Finishing",
+   "en": "Max Binder MB-200 inline ring binder",
+   "ar": "وحدة تجليد حلقي Max Binder MB-200 على الخط",
+   "dims": [
+    "695 x 704 x 1,028",
+    "125",
+    "Own 16 A line  ·  max. 400 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MB-511": {
+   "pn": "AC4KWY2",
+   "category": "Paper Supply",
+   "en": "Manual bypass tray, 250 sheets",
+   "ar": "درج التغذية اليدوية بسعة 250 ورقة",
+   "dims": [
+    "572 x 635.4 x 345.2",
+    "19.5",
+    "From main body  ·  max. 200 W"
+   ],
+   "details": {
+    "title": "MB-511 – Manual bypass tray",
+    "titleAr": "درج التغذية اليدوية بسعة 250 ورقة",
+    "rows": [
+     [
+      "Type",
+      "Manual by pass tray",
+      "النوع"
+     ],
+     [
+      "Compatibility",
+      "AccurioPress C14010/S, C12010/S, C10500/S  ·  PF-712, PF-812",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "52 – 350 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 100 x 148mm · Max. 330.2 x 487.7mm  ·  Length of 1300mm possible with MK-760",
+      "مقاسات الورق"
+     ],
+     [
+      "Tray capacity",
+      "250 sheets  ·  27.5 mm height",
+      "سعة الدرج"
+     ],
+     [
+      "Dimensions / Weight",
+      "572 x 635.4 x 345.2 mm  ·  19.5 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From PF  ·  200 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MK-732": {
+   "pn": "A4F5WY1",
+   "category": "Finishing",
+   "en": "Mount kit for FS-541 options",
+   "ar": "طقم تركيب لملحقات FS-541",
+   "dims": [
+    "—",
+    "3",
+    "—"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MK-737": {
+   "pn": "A6H9WY2",
+   "category": "Accessory",
+   "en": "Mount kit for third-party finishing options",
+   "ar": "طقم تركيب لملحقات التشطيب من الطرف الثالث",
+   "dims": [
+    "308 x 59 x 278",
+    "2.5",
+    "From main body  ·  max. 10 W"
+   ],
+   "details": {
+    "title": "MK-737 – Mount kit for third-party finishing options",
+    "titleAr": "طقم تركيب لملحقات التشطيب من الطرف الثالث",
+    "rows": [
+     [
+      "Type",
+      "Mount Kit required to attach 3rd Party Options",
+      "النوع"
+     ],
+     [
+      "Compatibility",
+      "PF-703, LS-505; LS-506",
+      "التوافق"
+     ],
+     [
+      "Dimensions / Weight",
+      "308 x 59 x 278 mm  ·  2.5 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Via Main body  ·  10 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MK-760": {
+   "pn": "ACR3WY1",
+   "category": "Paper Supply",
+   "en": "Banner (long sheet) input kit",
+   "ar": "طقم تغذية الورق الطويل (البانر)",
+   "dims": [
+    "583 x 368 x 309",
+    "2",
+    "—"
+   ],
+   "details": {
+    "title": "MK-760 – Banner (long sheet) input kit",
+    "titleAr": "طقم تغذية الورق الطويل",
+    "rows": [
+     [
+      "Type",
+      "Long sheet (banner) input kit for MB-511",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "128 gsm or more",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Up to 330.2 x 1,300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "583 x 368 x 309 mm  ·  2 kg",
+      "الأبعاد / الوزن"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MK-761": {
+   "pn": "ACR4WY1",
+   "category": "Finishing",
+   "en": "Banner (long sheet) output kit",
+   "ar": "طقم استلام الورق الطويل (البانر)",
+   "dims": [
+    "1,054 x 346 x 28.5",
+    "2",
+    "—"
+   ],
+   "details": {
+    "title": "MK-761 – Banner (long sheet) output kit",
+    "titleAr": "طقم استلام الورق الطويل",
+    "rows": [
+     [
+      "Type",
+      "Long sheet (banner) output tray",
+      "النوع"
+     ],
+     [
+      "Compatibility",
+      "RU-518m, OT-512, TU-510",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "128 gsm or more",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Up to 330.2 x 1,300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,054 x 346 x 28.5 mm  ·  2 kg",
+      "الأبعاد / الوزن"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MK-764": {
+   "pn": "ACJ7WY1",
+   "category": "Finishing",
+   "en": "Banner paper kit for TU-510",
+   "ar": "طقم الورق الطويل للوحدة TU-510",
+   "dims": [
+    "352.4 x 589.5 x 516",
+    "34.8",
+    "—"
+   ],
+   "details": {
+    "title": "MK-764 – Banner paper kit for TU-510",
+    "titleAr": "طقم الورق الطويل للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Enables banner feeding and paper reversal during paper output.",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "128 to 300 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 120 x 487.8 mm 140 x 487.8mm · Max. 330.2 x 1,300 mm 330.2 x 900 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Capacity",
+      "100 sheets (80 gsm or 20 mm )",
+      "السعة"
+     ],
+     [
+      "Dimensions / Weight",
+      "352.4 x 589.5 x 516 mm (conveyance section)  ·  770 x 554.8 x 77 mm (reversal section)  ·  34.8 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  50 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MK-765": {
+   "pn": "ACWMWY1",
+   "category": "Finishing",
+   "en": "Dust box (scrap ejection) for TU-510",
+   "ar": "صندوق تجميع قصاصات القص للوحدة TU-510",
+   "dims": [
+    "712 x 913 x 412.7",
+    "20.2",
+    "—"
+   ],
+   "details": {
+    "title": "MK-765 – Dust box (scrap ejection) for TU-510",
+    "titleAr": "صندوق تجميع قصاصات القص للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Scrap ejection",
+      "النوع"
+     ],
+     [
+      "Dimensions / Weight",
+      "712 x 913 x 412.7 mm  ·  20.2 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  40 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MPS-130": {
+   "pn": "9967008303",
+   "category": "Finishing",
+   "en": "Plockmatic MPS-130 multi purpose stacker",
+   "ar": "وحدة استلام متعددة الأغراض Plockmatic MPS-130",
+   "dims": [
+    "900 x 680 x 1060",
+    "71",
+    "Own 16 A line  ·  max. 150 W"
+   ],
+   "details": {
+    "title": "MPS-130 – Plockmatic MPS-130 multi purpose stacker",
+    "titleAr": "وحدة استلام متعددة الأغراض Plockmatic MPS-130",
+    "rows": [
+     [
+      "Type",
+      "Inline High Capacity Stacker",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Stacker mode",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "150-500 gsm plain paper",
+      "أوزان الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "900 x 680 x 1060 mm  ·  Lift Unit - 71 kg  Docking Unit - 5 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "100-240V 50-60Hz",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "MPS-XL": {
+   "pn": "9967012915",
+   "category": "Finishing",
+   "en": "Plockmatic MPS-XL high capacity stacker",
+   "ar": "وحدة استلام عالية السعة Plockmatic MPS-XL",
+   "dims": [
+    "1,410 x 750 x 1,060",
+    "76",
+    "Own 16 A line  ·  max. 150 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "OT-512": {
+   "pn": "AC8WWY1",
+   "category": "Finishing",
+   "en": "Open stacker (output tray), up to 4,200 sheets",
+   "ar": "وحدة استلام مفتوحة بسعة حتى 4,200 ورقة",
+   "dims": [
+    "1,003 x 656 x 1,020",
+    "57",
+    "From main body  ·  max. 120 W"
+   ],
+   "details": {
+    "title": "OT-512 – Open stacker (output tray)",
+    "titleAr": "وحدة استلام مفتوحة بسعة حتى 4,200 ورقة",
+    "rows": [
+     [
+      "Type",
+      "Open stacker (output tray)",
+      "النوع"
+     ],
+     [
+      "Stacking capacity",
+      "Up to 4,200 sheets A4  ·  2,000 sheets above A4 to SRA3",
+      "سعة الاستلام"
+     ],
+     [
+      "Paper weight",
+      "40 – 450 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 100 x 140 mm · Max. 330.2 x 487.7 mm (330.2 x 1,300 mm with MK-761)",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,003 x 656 x 1,020 mm  ·  57 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "120 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PatLite": {
+   "pn": "9967008359",
+   "category": "Accessory",
+   "en": "Status indicator lamp",
+   "ar": "مصباح بيان حالة الماكينة",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PB-503": {
+   "pn": "A15XW23",
+   "category": "Finishing",
+   "en": "Perfect binding unit",
+   "ar": "وحدة تجليد حراري (Perfect Binding)",
+   "dims": [
+    "1,360 x — x 1,223",
+    "270",
+    "Own 16 A line  ·  max. 1,000 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PE-101": {
+   "pn": "ACWNWY2",
+   "category": "Finishing",
+   "en": "Horizontal perforation kit for TU-510",
+   "ar": "طقم تخريم أفقي للوحدة TU-510",
+   "dims": [
+    "111.4 x 623.5 x 257.9",
+    "7,64",
+    "—"
+   ],
+   "details": {
+    "title": "PE-101 – Horizontal perforation kit for TU-510",
+    "titleAr": "طقم تخريم أفقي للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Perforation Feeding direction",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "80 – 140 gsm  ·  100 – 160 gsm (coated)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 140 x 133 mm · Max. 330.2 x 487.7 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "111.4 x 623.5 x 257.9 mm  ·  7,64 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  40 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PE-102": {
+   "pn": "ACWPWY2",
+   "category": "Finishing",
+   "en": "Vertical perforation kit for TU-510",
+   "ar": "طقم تخريم رأسي للوحدة TU-510",
+   "dims": [
+    "106.4 x 623.1 x 257.9",
+    "8.34",
+    "—"
+   ],
+   "details": {
+    "title": "PE-102 – Vertical perforation kit for TU-510",
+    "titleAr": "طقم تخريم رأسي للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "Perforation cross Feeding direction",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "80 – 140 gsm  ·  100 – 160 gsm (coated)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 140 x 133 mm · Max. 330.2 x 487.7 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "106.4 x 623.1 x 257.9 mm  ·  8.34 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  40 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PF-712": {
+   "pn": "AC4GWY2",
+   "category": "Paper Supply",
+   "en": "Air-suction paper feed unit, 3 trays, 4,630 sheets",
+   "ar": "وحدة تغذية ورق بالشفط الهوائي – 3 أدراج بسعة 4,630 ورقة",
+   "dims": [
+    "996 x 772 x 1,038",
+    "210",
+    "Own 16 A line  ·  max. 700 W"
+   ],
+   "details": {
+    "title": "PF-712 – Air-suction paper feed unit",
+    "titleAr": "وحدة تغذية ورق بالشفط الهوائي",
+    "rows": [
+     [
+      "Type",
+      "Paper feed unit",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "52 – 350 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 100 x 140 mm ( when 1st PFU )  ·  140 x 140 mm ( when 2nd or 3rd PFU ) · Max. 330 x 487 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Upper tray capacity",
+      "1,390 sheets",
+      "سعة الدرج العلوي"
+     ],
+     [
+      "Middle tray capacity",
+      "1,390 sheets",
+      "سعة الدرج الأوسط"
+     ],
+     [
+      "Lower tray capacity",
+      "1,850 sheets",
+      "سعة الدرج السفلي"
+     ],
+     [
+      "Dimensions / Weight",
+      "996 x 772 x 1,038 mm  ·  210 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  Less than 700 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PF-713": {
+   "pn": "AC4HWY2",
+   "category": "Paper Supply",
+   "en": "Paper feed unit with document feeder, 3 trays, 4,630 sheets",
+   "ar": "وحدة تغذية ورق مزودة بوحدة تغذية مستندات – 3 أدراج بسعة 4,630 ورقة",
+   "dims": [
+    "996 x 772 x 1,228",
+    "250",
+    "Own 16 A line  ·  max. 700 W"
+   ],
+   "details": {
+    "title": "PF-713 – Paper feed unit with document feeder",
+    "titleAr": "وحدة تغذية ورق مزودة بوحدة تغذية مستندات",
+    "rows": [
+     [
+      "Type",
+      "Paper feed unit with Document feeder",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "52 – 350 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 100 x 140 mm · Max. 297 x 431.8 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Tray capacity",
+      "300 sheets",
+      "سعة الدرج"
+     ],
+     [
+      "Upper tray capacity",
+      "1,390 sheets",
+      "سعة الدرج العلوي"
+     ],
+     [
+      "Middle tray capacity",
+      "1,390 sheets",
+      "سعة الدرج الأوسط"
+     ],
+     [
+      "Dimensions / Weight",
+      "996 x 772 x 1,228 mm  ·  250 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  Less than 700 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PF-812": {
+   "pn": "AC4JWY2",
+   "category": "Paper Supply",
+   "en": "Long sheet paper feed unit, 3 trays, up to 900 mm",
+   "ar": "وحدة تغذية ورق طويل – 3 أدراج حتى طول 900 مم",
+   "dims": [
+    "1,424 x 772 x 1,038",
+    "324",
+    "Own 16 A line  ·  max. 580 W"
+   ],
+   "details": {
+    "title": "PF-812 – Long sheet paper feed unit",
+    "titleAr": "وحدة تغذية ورق طويل",
+    "rows": [
+     [
+      "Type",
+      "Paper feed unit",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "52 – 350 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 210 x 176 mm · Max. 330 x 900 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Upper tray capacity",
+      "1,080 sheets ( up to 487mm length)  ·  750 sheets ( up to 900mm length)",
+      "سعة الدرج العلوي"
+     ],
+     [
+      "Middle tray capacity",
+      "1,080 sheets ( up to 487mm length)  ·  750 sheets ( up to 900mm length)",
+      "سعة الدرج الأوسط"
+     ],
+     [
+      "Lower tray capacity",
+      "1,540 sheets ( up to 487mm length)  ·  800 sheets ( up to 900mm length)",
+      "سعة الدرج السفلي"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,424 x 772 x 1,038 mm  ·  324 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  Less than 650 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PI-502": {
+   "pn": "A04HWY2",
+   "category": "Finishing",
+   "en": "Post inserter, 2 cover trays",
+   "ar": "وحدة إدخال لاحق للأغلفة بدرجين",
+   "dims": [
+    "511 x 620 x 220",
+    "10.5",
+    "From main body  ·  max. 30 W"
+   ],
+   "details": {
+    "title": "PI-502 – Post inserter",
+    "titleAr": "وحدة إدخال لاحق للأغلفة بدرجين",
+    "rows": [
+     [
+      "Type",
+      "Cover Paper feeding Tray ( 2 trays )",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "50 – 200 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Upper tray capacity",
+      "200 sheets or 30mm height",
+      "سعة الدرج العلوي"
+     ],
+     [
+      "Lower tray capacity",
+      "200 sheets or 30 mm height",
+      "سعة الدرج السفلي"
+     ],
+     [
+      "Dimensions / Weight",
+      "511 x 620 x 220 mm  ·  Approx. 10.5kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "from main body  ·  30 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PK-525": {
+   "pn": "AC8UW21",
+   "category": "Finishing",
+   "en": "Punch kit for FS-541",
+   "ar": "طقم تثقيب للوحدة FS-541",
+   "dims": [
+    "156 x 592 x 180",
+    "4.5",
+    "From main body  ·  max. 40 W"
+   ],
+   "details": {
+    "title": "PK-525 – Punch kit for FS-541",
+    "titleAr": "طقم تثقيب للوحدة FS-541",
+    "rows": [
+     [
+      "Paper weight",
+      "52 to 300 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "156 x 592 x 180 mm  ·  4.5 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  30 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PSQ-160": {
+   "pn": "9967008702",
+   "category": "Finishing",
+   "en": "Plockmatic PowerSquare 160 booklet maker",
+   "ar": "وحدة تصنيع كتيبات Plockmatic PowerSquare 160",
+   "dims": [
+    "1,895 x 1,760 x 1,560",
+    "535",
+    "Own 16 A line  ·  max. 500 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PSQ-224KR": {
+   "pn": "9967003742",
+   "category": "Finishing",
+   "en": "Plockmatic PowerSquare 224 booklet maker",
+   "ar": "وحدة تصنيع كتيبات Plockmatic PowerSquare 224",
+   "dims": [
+    "1,830 x 1,400 x 1,280",
+    "695",
+    "Own 16 A line  ·  max. 500 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "PT-220": {
+   "pn": "9967008450",
+   "category": "Finishing",
+   "en": "Plockmatic PT-220 trimmer",
+   "ar": "وحدة قص Plockmatic PT-220",
+   "dims": [
+    "520 x — x —",
+    "88",
+    "Own 16 A line  ·  max. 1,449 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "RU-510": {
+   "pn": "A4FCWY2",
+   "category": "Finishing",
+   "en": "Relay unit with paper reverse function",
+   "ar": "وحدة نقل وسيطة مع خاصية قلب الورق",
+   "dims": [
+    "410 x 656 x 1,020",
+    "35",
+    "—"
+   ],
+   "details": {
+    "title": "RU-510 – Relay unit with paper reverse function",
+    "titleAr": "وحدة نقل وسيطة مع خاصية قلب الورق",
+    "rows": [
+     [
+      "Type",
+      "Paper conveyance unit with paper reverse functions",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "By pass mode, Reverse mode",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "40 – 450 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 95 x 133 mm · Max. 330.2 x 1300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "410 x 656 x 1,020 mm  ·  App. 35 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From main body  ·  79 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "RU-518m": {
+   "pn": "A9CEWY2",
+   "category": "Finishing",
+   "en": "Conveyance unit: cooling, decurling, reverse output and density detection",
+   "ar": "وحدة نقل الورق مع التبريد وتصحيح التقوس وقلب الورق واستشعار الكثافة",
+   "dims": [
+    "410 x 787.2 x 1,135",
+    "95.4",
+    "Own 16 A line  ·  max. 712 W"
+   ],
+   "details": {
+    "title": "RU-518m – Conveyance unit",
+    "titleAr": "وحدة نقل الورق مع التبريد وتصحيح التقوس وقلب الورق واستشعار الكثافة",
+    "rows": [
+     [
+      "Functions",
+      "Paper cooling and transport  ·  reverse output  ·  sub tray (also purge)  ·  belt decurler with real-time adjustment  ·  density detection",
+      "الوظائف"
+     ],
+     [
+      "Paper weight",
+      "Reverse 52 – 350 gsm (simplex), 52 – 400 gsm (duplex)  ·  Decurler 52 – 350 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Up to 330 x 1,300 mm (banner)",
+      "مقاسات الورق"
+     ],
+     [
+      "Curl straightening",
+      "10 mm or less (curl before straightening 40 mm or less)",
+      "تصحيح تقوس الورق"
+     ],
+     [
+      "Option",
+      "HM-103 humidification unit",
+      "الملحقات"
+     ],
+     [
+      "Dimensions / Weight",
+      "410 x 787.2 x 1,135 mm  ·  approx. 95.4 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  712 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "RU-702": {
+   "pn": "AC5RWY1",
+   "category": "Finishing",
+   "en": "Purge tray",
+   "ar": "درج تصريف الأوراق (Purge Tray)",
+   "dims": [
+    "410 x — x 1,135",
+    "85",
+    "Own 16 A line  ·  max. 600 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "SD-435": {
+   "pn": "9967010938",
+   "category": "Finishing",
+   "en": "Plockmatic SD-435 booklet making unit",
+   "ar": "وحدة تصنيع كتيبات Plockmatic SD-435",
+   "dims": [
+    "1,510 x — x —",
+    "155",
+    "Own 16 A line  ·  max. 400 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "SD-450": {
+   "pn": "9967010940",
+   "category": "Finishing",
+   "en": "Plockmatic SD-450 upgrade kit",
+   "ar": "طقم ترقية Plockmatic SD-450",
+   "dims": [
+    "—",
+    "0.5",
+    "—"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "SD-506": {
+   "pn": "A0H2WY3",
+   "category": "Finishing",
+   "en": "Booklet making unit with trimming",
+   "ar": "وحدة تصنيع الكتيبات مع القص الأمامي",
+   "dims": [
+    "1,170 x 775 x 1,020",
+    "280",
+    "Own 16 A line  ·  max. 270 W"
+   ],
+   "details": {
+    "title": "SD-506 – Booklet making unit with trimming",
+    "titleAr": "وحدة تصنيع الكتيبات مع القص الأمامي",
+    "rows": [
+     [
+      "Type",
+      "Booklet making unit (saddle stitch, fold and front trim)",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Saddle stitch, trimming, multi-sheet half fold, multi-sheet letter fold-in, sub tray",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "52 – 244 gsm (down to 50 gsm via post insertion)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "A3, B4, A4S, B5S, SRA3, SRA4S, ISO B4, custom",
+      "مقاسات الورق"
+     ],
+     [
+      "Booklet tray capacity",
+      "2 – 10 sheets: 50 sets  ·  11 – 20: 30 sets  ·  21 – 50: 15 – 20 sets",
+      "سعة درج الكتيبات"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,170 x 775 x 1,020 mm  ·  approx. 280 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  270 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "SD-510": {
+   "pn": "A4F4WY1",
+   "category": "Finishing",
+   "en": "Saddle stitch unit for FS-541",
+   "ar": "وحدة تدبيس سرجي للوحدة FS-541",
+   "dims": [
+    "281 x 596 x 530",
+    "22.6",
+    "From main body  ·  max. 40 W"
+   ],
+   "details": {
+    "title": "SD-510 – Saddle stitch unit for FS-541",
+    "titleAr": "وحدة تدبيس سرجي للوحدة FS-541",
+    "rows": [
+     [
+      "Type",
+      "Saddle stitch and fold unit, installed in FS-541",
+      "النوع"
+     ],
+     [
+      "Functions",
+      "Booklet (fold + saddle stitch), centre fold, letter fold-in",
+      "الوظائف"
+     ],
+     [
+      "Paper weight",
+      "Content 50 – 216 gsm  ·  cover 50 – 300 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 120 x 240 mm · Max. 330.2 x 487.7 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Booklet capacity",
+      "Up to 25 sheets (50 – 61 gsm), 20 sheets (62 – 80 gsm)",
+      "سعة الكتيب"
+     ],
+     [
+      "Staple position",
+      "Adjustable (60 – 148.5 mm)",
+      "موضع التدبيس"
+     ],
+     [
+      "Dimensions / Weight",
+      "281 x 596 x 530 mm (inside FS-541)  ·  approx. 22.6 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From main body  ·  40 W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "SD-513": {
+   "pn": "A729WY1",
+   "category": "Finishing",
+   "en": "Booklet making unit, up to 50 sheets, with front trimming",
+   "ar": "وحدة تصنيع الكتيبات حتى 50 ورقة مع القص الأمامي",
+   "dims": [
+    "1,241 x 1,431 x 1,020",
+    "337",
+    "Own 16 A line  ·  max. 350 W"
+   ],
+   "details": {
+    "title": "SD-513 – Booklet making unit",
+    "titleAr": "وحدة تصنيع الكتيبات حتى 50 ورقة مع القص الأمامي",
+    "rows": [
+     [
+      "Type",
+      "Booklet making unit (saddle stitch, fold and front trim)",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Saddle stitch, saddle stitch + trim, multi half-fold, multi tri-fold, straight, sub tray",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Paper weight",
+      "50 – 300 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "SRA3, A3, B4, ISO B4, SRA4S, A4S, B5S, ISO B5S, wide and custom sizes",
+      "مقاسات الورق"
+     ],
+     [
+      "Booklet tray capacity",
+      "2 – 10 sheets: 30 sets  ·  41 – 50 sheets: 10 sets",
+      "سعة درج الكتيبات"
+     ],
+     [
+      "Options",
+      "CR-101 creasing, TU-503 slitting, FD-504 spine corner forming",
+      "الملحقات"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,241 x 1,431 x 1,020 mm (1,477 mm wide with booklet tray)  ·  approx. 337 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Power supply embedded  ·  less than 350 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "SF-204": {
+   "pn": "9967008451",
+   "category": "Finishing",
+   "en": "Plockmatic SF-204 square fold unit",
+   "ar": "وحدة تسطيح ظهر الكتيب Plockmatic SF-204",
+   "dims": [
+    "685 x — x —",
+    "30",
+    "Own 16 A line  ·  max. 230 W"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "TU-503": {
+   "pn": "A65WWY1",
+   "category": "Finishing",
+   "en": "Slitting unit for SD-513 (top and bottom trim)",
+   "ar": "وحدة قص علوي وسفلي للوحدة SD-513",
+   "dims": [
+    "304 x 381 x 630",
+    "18.7",
+    "From main body  ·  max. 50 W"
+   ],
+   "details": {
+    "title": "TU-503 – Slitting unit for SD-513 (top and bottom trim)",
+    "titleAr": "وحدة قص علوي وسفلي للوحدة SD-513",
+    "rows": [
+     [
+      "Type",
+      "Trimming Unit",
+      "النوع"
+     ],
+     [
+      "Modes",
+      "Slitting (Top and bottom cutting of sheet) and processing in SD or PB or output of slitted sheets",
+      "أوضاع التشغيل"
+     ],
+     [
+      "Compatibility",
+      "SD-513",
+      "التوافق"
+     ],
+     [
+      "Paper weight",
+      "50 – 300 gsm (depending on mode)",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 120 x 257mm · Max. 330.2 x 487.7 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Dimensions / Weight",
+      "304 x 381 x 630 mm ( built in SD-513)  ·  18.7kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Supplied from SD-513  ·  50W or less",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "TU-504": {
+   "pn": "ACJ6WY2",
+   "category": "Finishing",
+   "en": "Centre slit kit for TU-510",
+   "ar": "طقم قص طولي في المنتصف للوحدة TU-510",
+   "dims": [
+    "110.9 x 626.6 x 255.4",
+    "7.5",
+    "—"
+   ],
+   "details": {
+    "title": "TU-504 – Centre slit kit for TU-510",
+    "titleAr": "طقم قص طولي في المنتصف للوحدة TU-510",
+    "rows": [
+     [
+      "Type",
+      "1 line or 2 line slitting",
+      "النوع"
+     ],
+     [
+      "Dimensions / Weight",
+      "110.9 x 626.6 x 255.4 mm  ·  7.5 kg",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "From Finisher  ·  50 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "TU-510": {
+   "pn": "AC3TWY3",
+   "category": "Finishing",
+   "en": "Professional trimming unit (2-side slit, cross trim, crease, perforation)",
+   "ar": "وحدة قص احترافية (قص جانبي وعرضي وتكسير وتخريم)",
+   "dims": [
+    "1,360 x 747 x 1,151",
+    "272",
+    "Own 16 A line  ·  max. 790 W"
+   ],
+   "details": {
+    "title": "TU-510 – Professional trimming unit (2-side slit",
+    "titleAr": "وحدة قص احترافية",
+    "rows": [
+     [
+      "Type",
+      "Sub tray mode  ·  With trimming,",
+      "النوع"
+     ],
+     [
+      "Paper weight",
+      "50 to 400 gsm",
+      "أوزان الورق"
+     ],
+     [
+      "Paper size",
+      "Min. 95 x 133 mm · Max. 330.2 x 1300 mm",
+      "مقاسات الورق"
+     ],
+     [
+      "Tray capacity",
+      "200 sheets",
+      "سعة الدرج"
+     ],
+     [
+      "Dimensions / Weight",
+      "1,360 x 747 x 1,151 mm  ·  272 kg  ·  328 kg (with all options)",
+      "الأبعاد / الوزن"
+     ],
+     [
+      "Power",
+      "Own power cord  ·  900 W",
+      "الطاقة"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "UK-112": {
+   "pn": "ACMHWY1",
+   "category": "Accessory",
+   "en": "Upgrade kit, 2 x 1 TB HDD (required for scan)",
+   "ar": "طقم ترقية بقرصين صلبين 2 × 1 تيرابايت (مطلوب للمسح الضوئي)",
+   "details": {
+    "title": "UK-112 – Upgrade kit",
+    "titleAr": "طقم ترقية بقرصين صلبين 2 × 1 تيرابايت",
+    "rows": [
+     [
+      "Required for",
+      "Scan upgrade",
+      "مطلوب لـ"
+     ],
+     [
+      "Content",
+      "2x 1TB HDDs",
+      "المحتوى"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "UK-118": {
+   "pn": "AEM7WY1",
+   "category": "Controller",
+   "en": "5th colour activation kit for external controller",
+   "ar": "طقم تفعيل اللون الخامس لوحدة التحكم الخارجية",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "UK-121": {
+   "pn": "AEMJWY1",
+   "category": "Accessory",
+   "en": "5th colour upgrade kit (image processing board)",
+   "ar": "طقم ترقية اللون الخامس (لوحة معالجة الصورة)",
+   "details": {
+    "title": "UK-121 – 5th colour upgrade kit (image processing board)",
+    "titleAr": "طقم ترقية اللون الخامس",
+    "rows": [
+     [
+      "Required for",
+      "Main body interface kit to enable the 5th color",
+      "مطلوب لـ"
+     ],
+     [
+      "Content",
+      "Image Processing board, Protection chip (enables 5th colour)",
+      "المحتوى"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "UK-224": {
+   "pn": "AEMKWY1",
+   "category": "Controller",
+   "en": "VDP license kit for IC-614",
+   "ar": "طقم ترخيص الطباعة المتغيرة (VDP) للوحدة IC-614",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "UK-311": {
+   "pn": "AD8WWY1",
+   "category": "Accessory",
+   "en": "Inspection enhancement kit for AI-101",
+   "ar": "طقم تحسين الفحص للوحدة AI-101",
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "UK-312": {
+   "pn": "AD8XWY1",
+   "category": "Accessory",
+   "en": "VDP verification kit (real-time CSV comparison)",
+   "ar": "طقم التحقق من الطباعة المتغيرة (مقارنة CSV فورية)",
+   "details": {
+    "title": "UK-312 – VDP verification kit (real-time CSV comparison)",
+    "titleAr": "طقم التحقق من الطباعة المتغيرة",
+    "rows": [
+     [
+      "Function",
+      "CSV comparison in real time",
+      "الوظيفة"
+     ],
+     [
+      "Compatibility",
+      "AccurioPress C4080, C4070  ·  AccurioPress C14000/e, C12000/e  ·  AccurioPress C14010/S, C12000/S, C10500/S  ·  AccurioPress C3080/P, C3070  ·  AccurioPress C6100, C6085  ·  AccurioPress 6120, 6136/P",
+      "التوافق"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "VI-514": {
+   "pn": "ACMAWY2",
+   "category": "Accessory",
+   "en": "Video interface kit for IQ-601",
+   "ar": "وحدة توصيل الفيديو للوحدة IQ-601",
+   "details": {
+    "title": "VI-514 – Video interface kit for IQ-601",
+    "titleAr": "وحدة توصيل الفيديو للوحدة IQ-601",
+    "rows": [
+     [
+      "Type",
+      "Interface to connect IQ-601/501 to engine",
+      "النوع"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "VI-515": {
+   "pn": "ACMKWY1",
+   "category": "Accessory",
+   "en": "Video interface kit for external controllers and AI-101",
+   "ar": "وحدة توصيل الفيديو لوحدات التحكم الخارجية و AI-101",
+   "details": {
+    "title": "VI-515 – Video interface kit for external controllers and AI-101",
+    "titleAr": "وحدة توصيل الفيديو لوحدات التحكم الخارجية و AI-101",
+    "rows": [
+     [
+      "Type",
+      "Interface to connect AIT or External Controller",
+      "النوع"
+     ],
+     [
+      "Compatibility",
+      "IC-316, IC-317, IC-318, IC-319, UK-301,  ·  IC-320, IC-322, IC-323, AI-101",
+      "التوافق"
+     ]
+    ]
+   },
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  },
+  "WT-518": {
+   "pn": "ACT2WY1",
+   "category": "Accessory",
+   "en": "Working table",
+   "ar": "طاولة عمل",
+   "dims": [
+    "418 x — x —",
+    "3",
+    "—"
+   ],
+   "source": "Foliant C10500/C12010/C14010 + Product Guide v1.08"
+  }
+ }
+}
