@@ -1752,6 +1752,14 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     if (S.isOwner) { $('logWrap').hidden = false; loadLog(); }
   }
   // each person's offers sit in their own document offers/<their id>: they can add to it, only the owner reads them all
+  // One-line configuration for the log sheet: "main body + option + option"; several machines are separated by " | ".
+  function configText(ready) {
+    const one = (m) => {
+      const its = (InfinityOffer.attachOrder ? InfinityOffer.attachOrder(m.items || []) : (m.items || [])).filter((i) => i && i.model);
+      return its.map((i) => ((Number(i.qty) || 1) > 1 ? (Number(i.qty)) + '× ' : '') + String(i.model).trim()).join(' + ');
+    };
+    return ready.map(one).join(' | ');
+  }
   async function logOffer(entry) {
     if (window.OFFER_LOG_URL) {   // web app: each offer is posted to the owner's log sheet
       try { fetch(window.OFFER_LOG_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(Object.assign({ at: new Date().toISOString() }, entry)) }); } catch (e) {}
@@ -1863,7 +1871,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       { const pm = InfinityOffer.priceMath(ctx.machines.map((m) => ({ unit: num(m.unitPrice), qty: num(m.qty) || 1 })), ctx.pricesIncludeVat);
         logOffer({ by: $('preparedBy').value.trim(), customer: (ctx.customerEn || ctx.customerAr || '').trim(), models: ready.map((m) => S.lib[m.libId].model + ((num(m.qty) || 1) > 1 ? ' x ' + num(m.qty) : '')).join(' + '),
           total: pm.grandInc != null ? pm.grandInc.toLocaleString('en-US', { maximumFractionDigits: 2 }) : '', currency: ctx.currency, file: name,
-          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped') }); }
+          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped'), config: configText(ready) }); }
       status.className = driveErr ? 'status err' : 'status ok'; status.textContent = '';
       status.append('Saved ' + name + (saved ? ' and a copy in Drive (' : '. ') );
       if (saved) { status.append(el('a', { href: saved.url || ('https://drive.google.com/drive/folders/' + OFFERS_FOLDER()), target: '_blank', rel: 'noopener', text: '06 Generated Offers' }), ').' + (saved.light ? ' The Drive copy has lighter pictures so it fits the upload limit; the downloaded file is full quality.' : '')); }
