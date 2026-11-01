@@ -25,6 +25,9 @@ header.top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; pad
 header.top .logo { height: 44px; width: auto; background: #fff; border-radius: var(--r-sm); padding: 4px 8px; }
 header.top h1 { font-size: 26px; font-weight: 800; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 header.top .sub { color: var(--muted); font-size: 14px; margin: 0; }
+.co-pick { margin-left: auto; display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; gap: 2px; background: var(--surface); }
+.co-pick button { border: 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: 14px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 32px; }
+.co-pick button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
 .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
 .ar { font-family: var(--kufi); direction: rtl; }
 section.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; margin-bottom: 20px; }
@@ -94,6 +97,10 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       <div class="eyebrow">Konica Minolta production print</div>
       <h1>Offer Builder</h1>
       <p class="sub">Foliant export in, branded Word offer out. Anything left empty stays highlighted in yellow in the Word file.</p>
+    </div>
+    <div class="co-pick" id="companyPick" role="group" aria-label="Offer issued by">
+      <button type="button" data-co="infinity" aria-pressed="true">Infinity</button>
+      <button type="button" data-co="focus" aria-pressed="false">Focus IT</button>
     </div>
   </header>
 
@@ -336,6 +343,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const SHORT = M.every((m) => m.kind === 'office' || /^bizhub/i.test(m.model));
     const MODELS = M.map((m) => m.model);
     const C = ctx.company;
+    const CO = C.nameAr || 'شركة انفنيتي للتوزيع';   // the company's Arabic name, used wherever the offer speaks for the company
     const ATTACH = ctx.attachments !== false;   // the Attachments section (5) is optional, chosen in the builder
     // warranty copies: empty field = time-only warranty ("one full year"), no "or N copies, whichever comes first"
     const WCOPIES = String(ctx.warrantyCopies || '').trim();
@@ -343,7 +351,9 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const STRENGTHS = ctx.strengths !== false;
     const N_FIN = STRENGTHS ? '3' : '2', N_AS = STRENGTHS ? '4' : '3', N_ATT = STRENGTHS ? '5' : '4';
 
-    const RED = 'DC2229', INK = '040707', INK_SOFT = '2B2B2B', MUTED = '6B6B6B', BORDER = 'E5E5E5', SURF2 = 'F5F5F5', WHITE = 'FFFFFF';
+    // brand colours come from the company picked in the builder (Infinity red by default; Focus IT green with navy text on it)
+    const RED = String((ctx.company && ctx.company.color) || 'DC2229').replace('#', ''), ON_RED = String((ctx.company && ctx.company.onColor) || 'FFFFFF').replace('#', '');
+    const INK = '040707', INK_SOFT = '2B2B2B', MUTED = '6B6B6B', BORDER = 'E5E5E5', SURF2 = 'F5F5F5', WHITE = 'FFFFFF';
     const FONT = 'Arial', AR_BODY = 'Simplified Arabic', AR_HEAD = 'Noto Kufi Arabic', W = 9638, MM = 3.7795;
 
     const imgFit = (im, maxW, maxH) => { if (!im) return null; const k = Math.min(maxW / im.w, (maxH || 1e9) / im.h);
@@ -387,7 +397,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const table = (widths, rows, o = {}) => new Table({ width: { size: widths.reduce((a, b) => a + b, 0), type: WidthType.DXA }, columnWidths: widths,
       layout: TableLayoutType.FIXED, rows, alignment: AlignmentType.CENTER, visuallyRightToLeft: o.rtl ? true : undefined });
     const hdr = (widths, labels) => new TableRow({ tableHeader: true, cantSplit: true, children: labels.map((l, i) =>
-      cell(l[0], widths[i], { fill: RED, color: WHITE, bold: true, rtl: l[1], align: l[2], head: true })) });
+      cell(l[0], widths[i], { fill: RED, color: ON_RED, bold: true, rtl: l[1], align: l[2], head: true })) });
     // a plain string cell must not read String.prototype.bold & co. as options (that wrote w:b="function bold()" and broke Word)
     const row = (widths, cells, zebra) => new TableRow({ cantSplit: true, children: cells.map((c0, i) => {
       const c = c0 !== null && typeof c0 === 'object' && 'v' in c0 ? c0 : { v: c0 };
@@ -436,10 +446,10 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
         AR([ar(a, { size: 44, bold: true, color: RED, head: true })], { after: 0, align: AlignmentType.CENTER }),
         P([t('')], { after: 600, border: { bottom: { style: BorderStyle.SINGLE, size: 12, color: RED, space: 1 } }, indent: { left: 3600, right: 3600 } }),
         table(w, [
-          new TableRow({ children: [cell('End User / اسم العميل', w[0], { bold: true, color: WHITE, fill: RED, head: true }), cell(customerEN, w[1], { bold: true })] }),
-          new TableRow({ children: [cell(MULTI ? 'Machines / الماكينات' : 'Machine / الماكينة', w[0], { bold: true, color: WHITE, fill: RED, head: true }),
+          new TableRow({ children: [cell('End User / اسم العميل', w[0], { bold: true, color: ON_RED, fill: RED, head: true }), cell(customerEN, w[1], { bold: true })] }),
+          new TableRow({ children: [cell(MULTI ? 'Machines / الماكينات' : 'Machine / الماكينة', w[0], { bold: true, color: ON_RED, fill: RED, head: true }),
             cell(MODELS.map((m) => 'Konica Minolta ' + m), w[1], { bold: true })] }),
-          new TableRow({ children: [cell('Pages Language / لغة الصفحات', w[0], { bold: true, color: WHITE, fill: RED, head: true }), cell(lang, w[1])] }),
+          new TableRow({ children: [cell('Pages Language / لغة الصفحات', w[0], { bold: true, color: ON_RED, fill: RED, head: true }), cell(lang, w[1])] }),
         ]),
         pageBreak(),
       ];
@@ -486,10 +496,10 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const fitText = SHORT ? 'والتي تعد من أنسب حلول الطباعة والنسخ والمسح الضوئي للمكاتب والإدارات من حيث الاعتمادية وسهولة الاستخدام وانخفاض تكلفة التشغيل.'
       : 'والتي تعد من أنسب حلول الطباعة الرقمية للمطابع والمنشآت التي تحتاج إلى إنتاجية عالية وجودة طباعة ثابتة.';
     const letterIntro = MULTI
-      ? [AR('تتشرف شركة انفنيتي للتوزيع – قطاع حلول الطباعة الرقمية – بأن تتقدم لسيادتكم بالعرض الفني والمالي التالي للماكينات التالية:', { after: 80, line: 300 }),
+      ? [AR('تتشرف ' + CO + ' – قطاع حلول الطباعة الرقمية – بأن تتقدم لسيادتكم بالعرض الفني والمالي التالي للماكينات التالية:', { after: 80, line: 300 }),
          ...M.map((m, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(m.letterAr)], { after: 60, indent: { right: 360 } })),
          AR(fitText, { after: 120, before: 60, line: 300 })]
-      : [AR('تتشرف شركة انفنيتي للتوزيع بأن تتقدم لسيادتكم بالعرض الفني والمالي التالي ل' + M[0].letterAr + '، ' + fitText, { after: 120, line: 300 })];
+      : [AR('تتشرف ' + CO + ' بأن تتقدم لسيادتكم بالعرض الفني والمالي التالي ل' + M[0].letterAr + '، ' + fitText, { after: 120, line: 300 })];
     const toc = SHORT ? [['1', 'Technical Offer', 'العرض الفني'], ...M.map((m, i) => [`1.${i + 1}`, MULTI ? `Machine ${i + 1}: ${m.model}` : m.model, MULTI ? `الماكينة ${ORD_AR[i]}` : 'الماكينة موضوع العرض']),
       ['2', 'Financial Offer', 'العرض المالي']] : [['1', 'Technical Offer', 'العرض الفني'], ['1.1', 'Technical Offer Summary', 'ملخص العرض الفني'],
       ...M.map((m, i) => [`1.${i + 2}`, MULTI ? `Machine ${i + 1}: ${m.model}` : m.model, MULTI ? `الماكينة ${ORD_AR[i]}` : 'الماكينة موضوع العرض']),
@@ -501,7 +511,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       ...letterIntro,
       AR('ونحن على أتم استعداد لتقديم أي إيضاحات أو بيانات إضافية تطلبونها.', { after: 120 }),
       AR('وتفضلوا بقبول فائق الاحترام،', { after: 40 }),
-      AR('شركة انفنيتي للتوزيع', { bold: true, color: RED, after: 360 }),
+      AR('' + CO + '', { bold: true, color: RED, after: 360 }),
       label('Contents  |  المحتوى'),
       ...toc.map(([n, en, a]) => { const sub = n.includes('.'), b = { ...noBorders, bottom: hair };
         return table([1000, 4319, 4319], [new TableRow({ children: [cell(n, 1000, { borders: b, bold: !sub, color: sub ? MUTED : RED, size: sub ? 18 : 20 }),
@@ -512,7 +522,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const sumW = [700, 1500, 2200, 5238];
     const summary = [
       H2('1.1', 'Technical Offer Summary', 'ملخص العرض الفني'),
-      AR('تتشرف شركة انفنيتي للتوزيع – قطاع حلول الطباعة الرقمية – بتقديم العرض الفني التالي لجهتكم الموقرة، والذي يعد من أنسب حلول الطباعة الرقمية الإنتاجية من حيث الإنتاجية العالية والجودة الفائقة وتنوع الخامات، مع الترشيد في استهلاك الطاقة الكهربائية وتوفير أقل تكلفة تشغيل ممكنة.', { after: 140, line: 300 }),
+      AR('تتشرف ' + CO + ' – قطاع حلول الطباعة الرقمية – بتقديم العرض الفني التالي لجهتكم الموقرة، والذي يعد من أنسب حلول الطباعة الرقمية الإنتاجية من حيث الإنتاجية العالية والجودة الفائقة وتنوع الخامات، مع الترشيد في استهلاك الطاقة الكهربائية وتوفير أقل تكلفة تشغيل ممكنة.', { after: 140, line: 300 }),
       table(sumW, [
         hdr(sumW, [['No. / م', false, AlignmentType.CENTER], ['Brand / الماركة', false, AlignmentType.CENTER], ['Model / الطراز', false, AlignmentType.CENTER], ['Configuration / صورة الماكينة', false, AlignmentType.CENTER]]),
         ...M.map((m, i) => new TableRow({ cantSplit: true, children: [
@@ -582,7 +592,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       cell(label, finW.slice(0, 5).reduce((a, b) => a + b, 0), { span: 5, fill: strong ? INK_SOFT : SURF2, color: strong ? WHITE : INK, bold: true, rtl: true }),
       cell(money(value), finW[5], { fill: SURF2, bold: true, align: AlignmentType.CENTER })] });
     const financial = [...(SHORT ? [H2('2', 'Financial Offer', 'العرض المالي', true)] : sectionPage(N_FIN, 'Financial Offer', 'العرض المالي', 'Arabic  |  عربي')),
-      AR('تتشرف شركة انفنيتي للتوزيع – قطاع حلول الطباعة الرقمية – بأن تتقدم لجهتكم الموقرة بالعرض المالي التالي:', { after: 140 }),
+      AR('تتشرف ' + CO + ' – قطاع حلول الطباعة الرقمية – بأن تتقدم لجهتكم الموقرة بالعرض المالي التالي:', { after: 140 }),
       table(finW, [
         hdr(finW, [['م', true, AlignmentType.CENTER], ['الماركة', true], ['الموديل / الوصف', true], ['الكمية', true, AlignmentType.CENTER],
           [`سعر الوحدة ${CUR.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER], [`إجمالي السعر ${CUR.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER]]),
@@ -634,7 +644,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const asB = (children) => AR(children, { after: 60, indent: { right: 360 } });
     const each = MULTI ? ' لكل ماكينة' : '';
     const afterSales = [...sectionPage(N_AS, 'After-Sales Services', 'خدمات ما بعد البيع', 'Arabic  |  عربي'),
-      asP(N_AS + '.1  التركيب والتشغيل: ', [ar('يتم بمعرفتنا مجاناً وبدون مقابل من خلال مهندسي شركة انفنيتي للتوزيع.')]),
+      asP(N_AS + '.1  التركيب والتشغيل: ', [ar('يتم بمعرفتنا مجاناً وبدون مقابل من خلال مهندسي ' + CO + '.')]),
       asP(N_AS + '.2  التدريب الداخلي: ', [ar('بدون مقابل ولأي عدد من العاملين بالمطبعة لكل ماكينة لمدة '), arRun(ctx.training, '[يوم عمل كامل]'), ar(' من تاريخ التركيب والتشغيل.')]),
       asP(N_AS + '.3  الضمان: ', WCOPIES ? [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي أو إنتاج `), ar(WCOPIES), ar(` نسخة (أيهما أقرب)${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
         : [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي كامل${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]),
@@ -645,14 +655,14 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       asB([ar('–  بند الورق وأي نوع من وسائط الطباعة.')]),
       asB([ar('–  بند مستلزمات وخامات التشغيل المدرجة بالعرض الفني (مثل: الحبر، الديفلوبر، الدرام... إلخ).')]),
       asB([ar('–  قطع الغيار التي قد تتلف نتيجة عدم ثبات التيار الكهربائي بالمطبعة، أو سوء الاستخدام، أو التخزين أو نقل الماكينات بدون معرفة الشركة، أو تعرض الماكينة لحوادث بالتشغيل.')]),
-      AR([ar('يعد الضمان لاغياً في حالة استخدام خامات تشغيل غير أصلية أو التدخل الفني من قبل جهات صيانة غير معتمدة من شركة انفنيتي للتوزيع.', { bold: true, size: 18 })], { after: 140, before: 80 }),
+      AR([ar('يعد الضمان لاغياً في حالة استخدام خامات تشغيل غير أصلية أو التدخل الفني من قبل جهات صيانة غير معتمدة من ' + CO + '.', { bold: true, size: 18 })], { after: 140, before: 80 }),
       asP(N_AS + '.4  الصيانة خلال فترة الضمان: ', [ar('مجانية طيلة فترة الضمان، علماً بأنه لدينا مركز صيانة متخصص ومتوفر به قطع الغيار والخامات الأصلية، ويشرف عليه نخبة من المهندسين المتخصصين والمدربين لدى الجهات المصنعة بالخارج.')]),
       asP(N_AS + '.5  الصيانة بعد انتهاء فترة الضمان: ', [ar('كامل الاستعداد لإبرام عقد صيانة سنوي وفقاً لاختيار العميل من البدائل التالية:')]),
       (() => { const w = [1300, 8338];
         const mm = [['Labor', 'عقد صيانة سنوي شامل لأجور العمل، وغير شامل لبند التشغيل وبند الورق وكافة قطع الغيار ومستلزمات التشغيل، يتم فوترته ربع سنوياً أو شهرياً (أجل).'],
           ['SMA', 'عقد صيانة سنوي شامل لأجور العمل وقطع الغيار، وغير شامل لبند التشغيل وبند الورق ومستلزمات التشغيل، يتم فوترته ربع سنوياً أو شهرياً (أجل).'],
           ['FSMA', 'عقد صيانة سنوي شامل لأجور العمل وقطع الغيار ومستلزمات التشغيل، يتم فوترته شهرياً وفقاً لقيمة النسخة والحد الأدنى للإنتاجية الشهرية، وتتم فوترة الإنتاجية الزائدة ربع سنوياً، ويتم حساب قيمة النسخة وفقاً للتغطية والإنتاجية الشهرية المقررة من العميل.']];
-        return table(w, mm.map((r, i) => new TableRow({ cantSplit: true, children: [cell(r[0], w[0], { bold: true, color: WHITE, fill: RED, align: AlignmentType.CENTER }),
+        return table(w, mm.map((r, i) => new TableRow({ cantSplit: true, children: [cell(r[0], w[0], { bold: true, color: ON_RED, fill: RED, align: AlignmentType.CENTER }),
           cell(r[1], w[1], { rtl: true, fill: i % 2 ? SURF2 : undefined })] })), { rtl: true }); })(),
       gap(6),
       AR([ar('علماً بأن كافة عروض الصيانة أعلاه لا تشمل قطع الغيار التي قد تتلف نتيجة عدم ثبات التيار الكهربائي، أو سوء الاستخدام، أو التخزين أو نقل الماكينات بدون معرفة الشركة، أو تعرض الماكينة لحوادث بالتشغيل.', { size: 18, color: MUTED })])];
@@ -660,8 +670,8 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     // ---------- 5. attachments ----------
     const attachments = [...sectionPage(N_ATT, 'Attachments', 'المرفقات', 'Arabic  |  عربي'),
       ...[`كتالوجات ${machineWord} والوحدات موضوع العرض.`,
-        'صور ضوئية للمستندات القانونية الخاصة بشركة انفنيتي للتوزيع: عقد التأسيس، البطاقة الضريبية بآخر إقرار ضريبي، سجل تجاري حديث، شهادة التسجيل بضريبة القيمة المضافة.',
-        'شهادة موزع معتمد من الجهة المصنعة لشركة انفنيتي للتوزيع.', 'سابقة الأعمال.'].map((s, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(s)], { after: 80 }))];
+        'صور ضوئية للمستندات القانونية الخاصة ب' + CO + ': عقد التأسيس، البطاقة الضريبية بآخر إقرار ضريبي، سجل تجاري حديث، شهادة التسجيل بضريبة القيمة المضافة.',
+        'شهادة موزع معتمد من الجهة المصنعة ل' + CO + '.', 'سابقة الأعمال.'].map((s, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(s)], { after: 80 }))];
 
     // ---------- short (office) technical ----------
     function shortBlock(m, i) {
@@ -730,9 +740,11 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     if (m) {
       const emb = m[1].match(/<w:embedRegular([^>]*)\/>/)[1];
       ft = ft.replace(m[0], '').replace(new RegExp('(<w:font w:name="' + esc + '">[\\s\\S]*?<w:embedRegular[^>]*/>)'), (x) => x + '<w:embedBold' + emb + '/>');
+      ft = ft.replace(/w:fontKey="\{([0-9a-fA-F-]+)\}"/g, (x, g) => 'w:fontKey="{' + g.toUpperCase() + '}"');   // the schema wants upper-case GUIDs
       zip.file('word/fontTable.xml', ft);
       let st = await zip.file('word/settings.xml').async('string');
-      if (!st.includes('embedTrueTypeFonts')) st = st.replace(/(<w:settings[^>]*>)/, '$1<w:embedTrueTypeFonts/>');
+      // embedTrueTypeFonts must come after displayBackgroundShape (schema order), otherwise right after <w:settings>
+      if (!st.includes('embedTrueTypeFonts')) st = /<w:displayBackgroundShape\/>/.test(st) ? st.replace(/<w:displayBackgroundShape\/>/, '$&<w:embedTrueTypeFonts/>') : st.replace(/(<w:settings[^>]*>)/, '$1<w:embedTrueTypeFonts/>');
       zip.file('word/settings.xml', st);
     }
     return zip;
@@ -763,8 +775,27 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
   if (window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/pdf.worker.min.js';
   const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   $('date').value = today;
-  for (const k of STICKY) { const v = store.get('ob_' + k); if (v) $(k).value = v; }
-  for (const k of FIELDS) $(k).addEventListener('input', () => { if (STICKY.includes(k)) store.set('ob_' + k, $(k).value); renderTodo(); });
+  // Company the offer is issued by (toggle at the top). Phone, mobile and rep code are remembered per company.
+  let CO = store.get('ob_company') === 'focus' ? 'focus' : 'infinity';
+  const PER_CO = ['tel', 'mobile', 'repCode'];
+  const skey = (k) => 'ob_' + k + (CO === 'focus' && PER_CO.includes(k) ? '_focus' : '');
+  for (const k of STICKY) { const v = store.get(skey(k)); if (v) $(k).value = v; }
+  for (const k of FIELDS) $(k).addEventListener('input', () => { if (STICKY.includes(k)) store.set(skey(k), $(k).value); renderTodo(); });
+  function companyInfo(co) {
+    const st = S.settings || {}, d = st.defaults || {}, A = S.assets || {};
+    if (co === 'focus') { const f = (st.companies && st.companies.focus) || {};
+      return { key: 'focus', company: f, color: f.color || '96C941', onColor: f.onColor || '253D4C', header: A.focusHeader, logo: A.focusLogo, tel: f.tel || '', mobile: f.mobile || '', repCode: f.repCode || '' }; }
+    return { key: 'infinity', company: st.company || {}, color: 'DC2229', onColor: 'FFFFFF', header: A.header, logo: A.logo, tel: d.tel, mobile: d.mobile, repCode: d.repCode };
+  }
+  function applyCompany(switching) {
+    const ci = companyInfo(CO);
+    for (const b of document.querySelectorAll('#companyPick button')) b.setAttribute('aria-pressed', b.dataset.co === CO ? 'true' : 'false');
+    document.documentElement.style.setProperty('--brand', CO === 'focus' ? '#5E8F1F' : '#dc2229');   // UI accent: a darker shade of the logo green keeps white button text readable
+    if (ci.logo) { $('logo').src = (window.ASSET_BASE || '/_blob/') + ci.logo; $('logo').alt = ci.company.nameEn || ''; $('logo').hidden = false; }
+    if (switching) { for (const k of PER_CO) $(k).value = store.get(skey(k)) || ci[k] || ''; renderAll(); }
+  }
+  for (const b of document.querySelectorAll('#companyPick button')) b.addEventListener('click', () => {
+    if (b.dataset.co === CO) return; CO = b.dataset.co; store.set('ob_company', CO); applyCompany(true); });
 
   // ---------- library ----------
   (async () => {
@@ -789,14 +820,15 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     } catch (e) { $('lib').textContent = 'The machine library could not load: ' + (e.message || e.code || e); return; }
     await loadSeed();
     S.libReady = true; renderLibChips();
-    if (S.assets && S.assets.logo) { $('logo').src = (window.ASSET_BASE || '/_blob/') + S.assets.logo; $('logo').hidden = false; }
     const d = (S.settings && S.settings.defaults) || {};
     if (!d.tel) d.tel = '+(202) 26715539';   // Infinity's landline, always the default
     if (!d.mobile) d.mobile = '01029587432';   // default mobile on every offer
     if (!d.repCode) d.repCode = 'PSM';          // default sales rep code
     if (!d.warrantyCopies) d.warrantyCopies = 'مليون';   // default; clear the field for a time-only warranty
     d.delivery = String(d.delivery || '2-5').replace(/^من\s*/, '').replace(/\s*إلى\s*/, '-');
-    for (const k of ['validityDays', 'payment', 'delivery', 'warrantyCopies', 'responseHours', 'training', 'tel', 'mobile', 'repCode']) if (!$(k).value && d[k]) $(k).value = d[k];
+    const ci0 = companyInfo(CO);
+    for (const k of ['validityDays', 'payment', 'delivery', 'warrantyCopies', 'responseHours', 'training', 'tel', 'mobile', 'repCode']) { const v = PER_CO.includes(k) ? ci0[k] : d[k]; if (!$(k).value && v) $(k).value = v; }
+    applyCompany(false);
     if (!$('payment').value) $('payment').value = PAY_DEFAULT;
     renderPayTerms();
     if (d.deliveryUnit && $('deliveryUnit').querySelector(`option[value="${d.deliveryUnit}"]`)) $('deliveryUnit').value = d.deliveryUnit;
@@ -1874,8 +1906,9 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       const A = S.assets || {}, partsMap = A.parts || {}, partImgs = {};
       const models = new Set(ready.flatMap((m) => m.items.map((i) => i.model)));
       for (const mo of models) if (partsMap[mo]) partImgs[mo] = await img(partsMap[mo]);
-      const ctx = { company: S.settings.company, machines: ready.map((m) => ({ lib: dealLib(m), phys: m.folPhys, items: m.items, picture: m.picture, qty: m.qty, unitPrice: m.unitPrice, consumablePrices: m.consumablePrices })),
-        images: { header: await img(A.header), logo: await img(A.logo), parts: partImgs }, fonts: { kufiR: await asset(A.kufiR), kufiB: await asset(A.kufiB) } };
+      const ci = companyInfo(CO);
+      const ctx = { company: Object.assign({}, ci.company, { color: ci.color, onColor: ci.onColor }), machines: ready.map((m) => ({ lib: dealLib(m), phys: m.folPhys, items: m.items, picture: m.picture, qty: m.qty, unitPrice: m.unitPrice, consumablePrices: m.consumablePrices })),
+        images: { header: await img(ci.header), logo: await img(ci.logo), parts: partImgs }, fonts: { kufiR: await asset(A.kufiR), kufiB: await asset(A.kufiB) } };
       for (const k of FIELDS) ctx[k] = $(k).value;
       ctx.attachments = $('withAttach').checked;
       ctx.strengths = $('withStrengths').checked;
@@ -1892,7 +1925,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       { const pm = InfinityOffer.priceMath(ctx.machines.map((m) => ({ unit: num(m.unitPrice), qty: num(m.qty) || 1 })), ctx.pricesIncludeVat);
         logOffer({ by: $('preparedBy').value.trim(), customer: (ctx.customerEn || ctx.customerAr || '').trim(), models: ready.map((m) => S.lib[m.libId].model + ((num(m.qty) || 1) > 1 ? ' x ' + num(m.qty) : '')).join(' + '),
           total: pm.grandInc != null ? pm.grandInc.toLocaleString('en-US', { maximumFractionDigits: 2 }) : '', currency: ctx.currency, file: name,
-          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped'), config: configText(ready), deviceId: DEVICE.id, device: DEVICE.info }); }
+          drive: saved ? 'Saved' : (driveErr ? 'Not saved' : 'Skipped'), config: configText(ready), company: ci.company.nameEn || '', deviceId: DEVICE.id, device: DEVICE.info }); }
       status.className = driveErr ? 'status err' : 'status ok'; status.textContent = '';
       status.append('Saved ' + name + (saved ? ' and a copy in Drive (' : '. ') );
       if (saved) { status.append(el('a', { href: saved.url || ('https://drive.google.com/drive/folders/' + OFFERS_FOLDER()), target: '_blank', rel: 'noopener', text: '06 Generated Offers' }), ').' + (saved.light ? ' The Drive copy has lighter pictures so it fits the upload limit; the downloaded file is full quality.' : '')); }
