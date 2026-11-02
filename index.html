@@ -1092,6 +1092,8 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     for (const it of items) {
       const mo = String(it.model || '').trim(), q = Math.max(1, Number(it.qty) || 1);
       const cands = [mo, mo.toUpperCase(), mo.replace(/s$/, 'S')];
+      // the engine column can carry a short ident (AP2100) with the full name in the sysName row (AccurioPrint 2100)
+      (col.sysName || []).forEach((n, i) => { if (n && norm(n) === norm(mo) && idents[i]) cands.push(idents[i]); });
       let found = cands.some((c) => take(c, mo));
       for (let n = 1; n <= q; n++) if (cands.some((c) => take(`${c}_${n}`, q > 1 ? `${mo} (${n})` : mo))) found = true;
       for (const c of [mo, mo.toUpperCase()]) idents.forEach((id) => { if (id.startsWith(c + '_') && /tray/i.test(id)) take(id, `${mo} tray`); });
@@ -1675,6 +1677,15 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
 
   // ---------- rendering ----------
   function renderAll() { renderCards(); renderPrices(); renderTodo(); }
+  // Konica Minolta order codes: the same item with only the last 1 – 2 characters changed is a newer revision of that part
+  const pnAlt = (a, b) => { a = String(a || '').trim(); b = String(b || '').trim();
+    return a.length > 4 && a.length === b.length && a !== b && !/^\[/.test(a) && a.slice(0, -2) === b.slice(0, -2); };
+  // the Foliant's newer code replaces the library one (the owner's page saves it for everyone)
+  function adoptPN(libId, model, code) {
+    const lib = S.lib[libId], p = lib && lib.parts && lib.parts[model]; if (!p || p.pn === code) return;
+    p.pn = code;
+    if (S.isOwner && S.db) S.db.doc('machines/' + libId).update({ parts: JSON.parse(JSON.stringify(lib.parts)) }).catch(() => {});
+  }
   function renderCards() {
     const box = $('cards'); box.textContent = '';
     if (!S.machines.length) { box.append(el('p', { class: 'empty', text: 'No machines yet. The offer is built from the machines you add here.' })); return; }
@@ -1717,8 +1728,10 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
         const p = lib && !isMain ? realPart(lib, it.model) : null;
         let chip;
         if (!lib) chip = el('span', { class: 'chip neutral', text: '—' });
-        else if (isMain) chip = lib.mainBody.pn === it.code ? el('span', { class: 'chip ok', text: 'Main body' }) : el('span', { class: 'chip warn', text: `Library PN ${lib.mainBody.pn}` });
+        else if (isMain) chip = lib.mainBody.pn === it.code ? el('span', { class: 'chip ok', text: 'Main body' })
+          : pnAlt(lib.mainBody.pn, it.code) ? el('span', { class: 'chip ok', text: 'Main body · updated PN', title: `Library had ${lib.mainBody.pn}` }) : el('span', { class: 'chip warn', text: `Library PN ${lib.mainBody.pn}` });
         else if (!p) chip = el('span', { class: 'chip bad', text: 'New part: no specs' });
+        else if (p.pn && p.pn !== it.code && pnAlt(p.pn, it.code)) { chip = el('span', { class: 'chip ok', text: 'In library · updated PN', title: `Library had ${p.pn}` }); adoptPN(m.libId, it.model, it.code); }
         else if (p.pn && p.pn !== it.code) chip = el('span', { class: 'chip warn', text: `Library PN ${p.pn}` });
         else chip = el('span', { class: 'chip ok', text: 'In library' });
         const inp = (key, cls, w) => { const i = el('input', { value: it[key], class: cls || '', 'aria-label': key, style: w ? `width:${w}` : null });
