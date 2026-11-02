@@ -28,6 +28,7 @@ header.top .sub { color: var(--muted); font-size: 14px; margin: 0; }
 .co-pick { margin-left: auto; display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; gap: 2px; background: var(--surface); }
 .co-pick button { border: 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: 14px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 32px; }
 .co-pick button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
+.cur-pick { margin-left: 0; align-self: flex-start; }
 .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
 .ar { font-family: var(--kufi); direction: rtl; }
 section.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; margin-bottom: 20px; }
@@ -144,7 +145,6 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     <h2 id="s3"><span class="n">3</span> Prices</h2>
     <p class="hint">The offer always shows unit prices without VAT, then adds a 14% VAT line and the total with VAT. Leave a price empty to fill it in Word later.</p>
     <div class="grid" style="margin:0 0 14px">
-      <div class="field"><label for="currency">Currency</label><select id="currency"><option value="EGP" selected>EGP – جنيه مصري</option><option value="EUR">EUR – يورو</option></select></div>
       <div class="field"><label for="vatMode">The prices I type are</label><select id="vatMode"><option value="incl" selected>Including 14% VAT</option><option value="excl">Excluding VAT</option></select></div>
     </div>
     <div class="prices" id="prices"><p class="empty">Prices appear here once a machine is added.</p></div>
@@ -545,7 +545,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
         H3(`${n}.2`, 'Offered Configuration', 'مكونات الماكينة موضوع العرض'),
         EN('Part numbers as per Konica Minolta Foliant configuration.', { size: 16, color: MUTED, after: 100 }),
         table(cfgW, [
-          hdr(cfgW, [['#', false, AlignmentType.CENTER], ['Category'], ['PN'], ['Model'], ['QTY', false, AlignmentType.CENTER], ['Description in English'], ['الوصف باللغة العربية', true]]),
+          hdr(cfgW, [['#', false, AlignmentType.CENTER], ['Category'], ['PN'], ['Model'], ['Q', false, AlignmentType.CENTER], ['Description in English'], ['الوصف باللغة العربية', true]]),
           ...m.config.map((r, j) => row(cfgW, [{ v: String(j + 1), align: AlignmentType.CENTER }, r.category, { v: r.pn, bold: true }, { v: r.model, bold: true },
             { v: String(r.qty), align: AlignmentType.CENTER }, r.en, { v: r.ar, rtl: true }], j % 2 === 1)),
         ]),
@@ -582,11 +582,12 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     // ---------- 2. strengths ----------
     const strengthSection = [...sectionPage('2', 'Offer Strengths', 'نقاط القوة بالعرض المقدم'),
       ...M.flatMap((m, i) => [...(MULTI ? [H2(`2.${i + 1}`, `Konica Minolta ${m.model}`, `الماكينة ${ORD_AR[i]}`)] : []),
-        ...m.strengths.flatMap((s) => [bulletEN([t(s.enB, { bold: true }), t(s.enT)]), AR([ar(s.arB, { bold: true, color: RED }), ar(s.arT)], { after: 160, indent: { right: 360 } })])])];
+        ...m.strengths.flatMap((s) => [bulletEN([t(s.enB, { bold: true }), t(s.enT)]), AR([ar(s.arB, { bold: true, color: RED }), ar(s.arT)], { after: 160, numbering: { reference: 'ba', level: 0 } })])])];
 
     // ---------- 3. financial ----------
     const finW = [700, 1300, 3138, 900, 1800, 1800];
     const CUR = CURRENCIES[ctx.currency] || CURRENCIES.EGP, INCL = !!ctx.pricesIncludeVat;
+    const CUR2 = CURRENCIES[ctx.consCurrency] || CUR;   // consumables can be priced in another currency than the machines
     const PM = priceMath(M.map((m) => ({ unit: m.unitPrice, qty: m.qty })), INCL);
     const money = (x) => (x == null ? '[ ]' : Number.isInteger(x) ? fmt(x) : x.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
     const sumRow = (label, value, strong) => new TableRow({ cantSplit: true, children: [
@@ -617,7 +618,8 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       (() => { const w = [2000, 7638], D0 = ctx;
         const terms = [
           ['الأسعار', [ar('أسعار الوحدات الموضحة أعلاه غير شاملة ضريبة القيمة المضافة 14%، والإجمالي شامل الضريبة موضح بالجدول.')]],
-          ['العملة', [ar(CUR.code === 'EUR' ? 'الأسعار باليورو، ويتم السداد باليورو أو ما يعادله بالجنيه المصري وفقاً لسعر الصرف المعلن من البنك المركزي المصري يوم السداد.'
+          ['العملة', [ar(CUR.code !== CUR2.code ? `أسعار ${MULTI ? 'الماكينات' : 'الماكينة'} ${CUR.inWords} وأسعار خامات التشغيل ${CUR2.inWords}. ما هو مسعر باليورو يتم سداده باليورو أو ما يعادله بالجنيه المصري وفقاً لسعر الصرف المعلن من البنك المركزي المصري يوم السداد.`
+            : CUR.code === 'EUR' ? 'الأسعار باليورو، ويتم السداد باليورو أو ما يعادله بالجنيه المصري وفقاً لسعر الصرف المعلن من البنك المركزي المصري يوم السداد.'
             : 'الدفع بالجنيه المصري، وفقاً لقيم العملات المعلنة من البنك المركزي المصري، ما لم يتم تطبيق قواعد جديدة بالاقتصاد المصري من شأنها التأثير على حركة الاستيراد أو قيمة الجنيه المصري مقابل العملات الأجنبية.')]],
           ['السداد', [arRun(D0.payment, '[طريقة السداد]')]],
           ['مدة التوريد', [ar('بضاعة حاضرة: '), deliveryText(D0.delivery, D0.deliveryUnit) ? ar(deliveryText(D0.delivery, D0.deliveryUnit)) : arph('[مدة التوريد]'),
@@ -625,7 +627,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
           ['موقع التسليم', [ar('مقر العميل.')]],
           ['التركيب والتدريب', [ar('الأسعار شاملة التركيب والتدريب داخل مقر العميل.')]],
           ['الضمان', SHORT ? [ar(`عام ميلادي كامل${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة، شامل الصيانة وقطع الغيار وغير شامل خامات التشغيل والورق.`)]
-            : WCOPIES ? [ar('عام ميلادي كامل أو إنتاج '), ar(WCOPIES), ar(` نسخة (أيهما أقرب)${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
+            : WCOPIES ? [ar('عام ميلادي كامل أو إنتاج '), ar(WCOPIES), ar(` نسخة مقاس A4 وجه واحد (أيهما أقرب)${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
             : [ar(`عام ميلادي كامل${MULTI ? ' لكل ماكينة' : ''} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]],
           ['الارتباط', [ar('العرض ساري لمدة '), arRun(D0.validityDays, '[15]'), ar(' يوماً من تاريخ العرض.')]],
         ];
@@ -634,7 +636,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       gap(10),
       ...M.flatMap((m) => { const w = [2700, 4138, 2800];
         return [arLabel(MULTI ? `أسعار خامات التشغيل – ${m.model}` : 'أسعار خامات التشغيل'),
-          table(w, [hdr(w, [['الصنف', true], ['الوصف', true], [`سعر الوحدة ${CUR.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER]]),
+          table(w, [hdr(w, [['الصنف', true], ['الوصف', true], [`سعر الوحدة ${CUR2.inWords} (غير شامل الضريبة)`, true, AlignmentType.CENTER]]),
             ...m.priceList.map((r, i) => new TableRow({ cantSplit: true, children: [
               cell(EN(r[0], { bold: true, size: 18, after: 0, align: AlignmentType.RIGHT }), w[0], { fill: i % 2 ? SURF2 : undefined }),
               cell(r[1], w[1], { rtl: true, fill: i % 2 ? SURF2 : undefined }),
@@ -647,10 +649,10 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const afterSales = [...sectionPage(N_AS, 'After-Sales Services', 'خدمات ما بعد البيع', 'Arabic  |  عربي'),
       asP(N_AS + '.1  التركيب والتشغيل: ', [ar('يتم بمعرفتنا مجاناً وبدون مقابل من خلال مهندسي ' + CO + '.')]),
       asP(N_AS + '.2  التدريب الداخلي: ', [ar('بدون مقابل ولأي عدد من العاملين بالمطبعة لكل ماكينة لمدة '), arRun(ctx.training, '[يوم عمل كامل]'), ar(' من تاريخ التركيب والتشغيل.')]),
-      asP(N_AS + '.3  الضمان: ', WCOPIES ? [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي أو إنتاج `), ar(WCOPIES), ar(` نسخة (أيهما أقرب)${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
+      asP(N_AS + '.3  الضمان: ', WCOPIES ? [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي أو إنتاج `), ar(WCOPIES), ar(` نسخة مقاس A4 وجه واحد (أيهما أقرب)${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]
         : [ar(`نضمن ${machineWord} موضوع العرض لمدة عام ميلادي كامل${each} من تاريخ التوريد والتركيب ضد عيوب الصناعة.`)]),
       AR('يشمل الضمان:', { bold: true, after: 60 }),
-      asB([ar('–  الاستجابة لطلبات الأعطال والإصلاحات اللازمة بسرعة استجابة '), arRun(ctx.responseHours, '[48]'), ar(' ساعة من تلقي إدارة خدمة العملاء لطلب الإصلاح طيلة أيام الأسبوع عدا العطلات الرسمية.')]),
+      asB([ar('–  الاستجابة لطلبات الأعطال والإصلاحات اللازمة بسرعة استجابة '), arRun(ctx.responseHours, '[48]'), ar(' ساعة من تلقي إدارة خدمة العملاء لطلب الإصلاح، طيلة أيام الأسبوع خلال ساعات العمل من 9 صباحاً حتى 5 مساءً عدا العطلات الرسمية.')]),
       asB([ar(`–  عدد 12 زيارة صيانة وقائية${each} بواقع زيارة كل شهر بخلاف زيارات الأعطال.`)]),
       AR('لا يشمل الضمان:', { bold: true, after: 60, before: 80 }),
       asB([ar('–  بند الورق وأي نوع من وسائط الطباعة.')]),
@@ -684,7 +686,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
         gap(8),
         label('Offered configuration  |  مكونات الماكينة'),
         table(cfgW, [
-          hdr(cfgW, [['PN'], ['Model'], ['QTY', false, AlignmentType.CENTER], ['Description in English'], ['الوصف باللغة العربية', true]]),
+          hdr(cfgW, [['PN'], ['Model'], ['Q', false, AlignmentType.CENTER], ['Description in English'], ['الوصف باللغة العربية', true]]),
           ...m.config.map((r, j) => row(cfgW, [{ v: r.pn, bold: true }, { v: r.model, bold: true }, { v: String(r.qty), align: AlignmentType.CENTER }, r.en, { v: r.ar, rtl: true }], j % 2 === 1)),
         ]),
         gap(8),
@@ -718,7 +720,9 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
           { id: 'Heading2', name: 'Heading 2', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { size: 26, bold: true }, paragraph: { outlineLevel: 1 } },
           { id: 'Heading3', name: 'Heading 3', basedOn: 'Normal', next: 'Normal', quickFormat: true, run: { size: 22, bold: true }, paragraph: { outlineLevel: 2 } }] },
       numbering: { config: [{ reference: 'b', levels: [{ level: 0, format: LevelFormat.BULLET, text: '•', alignment: AlignmentType.LEFT,
-        style: { paragraph: { indent: { left: 360, hanging: 240 } }, run: { color: RED } } }] }] },
+        style: { paragraph: { indent: { left: 360, hanging: 240 } }, run: { color: RED } } }] },
+        { reference: 'ba', levels: [{ level: 0, format: LevelFormat.BULLET, text: '•', alignment: AlignmentType.LEFT,
+        style: { paragraph: { indent: { left: 360, hanging: 240 } }, run: { color: RED, rightToLeft: true } } }] }] },
       sections: (SHORT ? [cover.concat([gap(8), offerInfo, gap(8), company], letter), shortTechnical.concat(financial)]
         : [cover.concat([gap(8), offerInfo, gap(8), company], letter), technical, ...(STRENGTHS ? [strengthSection] : []), financial, afterSales, ...(ATTACH ? [attachments] : [])]).map((children, si) => ({
         properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 1300, bottom: 1250, left: 1134, right: 1134, header: 500, footer: 450 } }, titlePage: !(SHORT && si > 0) },
@@ -1704,9 +1708,18 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     });
   }
 
-  const curCode = () => $('currency').value === 'EUR' ? 'EUR' : 'EGP';
+  // machines and consumables each have their own currency (EGP / EUR), remembered in this browser
+  const savedCur = (k) => { try { return localStorage.getItem(k) === 'EUR' ? 'EUR' : 'EGP'; } catch (e) { return 'EGP'; } };
+  let MCUR = savedCur('offer.currency'), CCUR = savedCur('offer.consCurrency');
+  const curCode = () => MCUR, consCode = () => CCUR;
   const typedIncl = () => $('vatMode').value === 'incl';
-  const priceLabel = () => `Unit price (${curCode()}, ${typedIncl() ? 'incl.' : 'excl.'} VAT)`;
+  const priceLabel = (c = MCUR) => `Unit price (${c}, ${typedIncl() ? 'incl.' : 'excl.'} VAT)`;
+  function curToggle(label, get, set, key) {
+    const wrap = el('div', { class: 'co-pick cur-pick', role: 'group', 'aria-label': label });
+    for (const c of ['EGP', 'EUR']) wrap.append(el('button', { type: 'button', 'aria-pressed': get() === c ? 'true' : 'false', text: c === 'EGP' ? 'EGP – جنيه' : 'EUR – يورو',
+      onclick: () => { if (get() === c) return; set(c); try { localStorage.setItem(key, c); } catch (e) {} renderPrices(); } }));
+    return el('div', { class: 'field' }, [el('label', { text: label }), wrap]);
+  }
   function renderPrices() {
     const box = $('prices'); box.textContent = '';
     const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
@@ -1716,13 +1729,15 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       const pin = (val, set, label, w) => { const i = el('input', { value: val, inputmode: 'decimal', 'aria-label': label, style: w ? `width:${w}` : null });
         i.addEventListener('input', () => { set(i.value); renderTotal(); renderTodo(); }); return i; };
       const top = el('div', { class: 'grid' }, [
+        curToggle('Machine price currency', curCode, (c) => (MCUR = c), 'offer.currency'),
         el('div', { class: 'field' }, [el('label', { text: 'Number of machines' }), pin(m.qty, (v) => (m.qty = v), 'Number of machines')]),
         el('div', { class: 'field' }, [el('label', { text: priceLabel() }), pin(m.unitPrice, (v) => (m.unitPrice = v), 'Unit price')]),
       ]);
-      const cons = el('table', {}, [el('thead', {}, el('tr', {}, [el('th', { text: 'Consumable' }), el('th', { text: 'Description' }), el('th', { text: priceLabel() })])),
+      const cons = el('table', {}, [el('thead', {}, el('tr', {}, [el('th', { text: 'Consumable' }), el('th', { text: 'Description' }), el('th', { text: priceLabel(CCUR) })])),
         el('tbody', {}, lib.priceList.map(([item, arDesc]) => el('tr', {}, [el('td', { text: item }), el('td', { class: 'ar', text: arDesc }),
           el('td', {}, pin(m.consumablePrices[item] || '', (v) => (m.consumablePrices[item] = v), item + ' price'))])))]);
-      box.append(el('div', { class: 'price-block' }, [el('h3', { text: lib.model }), top, el('div', { class: 'tbl' }, cons)]));
+      box.append(el('div', { class: 'price-block' }, [el('h3', { text: lib.model }), top,
+        curToggle('Consumables currency', consCode, (c) => (CCUR = c), 'offer.consCurrency'), el('div', { class: 'tbl' }, cons)]));
     }
     box.append(el('div', { class: 'total', id: 'total' })); renderTotal();
   }
@@ -1927,7 +1942,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     try { await S.db.doc('config/payments').set({ terms }); } catch (e) {}
   }
   // currency and "prices typed with / without VAT": remembered in this browser
-  for (const [id, key] of [['currency', 'offer.currency'], ['vatMode', 'offer.vatMode']]) {
+  for (const [id, key] of [['vatMode', 'offer.vatMode']]) {
     try { const v = localStorage.getItem(key); if (v && $(id).querySelector(`option[value="${v}"]`)) $(id).value = v; } catch (e) {}
     $(id).addEventListener('change', () => { try { localStorage.setItem(key, $(id).value); } catch (e) {} renderPrices(); });
   }
@@ -1950,7 +1965,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       for (const k of FIELDS) ctx[k] = $(k).value;
       ctx.attachments = $('withAttach').checked;
       ctx.strengths = $('withStrengths').checked;
-      ctx.currency = curCode(); ctx.pricesIncludeVat = typedIncl();
+      ctx.currency = curCode(); ctx.consCurrency = consCode(); ctx.pricesIncludeVat = typedIncl();
       const bytes = await packDocx(ctx), out = new Blob([bytes], { type: DOCX });
       const clean = (s) => String(s || '').replace(/[\\/:*?"<>|\n\r\t]+/g, '-').replace(/\s+/g, ' ').trim();
       const base = clean(ctx.customerEn.trim() || ctx.customerAr.trim() || 'Customer') + '_' + ready.map((m) => clean(S.lib[m.libId].model)).join(' + ');
