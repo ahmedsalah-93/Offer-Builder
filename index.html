@@ -782,7 +782,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     for (const [k, v] of Object.entries(attrs)) { if (k === 'text') e.textContent = v; else if (k === 'class') e.className = v; else if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else if (v != null) e.setAttribute(k, v); }
     for (const k of [].concat(kids)) if (k != null) e.append(k); return e; };
   const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  const norm = (s) => String(s || '').toLowerCase().replace(/accuriopress|\s|-/g, '');
+  const norm = (s) => String(s || '').toLowerCase().replace(/accuriopress|accurioprint|\s|-/g, '');
   const fmt = (n) => Number(n).toLocaleString('en-US');
   const num = (v) => { const s = String(v ?? '').replace(/[, ]/g, ''); const x = Number(s); return s !== '' && isFinite(x) ? x : null; };
   const pngInfo = (u8) => ({ w: (u8[16] << 24 | u8[17] << 16 | u8[18] << 8 | u8[19]) >>> 0, h: (u8[20] << 24 | u8[21] << 16 | u8[22] << 8 | u8[23]) >>> 0 });
@@ -834,6 +834,10 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       // database documents come back read-only: keep editable copies (the sheet merge and edits change them)
       const own = (x) => (x == null ? x : JSON.parse(JSON.stringify(x)));
       ms.docs.forEach((d) => { S.lib[d.id] = own(d.data()); });
+      // a machine saved as a variant of another (variantOf) takes everything from it, then its own fields, minus dropParts
+      for (const [id, l] of Object.entries(S.lib)) if (l.variantOf && S.lib[l.variantOf]) {
+        const v = Object.assign(own(S.lib[l.variantOf]), l); v.parts = own(S.lib[l.variantOf].parts || {});
+        for (const p of (l.dropParts || [])) delete v.parts[p]; delete v.variantOf; delete v.dropParts; S.lib[id] = v; }
       S.settings = st.exists ? own(st.data()) : null;
       S.assets = as.exists ? own(as.data()) : null;
     } catch (e) { $('lib').textContent = 'The machine library could not load: ' + (e.message || e.code || e); return; }
@@ -1198,7 +1202,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
         if (x < b.x1) b.x1 = x; if (x > b.x2) b.x2 = x; if (y < b.y1) b.y1 = y; if (y > b.y2) b.y2 = y;
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, yy = y + dy;
           if (xx >= 0 && yy >= 0 && xx < gw && yy < gh) { const r = yy * gw + xx; if (cell[r] && !lab[r]) { lab[r] = n; st.push(r); } } } }
-      blobs.push(b); }
+      if (!(b.x1 === 0 && b.x2 === gw - 1)) blobs.push(b); }   // a bar running edge to edge is Foliant's toolbar, not the machine
     if (!blobs.length) return null;
     blobs.sort((a, b) => b.n - a.n);
     const box = Object.assign({}, blobs[0]), gap = Math.max(2, Math.round(H * 0.01 / S)), used = new Set([0]);
