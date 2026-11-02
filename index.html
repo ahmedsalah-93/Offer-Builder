@@ -1268,6 +1268,29 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     }
     return files;
   }
+  // Part pictures: a picture in Drive "02 Products / Options & Accessories" named <MODEL>.png (or .jpg) wins over the built-in one.
+  // Only the owner's Drive is reachable; everyone else keeps the built-in pictures.
+  const PARTS_FOLDER = () => (S.settings && S.settings.partsFolderId) || '10vmv3A4M9A74PJwMspWXCayC1KzhyWvw';
+  let drivePics = null; const drivePicCache = {};
+  async function loadDrivePics() {
+    if (drivePics) return drivePics;
+    drivePics = {};
+    if (!S.caps.mcp || window.WEB_APP) return drivePics;
+    try { for (const f of await driveSearch(`parentId = '${PARTS_FOLDER()}'`)) { const m = /^(.+)\.(png|jpe?g)$/i.exec(f.title || ''); if (m) drivePics[m[1].trim().toUpperCase()] = f; } } catch (e) {}
+    return drivePics;
+  }
+  async function drivePic(model) {
+    const f = (await loadDrivePics())[String(model || '').trim().toUpperCase()]; if (!f) return null;
+    if (drivePicCache[f.id]) return drivePicCache[f.id];
+    try {
+      const r = await driveCall('download_file_content', { fileId: f.id }); const b64 = r && r.content; if (!b64) return null;
+      const bin = atob(b64), u8 = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      let out;
+      if (u8[0] === 0x89 && u8[1] === 0x50) out = Object.assign({ data: u8 }, pngInfo(u8));
+      else { const bm = await createImageBitmap(new Blob([u8])); out = { data: u8, w: bm.width, h: bm.height, type: 'jpg' }; }
+      return (drivePicCache[f.id] = out);
+    } catch (e) { return null; }
+  }
   let folderCache = null;
   async function productFolders() {        // every folder under 02 Products, up to 3 levels deep (production, office, ...)
     if (folderCache) return folderCache;
@@ -1920,7 +1943,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       const ready = S.machines.filter((m) => m.status === 'ready' && m.libId && S.lib[m.libId]);
       const A = S.assets || {}, partsMap = A.parts || {}, partImgs = {};
       const models = new Set(ready.flatMap((m) => m.items.map((i) => i.model)));
-      for (const mo of models) if (partsMap[mo]) partImgs[mo] = await img(partsMap[mo]);
+      for (const mo of models) { const dp = await drivePic(mo); if (dp) partImgs[mo] = dp; else if (partsMap[mo]) partImgs[mo] = await img(partsMap[mo]); }
       const ci = companyInfo(CO);
       const ctx = { company: Object.assign({}, ci.company, { color: ci.color, onColor: ci.onColor }), machines: ready.map((m) => ({ lib: dealLib(m), phys: m.folPhys, items: m.items, picture: m.picture, qty: m.qty, unitPrice: m.unitPrice, consumablePrices: m.consumablePrices })),
         images: { header: await img(ci.header), logo: await img(ci.logo), parts: partImgs }, fonts: { kufiR: await asset(A.kufiR), kufiB: await asset(A.kufiB) } };
