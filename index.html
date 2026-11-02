@@ -343,7 +343,8 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const SHORT = M.every((m) => m.kind === 'office' || /^bizhub/i.test(m.model));
     const MODELS = M.map((m) => m.model);
     const C = ctx.company;
-    const CO = C.nameAr || 'شركة انفنيتي للتوزيع';   // the company's Arabic name, used wherever the offer speaks for the company
+    const CO = C.nameAr || 'شركة انفنيتي للتوزيع';
+    const PARTNER = C.role === 'partner';   // Focus IT sells as an authorized partner; Infinity is the distribution channel   // the company's Arabic name, used wherever the offer speaks for the company
     const ATTACH = ctx.attachments !== false;   // the Attachments section (5) is optional, chosen in the builder
     // warranty copies: empty field = time-only warranty ("one full year"), no "or N copies, whichever comes first"
     const WCOPIES = String(ctx.warrantyCopies || '').trim();
@@ -479,8 +480,8 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     ]);
     const cW = [2700, 4238, 2700];
     const company = table(cW, [
-      new TableRow({ children: [cell([EN('Authorized Distribution Channel Basic Data', { size: 18, bold: true, color: WHITE, after: 0, align: AlignmentType.CENTER }),
-        AR([ar('البيانات الرئيسية للموزع المعتمد المسؤول عن الاستيراد ومستوى خدمات ما بعد البيع', { size: 17, bold: true, color: WHITE, head: true })], { after: 0, align: AlignmentType.CENTER })],
+      new TableRow({ children: [cell([EN(PARTNER ? 'Authorized Partner Basic Data' : 'Authorized Distribution Channel Basic Data', { size: 18, bold: true, color: WHITE, after: 0, align: AlignmentType.CENTER }),
+        AR([ar(PARTNER ? 'البيانات الرئيسية للشريك المعتمد' : 'البيانات الرئيسية للموزع المعتمد المسؤول عن الاستيراد ومستوى خدمات ما بعد البيع', { size: 17, bold: true, color: WHITE, head: true })], { after: 0, align: AlignmentType.CENTER })],
         W, { fill: INK_SOFT, span: 3 })] }),
       row(cW, [{ v: 'Company Name', bold: true }, `${C.nameEn}  |  ${C.nameAr}`, { v: 'اسم الشركة', rtl: true, bold: true }]),
       row(cW, [{ v: 'Commercial Register No.', bold: true }, C.cr, { v: 'رقم السجل التجاري', rtl: true, bold: true }], true),
@@ -671,7 +672,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const attachments = [...sectionPage(N_ATT, 'Attachments', 'المرفقات', 'Arabic  |  عربي'),
       ...[`كتالوجات ${machineWord} والوحدات موضوع العرض.`,
         'صور ضوئية للمستندات القانونية الخاصة ب' + CO + ': عقد التأسيس، البطاقة الضريبية بآخر إقرار ضريبي، سجل تجاري حديث، شهادة التسجيل بضريبة القيمة المضافة.',
-        'شهادة موزع معتمد من الجهة المصنعة ل' + CO + '.', 'سابقة الأعمال.'].map((s, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(s)], { after: 80 }))];
+        (PARTNER ? 'شهادة شريك معتمد ل' + CO + ' صادرة من شركة انفنيتي للتوزيع، الموزع المعتمد لكونيكا مينولتا.' : 'شهادة موزع معتمد من الجهة المصنعة ل' + CO + '.'), 'سابقة الأعمال.'].map((s, i) => AR([ar(`${i + 1}.  `, { bold: true, color: RED }), ar(s)], { after: 80 }))];
 
     // ---------- short (office) technical ----------
     function shortBlock(m, i) {
