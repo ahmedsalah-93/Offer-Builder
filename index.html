@@ -748,6 +748,20 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       if (!st.includes('embedTrueTypeFonts')) st = /<w:displayBackgroundShape\/>/.test(st) ? st.replace(/<w:displayBackgroundShape\/>/, '$&<w:embedTrueTypeFonts/>') : st.replace(/(<w:settings[^>]*>)/, '$1<w:embedTrueTypeFonts/>');
       zip.file('word/settings.xml', st);
     }
+    // Word rejects part names with spaces (docx-js writes "fonts/Noto Kufi Arabic.odttf"): rename to fontN.odttf
+    const fonts = Object.keys(zip.files).filter((p) => /^word\/fonts\/[^/]+\.odttf$/.test(p) && !/^word\/fonts\/font\d+\.odttf$/.test(p));
+    if (fonts.length && zip.file('word/_rels/fontTable.xml.rels')) {
+      let rels = await zip.file('word/_rels/fontTable.xml.rels').async('string');
+      for (let i = 0; i < fonts.length; i++) {
+        const p = fonts[i], nn = 'font' + (i + 1) + '.odttf', old = p.slice('word/fonts/'.length);
+        zip.file('word/fonts/' + nn, await zip.file(p).async('uint8array'));
+        delete zip.files[p];
+        rels = rels.split('Target="fonts/' + old + '"').join('Target="fonts/' + nn + '"');
+      }
+      zip.file('word/_rels/fontTable.xml.rels', rels);
+    }
+    // folder entries are not parts of the package; leave only real files in the zip
+    for (const p of Object.keys(zip.files)) if (zip.files[p].dir) delete zip.files[p];
     return zip;
   }
 
