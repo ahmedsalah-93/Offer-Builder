@@ -28,7 +28,7 @@ header.top .sub { color: var(--muted); font-size: 14px; margin: 0; }
 .co-pick { margin-left: auto; display: inline-flex; border: 1px solid var(--line-strong); border-radius: 999px; padding: 3px; gap: 2px; background: var(--surface); }
 .co-pick button { border: 0; background: transparent; color: var(--ink-soft); font: inherit; font-size: 14px; font-weight: 600; padding: 6px 14px; border-radius: 999px; cursor: pointer; min-height: 32px; }
 .co-pick button[aria-pressed="true"] { background: var(--brand); color: var(--on-brand); }
-.cur-pick { margin-left: 0; align-self: flex-start; }
+.cur-pick { margin-left: 0; align-self: flex-start; justify-self: start; width: max-content; }
 .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
 .ar { font-family: var(--kufi); direction: rtl; }
 section.step { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; margin-bottom: 20px; }
@@ -1109,7 +1109,9 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
   async function readPhysicals(file, items) {
     const pdf = await pdfjsLib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
     const pan = (await (await pdf.getPage(1)).getAnnotations()).find((a) => a.fieldName === 'Pandora' && typeof a.fieldValue === 'string');
-    return pan ? foliantPhysicals(pan.fieldValue, items) : null;
+    const ph = pan ? foliantPhysicals(pan.fieldValue, items) : null;
+    // office Foliants carry no layout data (all zeros): then the offer keeps the library dimensions
+    return ph && ph.total && ph.total.width > 0 && ph.total.depth > 0 && ph.total.height > 0 ? ph : null;
   }
   function physNote(m) {
     if (!m.folPhys) return null;
@@ -1165,11 +1167,14 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
 
   // machine picture: Foliant shows it in a band near the top of the page; whiten the background and trim
   async function cropMachine(canvas) {
+    // Foliant draws the configuration near the top of page 1: production pages in roughly 7–26 % of the height, office pages a bit lower
+    // (7–31 %), with small option thumbnails under it. Look in 6.5–38 %, whiten the background, then keep the biggest drawing plus
+    // anything touching it (within ~1 % of the page) so thumbnails and labels further down are left out.
     const W = canvas.width, H = canvas.height;
-    const x0 = Math.round(W * 0.05), y0 = Math.round(H * 0.065), w = Math.round(W * 0.90), h = Math.round(H * 0.19);
+    const x0 = Math.round(W * 0.05), y0 = Math.round(H * 0.065), w = Math.round(W * 0.90), h = Math.round(H * 0.315);
     const c = document.createElement('canvas'); c.width = w; c.height = h;
     const g = c.getContext('2d'); g.drawImage(canvas, x0, y0, w, h, 0, 0, w, h);
-    g.fillStyle = '#fff'; g.fillRect(Math.round(w * 0.86), 0, w, Math.round(h * 0.25));   // Foliant's "next" arrow
+    g.fillStyle = '#fff'; g.fillRect(Math.round(w * 0.86), 0, w, Math.round(H * 0.05));   // Foliant's "next" arrow
     const im = g.getImageData(0, 0, w, h), d = im.data, seen = new Uint8Array(w * h), q = new Int32Array(w * h);
     const bg = [d[(5 * w + w - 6) * 4], d[(5 * w + w - 6) * 4 + 1], d[(5 * w + w - 6) * 4 + 2]];
     const near = (i) => { const r = d[i * 4], gg = d[i * 4 + 1], b = d[i * 4 + 2];
@@ -1182,11 +1187,27 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       d[i * 4] = d[i * 4 + 1] = d[i * 4 + 2] = 255;
       if (x > 0) push(i - 1); if (x < w - 1) push(i + 1); if (y > 0) push(i - w); if (y < h - 1) push(i + w); }
     g.putImageData(im, 0, 0);
-    let minX = w, minY = h, maxX = -1, maxY = -1;
+    // drawings on a coarse grid (4 px cells), grouped into blobs
+    const S = 4, gw = Math.ceil(w / S), gh = Math.ceil(h / S), cell = new Uint8Array(gw * gh);
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const i = (y * w + x) * 4;
-      if (d[i] < 242 || d[i + 1] < 242 || d[i + 2] < 242) { if (x < minX) minX = x; if (x > maxX) maxX = x; if (y < minY) minY = y; if (y > maxY) maxY = y; } }
-    if (maxX < 0) return null;
-    const pad = 12; minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad); maxX = Math.min(w - 1, maxX + pad); maxY = Math.min(h - 1, maxY + pad);
+      if (d[i] < 242 || d[i + 1] < 242 || d[i + 2] < 242) cell[((y / S) | 0) * gw + ((x / S) | 0)] = 1; }
+    const lab = new Int32Array(gw * gh), blobs = []; let n = 0;
+    for (let s0 = 0; s0 < gw * gh; s0++) { if (!cell[s0] || lab[s0]) continue;
+      const b = { n: 0, x1: gw, y1: gh, x2: -1, y2: -1 }; n++; lab[s0] = n; const st = [s0];
+      while (st.length) { const p = st.pop(), x = p % gw, y = (p / gw) | 0; b.n++;
+        if (x < b.x1) b.x1 = x; if (x > b.x2) b.x2 = x; if (y < b.y1) b.y1 = y; if (y > b.y2) b.y2 = y;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const xx = x + dx, yy = y + dy;
+          if (xx >= 0 && yy >= 0 && xx < gw && yy < gh) { const r = yy * gw + xx; if (cell[r] && !lab[r]) { lab[r] = n; st.push(r); } } } }
+      blobs.push(b); }
+    if (!blobs.length) return null;
+    blobs.sort((a, b) => b.n - a.n);
+    const box = Object.assign({}, blobs[0]), gap = Math.max(2, Math.round(H * 0.01 / S)), used = new Set([0]);
+    for (let grew = true; grew;) { grew = false;
+      blobs.forEach((b, k) => { if (used.has(k)) return;
+        if (b.x1 <= box.x2 + gap && b.x2 >= box.x1 - gap && b.y1 <= box.y2 + gap && b.y2 >= box.y1 - gap) {
+          used.add(k); grew = true; box.x1 = Math.min(box.x1, b.x1); box.y1 = Math.min(box.y1, b.y1); box.x2 = Math.max(box.x2, b.x2); box.y2 = Math.max(box.y2, b.y2); } }); }
+    const pad = 12;
+    let minX = Math.max(0, box.x1 * S - pad), minY = Math.max(0, box.y1 * S - pad), maxX = Math.min(w - 1, box.x2 * S + S + pad), maxY = Math.min(h - 1, box.y2 * S + S + pad);
     const k = Math.min(1, 1100 / (maxX - minX + 1));
     const out = document.createElement('canvas'); out.width = Math.round((maxX - minX + 1) * k); out.height = Math.round((maxY - minY + 1) * k);
     out.getContext('2d').drawImage(c, minX, minY, maxX - minX + 1, maxY - minY + 1, 0, 0, out.width, out.height);
