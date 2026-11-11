@@ -298,6 +298,72 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       out.splice(i + 1, 0, it); }
     return out;
   }
+  // ---------- office machines: main specs follow the configured Foliant, not the full option list ----------
+  // optional features show only when their option is in the configuration (fax kit, Wi-Fi kit, SSD upgrade, Fiery...),
+  // paper input shows the total of this configuration, output capacity shows the configured finisher
+  const MODEL_RE = /\b[A-Z]{2,4}-[A-Z]?\d{2,4}[a-zA-Z]*\b/g;
+  const keyM = (s) => String(s || '').toUpperCase().replace(/\s+/g, '');
+  const sheetsOf = (en) => {
+    const s = String(en || ''), n = (x) => Number(String(x).replace(/,/g, ''));
+    if (/no paper input|dummy/i.test(s)) return 0;
+    let r = s.match(/(\d+)\s*x\s*([\d,]+)\s*(?:-sheet|sheets)/i); if (r) return n(r[1]) * n(r[2]);
+    r = s.match(/([\d,]+)\s*\+\s*([\d,]+)\s*sheets/i); if (r) return n(r[1]) + n(r[2]);
+    r = s.match(/([\d,]+)\s*(?:-sheet|sheets)/i); return r ? n(r[1]) : 0;
+  };
+  function configureSpecs(rows, lib, config) {
+    const opts = config.filter((c) => !c.main);
+    const has = (mo) => opts.some((c) => keyM(c.model) === keyM(mo));
+    const enOf = (c) => (lib.parts[c.model] || {}).en || c.en || '';
+    const hasFax = opts.some((c) => /^FK-/i.test(c.model) || /fax (kit|board)/i.test(enOf(c)));
+    const finisher = opts.find((c) => (/^FS-/i.test(c.model) || /finisher/i.test(enOf(c))) && !/offline|convenience|no finisher|output tray/i.test(enOf(c)));
+    const fmtN = (x) => Number(x).toLocaleString('en-US');
+    const out = [];
+    for (const r of rows || []) {
+      const [label, value, ar] = r; let v = String(value || '');
+      if (/^type$/i.test(label)) v = v.replace(/,?\s*fax\s*\(optional\)/i, hasFax ? ', fax' : '');
+      else if (/^fax$/i.test(label) && /optional/i.test(v)) {
+        if (!hasFax) continue;
+        v = v.replace(/\s*\(optional\)/gi, '').replace(/\boptional\s*/gi, '');
+      } else if (/^optional:/i.test(v)) {                 // e.g. document feeder: "Optional: DF-714 ... or DF-632 ... · or OC-511 ..."
+        const alts = v.replace(/^optional:\s*/i, '').split(/\s*·\s*or\s+|\s+or\s+|\s*·\s*/).filter((a) => (a.match(MODEL_RE) || []).some(has));
+        if (!alts.length) continue;
+        v = alts.join(' · ');
+      } else if (/paper input/i.test(label)) {
+        const std = v.match(/([\d,]+)\s*sheets standard/i);
+        if (std) {
+          const base = v.split(/\s*·\s*/).filter((c) => !/^max\./i.test(c)).join(' · ');
+          const trays = opts.filter((c) => /paper/i.test(c.category)).map((c) => ({ c, n: sheetsOf(enOf(c)) * (num(c.qty) || 1) })).filter((x) => x.n > 0);
+          const extra = trays.reduce((a, x) => a + x.n, 0);
+          v = extra ? base + ' · total ' + fmtN(Number(std[1].replace(/,/g, '')) + extra) + ' sheets with ' +
+            trays.map((x) => ((num(x.c.qty) || 1) > 1 ? num(x.c.qty) + ' x ' : '') + x.c.model).join(' + ') : base;
+        }
+      } else if (/output capacity/i.test(label)) {
+        v = v.split(/\s*·\s*/).map((c) => {
+          if (!/with finisher/i.test(c)) return c;
+          if (!finisher) return null;
+          const cap = enOf(finisher).match(/([\d,]+)\s*sheets output|output[^,]*?([\d,]+)\s*sheets/i);
+          return cap ? 'up to ' + (cap[1] || cap[2]) + ' sheets with ' + finisher.model : c;
+        }).filter(Boolean).join(' · ');
+      } else if (/optional/i.test(v)) {
+        v = v.split(/\s*·\s*/).map((c) => {
+          if (!/optional/i.test(c)) return c;
+          const mods = c.match(MODEL_RE) || [];
+          if (!mods.length) return c;
+          const on = mods.some(has), aside = c.match(/^(.*?\S)\s*\(([^()]*optional[^()]*)\)\s*$/i);
+          if (aside && aside[2].replace(MODEL_RE, '').replace(/optional|[,;\s]/gi, '')) {          // "256 GB SSD (1 TB SSD optional, EM-908)"
+            if (!on) return aside[1];
+            const what = aside[2].replace(MODEL_RE, '').replace(/\boptional\b/i, '').replace(/[,;]/g, ' ').replace(/\s+/g, ' ').trim();
+            return what + ' (' + mods.filter(has).join(', ') + ')';
+          }
+          if (!on) return null;                                                                         // "Wi-Fi ... (optional UK-221)"
+          return c.replace(/\(optional\s+/gi, '(').replace(/\s*\(optional\)/gi, '').replace(/\boptional\s*/gi, '').replace(/\s{2,}/g, ' ').trim();
+        }).filter(Boolean).join(' · ');
+      }
+      if (!v.trim()) continue;
+      out.push([label, v, ar]);
+    }
+    return out;
+  }
   function assembleMachine(m) {
     const lib = m.lib, items = attachOrder(m.items || []);
     const config = [];
@@ -320,7 +386,12 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
       .replace(/\bW\s*\/\s*YMCK\b|\bW\s*\/\s*CMYK\b|\bWYMCK\b|\bYMCK\b/g, five ? 'WCMYK' : 'CMYK')
       .replace(/independent [45] systems/gi, five ? 'independent 5 systems' : 'independent 4 systems');
     const fixRows = (rs) => (rs || []).map((r) => [r[0], colourFix(r[1]), r[2]]);
-    const mainSpecs = fixRows(lib.mainSpecs);
+    const office = lib.kind === 'office' || /^bizhub/i.test(lib.model);
+    const mainSpecs = office ? configureSpecs(fixRows(lib.mainSpecs), lib, config) : fixRows(lib.mainSpecs);
+    const hasFaxKit = config.some((c) => !c.main && (/^FK-/i.test(c.model) || /fax (kit|board)/i.test((lib.parts[c.model] || {}).en || c.en || '')));
+    const faxOpt = (lib.mainSpecs || []).some((r) => (/^fax$/i.test(r[0]) && /optional/i.test(r[1])) || (/^type$/i.test(r[0]) && /fax\s*\(optional\)/i.test(r[1])));
+    const tagline = office && faxOpt && !hasFaxKit ? String(lib.tagline || '').replace(/,?\s*fax(\s*\(optional\))?/i, '')
+      : office ? String(lib.tagline || '').replace(/fax\s*\(optional\)/i, 'fax') : lib.tagline;
     const details = (lib.engineDetails || []).map((d) => Object.assign({}, d, { rows: fixRows(d.rows) }));
     for (const mo of models) {
       const p = lib.parts[mo];
@@ -330,7 +401,7 @@ input.ph { background: var(--hl); color: var(--ink); } tr.new td { background: v
     const shortLines = [];
     for (let i = 0; i < models.length; i += 3) shortLines.push(models.slice(i, i + 3).join('  ·  '));
     const strengths = lib.strengths.filter((s) => !s.needs || models.includes(s.needs));
-    return Object.assign({}, lib, { config, dims, details, mainSpecs, includedShort: shortLines, strengths, picture: m.picture, physTotal: m.phys ? m.phys.total : null,
+    return Object.assign({}, lib, { config, dims, details, mainSpecs, tagline, includedShort: shortLines, strengths, picture: m.picture, physTotal: m.phys ? m.phys.total : null,
       qty: num(m.qty) || 1, unitPrice: num(m.unitPrice), consumablePrices: m.consumablePrices || {} });
   }
 
